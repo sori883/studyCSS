@@ -1,0 +1,379 @@
+// Document
+// 1.全要素をbox-sizing=border-boxに変更する
+// 2.システムフォントを使用する
+// 3.全ブラウザのline-heightを統一
+// 4.iOSブラウザとかを傾けたときにフォントサイズが変わらないようにする
+// 5.iOsとかでタップしたときのハイライトを透明にする
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box; //1
+}
+
+html{
+    font-family: sans-serif; // 2
+    line-height: 1.15; //3
+    -webkit-text-size-adjust: 100%; // 4
+    -webkit-tap-highlight-color: rgba($black, 0); // 5
+}
+
+// 新しいhtml5タグを正しく表示する(IE10またはそれ以下)
+article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+    display: block;
+}
+
+// body
+// 1.bodyにマージンがあるブラウザがあるのでmargin=0を指定
+// 2.<th>要素とかでinheritを使用できるように明示的に初期値を設定しておく
+// 3.背景色を指定するのがベストプラクティスみたいなので指定
+
+body {
+    margin: 0; // 1
+    font-family: $font-family-base;
+    @include font-size($font-size-base);
+    font-weight: $font-weight-base;
+    line-height: $line-height-base;
+    color: $body-color;
+    text-align: left; // 2
+    background-color: $body-bg; // 3
+}
+
+// キーボードでアクセス出来ない要素にフォーカスのアウトラインを表示しないようにする
+// ポインタイベントにまだ反応する可能性がある要素の周囲に変な感じでアウトラインが表示されないようにする
+
+[tabindex="-1"]:focus {
+    outline: 0 !important;
+}
+
+// hr
+// 1. firefox用にbox-sizingを追加
+// 2. IEとEdgeでオーバフローを表示
+
+hr {
+    box-sizing: content-box; // 1
+    height: 0; // 1
+    overflow: visible; // 2
+}
+
+// header
+// h要素にあるデフォルトの上下marginを調整します。
+// 上marginの折りたたみを回避するために指定します。
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: $headings-margin-bottom;
+}
+
+// paragraph
+// hタグ同様にpタグのmarginも削除します。
+// emじゃなくてremを使うので、下のmarginは調整
+p {
+    margin-top: 0;
+    margin-bottom: $paragraph-margin-bottom;
+}
+
+// Abbreviations
+// 1.data-*属性の動作が重複してるみたい
+// 2.Chrome, Edge, IE, Opera, Safariで統一したテキスト装飾にする
+// 3.明示的にカーソルを指定する
+// 4.firefox 39の下線を削除
+// 5.テキスト装飾がスキップされないようにする
+abbr[title],
+abbr[data-original-title] { // 1
+    text-decoration: underline; // 2
+    text-decoration: underline dotted; // 2
+    cursor: help; // 3
+    border-bottom: 0; // 4
+    text-decoration-skip-ink: none; // 5
+}
+
+address {
+    margin-bottom: 1rem;
+    font-style: normal;
+    line-height: inherit;
+}
+
+ol,
+ul,
+dl {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+    margin-bottom: 0;
+}
+
+dt {
+    font-weight: $dt-font-weight;
+}
+  
+dd {
+    margin-bottom: .5rem;
+    margin-left: 0; //ブラウザデフォルトを削除
+}
+  
+blockquote {
+    margin: 0 0 1rem;
+}
+
+// Chrome, Edge, Safariでフォントの太さを統一する
+b,
+strong {
+  font-weight: $font-weight-bolder;
+}
+
+// 全てのブラウザでフォントの細さを統一する
+small {
+    @include font-size(80%);
+}
+
+// subとsup要素が行の高さに影響しないようにする
+sub,
+sup {
+  position: relative;
+  @include font-size(75%);
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+sub { bottom: -.25em; }
+sup { top: -.5em; }
+
+
+// link
+a {
+    color: $link-color;
+    text-decoration: $link-decoration;
+    background-color: transparent; // IE10のアクティブリンクの灰色背景を削除
+  
+    @include hover {
+      color: $link-hover-color;
+      text-decoration: $link-hover-decoration;
+    }
+}
+
+// 明示的にキーボードフォーカスを可能にしていない名前付きアンカー(hrefなし)のスタイルを統一
+a:not([href]):not([tabindex]) {
+    color: inherit;
+    text-decoration: none;
+  
+    @include hover-focus {
+      color: inherit;
+      text-decoration: none;
+    }
+  
+    &:focus {
+      outline: 0;
+    }
+}
+
+// code
+pre,
+code,
+kbd,
+samp {
+    font-family: $font-family-monospace;
+    @include font-size(1em); // 全てのブラウザでemのフォントサイズを統一する
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: 1rem; // remを使うように変更
+    overflow: auto; // コンテンツ外に行かないようにする
+}
+
+// figure
+figure {
+    margin: 0 0 1rem; // 一貫性のあるmarginを指定
+}
+
+//img, content
+img {
+    vertical-align: middle;
+    border-style: none; // IEのimgにつくborderを削除する
+}
+
+svg {
+    overflow: hidden; // IEのoverflowバグ
+    vertical-align: middle;
+}
+
+
+// table
+table {
+    border-collapse: collapse; //borderが重ならないようにする
+}
+
+caption {
+    padding-top: $table-cell-padding;
+    padding-bottom: $table-cell-padding;
+    color: $table-caption-color;
+    text-align: left;
+    caption-side: bottom;
+}
+
+th {
+    // bodyとかから継承
+    text-align: inherit;
+}
+
+// form
+label {
+    display: inline-block;
+    margin-bottom: $label-margin-bottom;
+}
+
+button {
+    border-radius: 0; // MACOSのChromeについてるmargin-radiusを削除
+}
+
+// 透明なbutton背景がbuttonのフォーカススタイルを邪魔するので削除
+button:focus {
+    outline: 1px dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+}
+
+input,
+button,
+select,
+optgroup,
+textarea {
+    margin: 0; // firefoxとsafariのmarginを削除
+    font-family: inherit;
+    @include font-size(inherit);
+    line-height: inherit;
+}
+
+button,
+input {
+    overflow: visible; // Edgeでoverflowを表示
+}
+
+button,
+select {
+    text-transform: none; // firefoxのテキスト継承を削除
+}
+
+select {
+    word-wrap: normal; //safariのword-wrapを削除
+}
+
+
+// 1. Andoroid 4のネイティブコントローラが壊れにように修正
+// 2. iOSとsafariでスタイル出来ないバグを修正
+button,
+[type="button"], // 1
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button; // 2
+}
+
+// button要素のカーソルをポインタに変更
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+// firefoxから線とパッティングを削除
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    padding: 0;
+    border-style: none;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    box-sizing: border-box; // 1. IEでbox-sizingを指定
+    padding: 0; // 2. IEのパッティングを削除
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+    //Mobile Safariのバグを回避するために、一時入力のデフォルトの外観を削除
+    -webkit-appearance: listbox;
+}
+
+textarea {
+    overflow: auto; // IEのデフォルトスクロールバーを削除
+    resize: vertical;
+}
+
+fieldset {
+    // fieldsetを標準のブロック要素にする
+    min-width: 0;
+    // デフォルトのアウトライン動作をリセットする
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+// 1. IEとEdgeの折返しを修正
+// 2. IEのfieldsetから色の継承
+legend {
+    display: block;
+    width: 100%;
+    max-width: 100%; // 1
+    padding: 0;
+    margin-bottom: .5rem;
+    @include font-size(1.5rem);
+    line-height: inherit;
+    color: inherit; // 2
+    white-space: normal; // 1
+}
+
+progress {
+    vertical-align: baseline; // Chrome, firefox, operaで垂直方向の配置を追加
+}
+
+// ボタンのカーソルスタイルを修正
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+
+[type="search"] {
+    // iOSの丸みを帯びた検索入力を修正
+    outline-offset: -2px; // safariのアウトラインスタイルを指定
+    -webkit-appearance: none;
+}
+
+// chrome, safari macOSのパッディングを削除
+[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+// 1. クリック可能タイプのスタイルを設定できるようにする
+// 2. safariのフォントを継承にする
+::-webkit-file-upload-button {
+    font: inherit; // 2
+    -webkit-appearance: button; // 1
+}
+
+output {
+    display: inline-block;
+}
+
+summary {
+    display: list-item;
+    cursor: pointer;
+}
+
+template {
+    display: none; // IE
+}
+
+[hidden] {
+    display: none !important;
+}
