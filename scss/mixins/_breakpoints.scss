@@ -1,3 +1,9 @@
+
+@function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
+  @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
+}
+
+
 // キーから値をよしなに取得してmediaのサイズを返す
 @function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
     $min: map-get($breakpoints, $name);
