@@ -1,0 +1,33 @@
+{
+  "name": "simplicss",
+  "version": "1.0.0",
+  "description": "css",
+  "keywords": [
+    "css"
+  ],
+  "main": "dist/css",
+  "scripts": {
+    "dist": "npm run compile-sass && autoprefixer",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile-sass": "node-sass --include-path scss --precision 6 scss/simplicss-grid.scss dist/css/simplicss-grid.css",
+    "autoprefixer": "postcss -o simplicss-grid.scss dist/css/simplicss-grid.css --config postcss.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sori883/simplicss.git"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "author": "sorinaji",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sori883/simplicss/issues"
+  },
+  "homepage": "https://github.com/sori883/simplicss#readme",
+  "devDependencies": {
+    "autoprefixer": "^9.6.1",
+    "node-sass": "^4.12.0",
+    "postcss-cli": "^6.1.3"
+  }
+}
