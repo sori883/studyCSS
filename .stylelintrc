@@ -3,24 +3,25 @@
     "stylelint-scss"
   ],
 'rules': {
-    'at-function-named-arguments': 'never',
-    'at-function-parentheses-space-before': 'never',
-    'at-import-no-partial-leading-underscore': true,
-    'at-mixin-argumentless-call-parentheses': 'always',
-    'at-mixin-named-arguments': null,
-    'at-mixin-parentheses-space-before': 'never',
-    'at-rule-no-unknown': true,
-    'dollar-variable-colon-space-after': 'at-least-one-space',
-    'dollar-variable-colon-space-before': 'never',
-    'dollar-variable-default': [
+    'at-rule-no-unknown': null,
+    'scss/at-function-named-arguments': 'never',
+    'scss/at-function-parentheses-space-before': 'never',
+    'scss/at-import-no-partial-leading-underscore': true,
+    'scss/at-mixin-argumentless-call-parentheses': 'always',
+    'scss/at-mixin-named-arguments': null,
+    'scss/at-mixin-parentheses-space-before': 'never',
+    'scss/at-rule-no-unknown': true,
+    'scss/dollar-variable-colon-space-after': 'at-least-one-space',
+    'scss/dollar-variable-colon-space-before': 'never',
+    'scss/dollar-variable-default': [
       true,
       {
         'ignore': 'local'
       }
     ],
-    'dollar-variable-no-missing-interpolation': true,
-    'media-feature-value-dollar-variable': null,
-    'no-duplicate-dollar-variables': [
+    'scss/dollar-variable-no-missing-interpolation': true,
+    'scss/media-feature-value-dollar-variable': null,
+    'scss/no-duplicate-dollar-variables': [
       null,
       {
         'ignoreInsideAtRules': [
@@ -29,8 +30,8 @@
         ]
       }
     ],
-    'operator-no-newline-after': true,
-    'operator-no-newline-before': true,
-    'operator-no-unspaced': true
+    'scss/operator-no-newline-after': true,
+    'scss/operator-no-newline-before': true,
+    'scss/operator-no-unspaced': true
   }
 }
