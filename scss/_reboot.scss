@@ -150,26 +150,21 @@ a {
     text-decoration: $link-decoration;
     background-color: transparent; // IE10のアクティブリンクの灰色背景を削除
   
-    @include hover {
-      color: $link-hover-color;
-      text-decoration: $link-hover-decoration;
+    &:hover {
+        color: $link-hover-color;
+        text-decoration: $link-hover-decoration;
     }
 }
 
 // 明示的にキーボードフォーカスを可能にしていない名前付きアンカー(hrefなし)のスタイルを統一
-a:not([href]):not([tabindex]) {
-    color: inherit;
-    text-decoration: none;
-  
-    @include hover-focus {
+a:not([href]) {
+    &,
+    &:hover {
       color: inherit;
       text-decoration: none;
     }
+  }
   
-    &:focus {
-      outline: 0;
-    }
-}
 
 // code
 pre,
