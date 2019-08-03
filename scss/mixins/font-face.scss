@@ -1,7 +1,0 @@
-@mixin make-font-face($name,$weight: null) {
-    @font-face {
-        font-family: quote($name);
-        font-weight: $weight;
-        src: local(quote(name));
-    }
-}
