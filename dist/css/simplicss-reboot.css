@@ -57,11 +57,9 @@ p {
 abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
-  -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
   cursor: help;
   border-bottom: 0;
-  -webkit-text-decoration-skip-ink: none;
   text-decoration-skip-ink: none;
 }
 
@@ -326,4 +324,5 @@ template {
 [hidden] {
   display: none !important;
 }
+
 /*# sourceMappingURL=simplicss-reboot.css.map */

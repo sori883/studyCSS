@@ -1,0 +1,16 @@
+languageCode:           "ja"
+title:                  "sori883"
+baseURL:                "https://sori883.com"
+
+
+archetypeDir:           "site/archetypes"
+assetDir:               "site/assets"
+contentDir:             "site/content"
+dataDir:                "site/data"
+layoutDir:              "site/layouts"
+staticDir:              "site/static"
+themesDir:              "site/themes"
+
+params:
+  current_version:      "0.5.1"
+  docs_version:         "0.5"

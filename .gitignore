@@ -1,2 +1,8 @@
+# super folder
 0/
+
+# hogo resources
+resources/
+
+# folders to ignore
 node_modules/

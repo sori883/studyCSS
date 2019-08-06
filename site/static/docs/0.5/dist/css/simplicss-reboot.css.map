@@ -2,14 +2,14 @@
 	"version": 3,
 	"file": "simplicss-reboot.css",
 	"sources": [
-		"../../../../../../scss/simplicss-reboot.scss",
-		"../../../../../../scss/_variables.scss",
-		"../../../../../../scss/_mixin.scss",
-		"../../../../../../scss/vendor/_rfs.scss",
-		"../../../../../../scss/mixins/_breakpoints.scss",
-		"../../../../../../scss/mixins/_grid-framework.scss",
-		"../../../../../../scss/mixins/_grid.scss",
-		"../../../../../../scss/_reboot.scss"
+		"../../scss/simplicss-reboot.scss",
+		"../../scss/_variables.scss",
+		"../../scss/_mixin.scss",
+		"../../scss/vendor/_rfs.scss",
+		"../../scss/mixins/_breakpoints.scss",
+		"../../scss/mixins/_grid-framework.scss",
+		"../../scss/mixins/_grid.scss",
+		"../../scss/_reboot.scss"
 	],
 	"sourcesContent": [
 		"\r\n@import \"variables\";\r\n@import \"mixin\";\r\n@import \"reboot\";",
