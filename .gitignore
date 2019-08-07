@@ -1,6 +1,9 @@
 # super folder
 0/
 
+# OS file
+.DS_Store
+
 # hogo resources
 resources/
 
