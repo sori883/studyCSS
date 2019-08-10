@@ -34,6 +34,12 @@
           max-width: 100%;
         }
 
+        @for $i from 1 through $columns {
+          .col#{$infix}-#{$i} {
+            @include make-col($i, $columns);
+          }
+        }
+
         @for $i from 0 through ($columns - 1) {
           @if not ($infix == "" and $i == 0) {
             .offset#{$infix}-#{$i} {

@@ -13,6 +13,20 @@
     <meta property="og:image" content="./assets/img/ogimage.jpg">
     <meta name="twitter:card" content="summary">
     <title>Panda!</title>
+    <style>
+      .col-sm-12{
+        border: 1px solid #0f0;
+      }
+      .col-md-3{
+        border: 1px solid #f00;
+      }
+      .col-lg-2{
+        border: 1px solid #00f;
+      }
+      .bg-r{
+        background: #f00;
+      }
+    </style>
   </head>
   <body>
     <header id="first">
@@ -24,7 +38,7 @@
           <div class="container">
             <h2 class="heading center white-text">Who I am</h2>
             <div class="row">
-              <div class="first-img center col s12">
+              <div class="first-img center col-sm-12">
                 <p class="writer flow-text white-text">
                   -Hello, My name is Sorinaji.
                   I'm an back-end developer.
@@ -39,10 +53,11 @@
       <section id="skills">
           <h2 class="heading center">Skills</h2>
           <div class="container">
-            <div class="row">
-              <div class="skill-front s12 m12 l12">
+            <div class="row bg-r">
+              <div class="skill-front col-sm-12 col-md-12 col-lg-12">
                 <h3 class="skill-heading">Languages</h3>
-              <div class="col s6 m3 l2">
+              </div>
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/html5.svg">
@@ -52,7 +67,7 @@
                   </div>
                 </div>
                 </div>
-                <div class="col s6 m3 l2">
+                <div class="col-sm-6 col-md-3 col-lg-2">
                   <div class="card">
                     <div class="card-image skills-card">
                       <img class="skills-img" src="./assets/img/css3.svg">
@@ -62,7 +77,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col s6 m3 l2">
+                <div class="col-sm-6 col-md-3 col-lg-2">
                   <div class="card">
                     <div class="card-image skills-card">
                       <img class="skills-img" src="./assets/img/sass.svg">
@@ -72,7 +87,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col s6 m3 l2">
+                <div class="col-sm-6 col-md-3 col-lg-2">
                   <div class="card">
                     <div class="card-image skills-card">
                       <img class="skills-img" src="./assets/img/jquery.svg">
@@ -82,7 +97,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col s6 m3 l2">
+                <div class="ccol-sm-6 col-md-3 col-lg-2">
                     <div class="card">
                       <div class="card-image skills-card">
                         <img class="skills-img" src="./assets/img/php.svg">
@@ -92,7 +107,7 @@
                       </div>
                       </div>
                 </div>
-                <div class="col s6 m3 l2">
+                <div class="col-sm-6 col-md-3 col-lg-2">
                   <div class="card">
                     <div class="card-image skills-card">
                       <img class="skills-img" src="./assets/img/java.svg">
@@ -102,7 +117,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col s6 m3 l2">
+                <div class="col-sm-6 col-md-3 col-lg-2">
                   <div class="card">
                     <div class="card-image skills-card">
                       <img class="skills-img" src="./assets/img/c-sharp.svg">
@@ -112,7 +127,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col s6 m3 l2">
+                <div class="col-sm-6 col-md-3 col-lg-2">
                   <div class="card">
                     <div class="card-image skills-card">
                       <img class="skills-img" src="./assets/img/powershell.svg">
@@ -122,13 +137,15 @@
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
+            <!-- end languages -->
+
+
             <div class="row">
-              <div class="skill-front s12 m12 l12">
+              <div class="skill-front col-sm-12 col-md-12 col-lg-12">
                 <h3 class="skill-heading">Datebase</h3>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/mssql.svg">
@@ -138,7 +155,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/mysql.svg">
@@ -148,7 +165,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/postgresql.svg">
@@ -158,7 +175,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/sqlite.svg">
@@ -168,7 +185,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/mariadb.svg">
@@ -178,7 +195,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/mongodb.svg">
@@ -190,10 +207,10 @@
               </div>
             </div>
             <div class="row">
-              <div class="skill-front s12 m12 l12">
+              <div class="skill-front col-sm-12 col-md-12 col-lg-12">
                 <h3 class="skill-heading">Server</h3>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                   <div class="card">
                   <div class="card-image skills-card">
                     <img class="skills-img" src="./assets/img/windowsserver.svg">
@@ -203,7 +220,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col s6 m4 l2">
+              <div class="col-sm-6 col-md-3 col-lg-2">
                 <div class="card">
                 <div class="card-image skills-card">
                   <img class="skills-img" src="./assets/img/redhat.svg">
@@ -213,7 +230,7 @@
                 </div>
               </div>
             </div>
-            <div class="col s6 m4 l2">
+            <div class="col-sm-6 col-md-3 col-lg-2">
               <div class="card">
                 <div class="card-image skills-card">
                   <img class="skills-img" src="./assets/img/centos.svg">
@@ -232,7 +249,7 @@
         <h2 class="heading center">Experience</h2>
         <div class="container">
           <div class="row">
-            <div class="experience-card col s12 m12 l12">
+            <div class="experience-card col-sm-12 col-md-12 col-lg-12">
               <div class="card darken-1">
                 <div class="card-content">
                   <span class="card-title">I joined my company</span>
@@ -254,7 +271,6 @@
       <footer id="last" class="page-footer">
         </footer>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="./assets/js/script.min.js"></script>
   </body>
 </html>
