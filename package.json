@@ -20,6 +20,8 @@
     "watch-css": "nodemon --watch scss/ --ext scss --exec \"npm run css\"",
     "watch-server": "browser-sync start --server ./ --startPath site/"
   },
+  "style": "dist/css/simplicss.css",
+  "sass": "scss/simplicss.scss",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sori883/simplicss.git"
