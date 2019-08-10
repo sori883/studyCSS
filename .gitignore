@@ -1,11 +1,10 @@
 # super folder
 0/
 
-# OS file
+# OS or Editor Files
 .DS_Store
+.vscode/
 
-# hogo resources
-resources/
 
 # folders to ignore
 node_modules/
