@@ -4,17 +4,13 @@ $white: #fff !default;
 $gray-600: #6c757d !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
-
-$blue:    #007bff !default;
-
-
+$blue: #007bff !default;
 
 // スペース調整
 $spacer: 1rem !default;
 
 // フォント関連
 $font-family-sans-serif: -apple-system, "BlinkMacSystemFont", "Helvetica Neue", Helvetica, "Arial", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
-// todo monospaceいるの？
 $font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base: $font-family-sans-serif !default;
 
@@ -35,12 +31,12 @@ $dt-font-weight: $font-weight-bold !default;
 
 // タグ関連
 // body
-$body-bg:  $white !default;
+$body-bg: $white !default;
 $body-color: $gray-900 !default;
 // h
 $headings-margin-bottom: $spacer / 2 !default;
 // p
-$paragraph-margin-bottom:   1rem !default;
+$paragraph-margin-bottom: 1rem !default;
 // a
 $link-color: $blue !default;
 $link-decoration: none !default;
@@ -52,9 +48,7 @@ $table-caption-color: $text-muted !default;
 // form
 $label-margin-bottom: .5rem !default;
 
-// layout
 // grid
-
 $container-max-widths: (
   sm: 540px,
   md: 720px,

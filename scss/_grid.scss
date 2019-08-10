@@ -1,28 +1,28 @@
 // 固定幅のコンテナ
 // mediaごとも作成
 .container {
-    @include make-container(); 
-    @include make-container-max-widths();
+  @include make-container(); 
+  @include make-container-max-widths();
 }
 
 // 幅100％のコンテナ
 .container-fluid {
-    @include make-container();
+  @include make-container();
 }
 
 // .flexboxとno gutter
 .row {
-    @include make-row();
-    .no-gutters {
-        margin-right: 0;
-        margin-left: 0;
+  @include make-row();
+  .no-gutters {
+    margin-right: 0;
+    margin-left: 0;
     
-        > .col,
-        > [class*="col-"] {
-          padding-right: 0;
-          padding-left: 0;
-        }
+    > .col,
+    > [class*="col-"] {
+      padding-right: 0;
+      padding-left: 0;
     }
+  }
 }
-
+// col-md-1とかを作成
 @include make-grid-columns();
