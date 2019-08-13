@@ -9,6 +9,13 @@ $blue: #007bff !default;
 // スペース調整
 $spacer: 1rem !default;
 
+// borderデフォルト
+$border-width: 1px !default;
+
+$border-radius: .25rem !default;
+$border-radius-lg: .3rem !default;
+$border-radius-sm: .2rem !default;
+
 // フォント関連
 $font-family-sans-serif: -apple-system, "BlinkMacSystemFont", "Helvetica Neue", Helvetica, "Arial", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
 $font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
@@ -47,6 +54,16 @@ $table-cell-padding: .75rem !default;
 $table-caption-color: $text-muted !default;
 // form
 $label-margin-bottom: .5rem !default;
+
+// cards
+$card-bg: $white !default;
+$card-border-width: $border-width !default;
+$card-border-radius: $border-radius !default;
+$card-border-color: rgba($black, .125) !default;
+$card-spacer-y: .75rem !default;
+$card-spacer-x: 1.25rem !default;
+$card-color: null !default;
+$card-inner-border-radius: calc(#{$card-border-radius} - #{$card-border-width}) !default;
 
 // grid
 $container-max-widths: (
