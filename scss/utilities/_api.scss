@@ -1,0 +1,31 @@
+// Variablesのgrid-breakpointsをループ
+@each $breakpoint in map-keys($grid-breakpoints) {
+
+  // メディアクエリーを作成
+  @include media-breakpoint-up($breakpoint) {
+    // -xlとかの名前を作成
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+  
+    //ユーティリティプロパティを作ります
+    @each $key, $utility in $utilities {
+      // utilityがマップかつ、レスポンシブがtrueで$infixが空のとき
+      // レスポンシブがtrueの時は全部の画面サイズのプロパティを作成
+      // レスポンシブがfalseの時はメディア指定なしで作成
+      @if type-of($utility) == "map" and (map-get($utility, responsive) or $infix == "") {
+        @include generate-utility($utility, $infix);
+      }
+    }
+  }
+}
+  
+  
+// 印刷用ユーティリティ
+@media print {
+  @each $key, $utility in $utilities {
+    // printがtrueの場合のみユーティリティプロパティを作成
+    // printがない場合は作成しない
+    @if type-of($utility) == "map" and map-get($utility, print) == true {
+      @include generate-utility($utility, "-print");
+    }
+  }
+}

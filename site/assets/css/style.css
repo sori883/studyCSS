@@ -1,0 +1,94 @@
+html,
+body {
+  height: 100%;
+}
+
+/*all*/
+.heading {
+  font-size: 52px;
+}
+
+.writer {
+  white-space: pre-line;
+}
+
+/* first */
+#first {
+  position: relative;
+  min-height: 100%;
+  background: #261969;
+}
+
+.first-nav {
+  background: #2c2191;
+}
+
+#first-down {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  bottom: 15px;
+  color: #fff;
+}
+
+.down-circle {
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 3px solid #6558d9;
+  text-align: center;
+}
+
+.down-icon {
+  -webkit-animation: pulsate 1.5s ease;
+  animation: pulsate 1.5s ease;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  padding-top: 7px;
+}
+
+/* skills */
+.skill-heading {
+  font-size: 38px;
+}
+
+.skill-card {
+  width: 100px;
+  height: 100px;
+}
+
+
+/* experience */
+#experience {
+  background: #f2f2f5;
+  padding: 5px 0;
+}
+
+.experience-next {
+  font-size: 40px;
+  font-weight: 900;
+  color: #2c2191;
+}
+
+/* last */
+#last {
+  background: #261969;
+}
+
+.last-img {
+  width: 10rem;
+  height: 10rem;
+}
+
+.last-contact {
+  margin-bottom: 2px;
+  font-size: 1.2rem;
+}
+
+.last-icon {
+  padding: 0 5px;
+}

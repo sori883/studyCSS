@@ -1,0 +1,22 @@
+// ユーティリティ
+
+$utilities: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$utilities: map-merge(
+  (
+    // text
+    "text-align": (
+      responsive: true,
+      property: text-align,
+      class: text,
+      values: left right center
+    ),
+    "text-align-justify": (
+      responsive: true,
+      property: text-align-last,// スペースなしの文字列だとlastにしないと均等にならない（日本語用）
+      class: text,
+      values: justify
+    ),
+  ),
+  $utilities
+);

@@ -1,10 +1,11 @@
-
+// -xlとかの名前を作成
+// null（xs）のときはなんにも返さない
 @function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
   @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
 }
 
 
-// キーから値をよしなに取得してmediaのサイズを返す
+// name(mdとか)をキーとして、画面サイズを取得する
 @function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
   $min: map-get($breakpoints, $name);
   @return if($min != 0, $min, null);
