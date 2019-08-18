@@ -67,9 +67,11 @@ p {
 abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
+  -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
   cursor: help;
   border-bottom: 0;
+  -webkit-text-decoration-skip-ink: none;
   text-decoration-skip-ink: none;
 }
 
@@ -1154,146 +1156,104 @@ template {
   border-top-right-radius: calc(0.25rem - 1px);
 }
 
-/* line 33, scss/mixins/_utilities.scss */
+/* line 31, scss/mixins/_utilities.scss */
 .text-left {
   text-align: left !important;
 }
 
-/* line 33, scss/mixins/_utilities.scss */
+/* line 31, scss/mixins/_utilities.scss */
 .text-right {
   text-align: right !important;
 }
 
-/* line 33, scss/mixins/_utilities.scss */
+/* line 31, scss/mixins/_utilities.scss */
 .text-center {
   text-align: center !important;
 }
 
-/* line 33, scss/mixins/_utilities.scss */
+/* line 31, scss/mixins/_utilities.scss */
 .text-justify {
+  -moz-text-align-last: justify !important;
   text-align-last: justify !important;
 }
 
-/* line 33, scss/mixins/_utilities.scss */
-.mx-1 {
-  margin-right: 1 !important;
-  margin-left: 1 !important;
-}
-
-/* line 33, scss/mixins/_utilities.scss */
-.shadow-sm {
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-}
-
-/* line 33, scss/mixins/_utilities.scss */
-.shadow {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
-
-/* line 33, scss/mixins/_utilities.scss */
-.shadow-lg {
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
-}
-
-/* line 33, scss/mixins/_utilities.scss */
-.shadow-none {
-  box-shadow: none !important;
-}
-
 @media (min-width: 576px) {
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-sm-left {
     text-align: left !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-sm-right {
     text-align: right !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-sm-center {
     text-align: center !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-sm-justify {
+    -moz-text-align-last: justify !important;
     text-align-last: justify !important;
-  }
-  /* line 33, scss/mixins/_utilities.scss */
-  .mx-sm-1 {
-    margin-right: 1 !important;
-    margin-left: 1 !important;
   }
 }
 
 @media (min-width: 768px) {
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-md-left {
     text-align: left !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-md-right {
     text-align: right !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-md-center {
     text-align: center !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-md-justify {
+    -moz-text-align-last: justify !important;
     text-align-last: justify !important;
-  }
-  /* line 33, scss/mixins/_utilities.scss */
-  .mx-md-1 {
-    margin-right: 1 !important;
-    margin-left: 1 !important;
   }
 }
 
 @media (min-width: 992px) {
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-lg-left {
     text-align: left !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-lg-right {
     text-align: right !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-lg-center {
     text-align: center !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-lg-justify {
+    -moz-text-align-last: justify !important;
     text-align-last: justify !important;
-  }
-  /* line 33, scss/mixins/_utilities.scss */
-  .mx-lg-1 {
-    margin-right: 1 !important;
-    margin-left: 1 !important;
   }
 }
 
 @media (min-width: 1200px) {
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-xl-left {
     text-align: left !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-xl-right {
     text-align: right !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-xl-center {
     text-align: center !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
+  /* line 31, scss/mixins/_utilities.scss */
   .text-xl-justify {
+    -moz-text-align-last: justify !important;
     text-align-last: justify !important;
   }
-  /* line 33, scss/mixins/_utilities.scss */
-  .mx-xl-1 {
-    margin-right: 1 !important;
-    margin-left: 1 !important;
-  }
 }
-
 /*# sourceMappingURL=simplicss.css.map */
