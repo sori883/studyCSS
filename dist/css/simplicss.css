@@ -1157,6 +1157,31 @@ template {
 }
 
 /* line 31, scss/mixins/_utilities.scss */
+.font-weight-light {
+  font-weight: 300 !important;
+}
+
+/* line 31, scss/mixins/_utilities.scss */
+.font-weight-lighter {
+  font-weight: lighter !important;
+}
+
+/* line 31, scss/mixins/_utilities.scss */
+.font-weight-normal {
+  font-weight: 400 !important;
+}
+
+/* line 31, scss/mixins/_utilities.scss */
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+/* line 31, scss/mixins/_utilities.scss */
+.font-weight-bolder {
+  font-weight: bolder !important;
+}
+
+/* line 31, scss/mixins/_utilities.scss */
 .text-left {
   text-align: left !important;
 }

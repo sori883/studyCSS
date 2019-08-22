@@ -5,6 +5,16 @@ $utilities: () !default;
 $utilities: map-merge(
   (
     // text
+    "font-weight": (
+      property: font-weight,
+      values: (
+        light: $font-weight-light,
+        lighter: $font-weight-lighter,
+        normal: $font-weight-normal,
+        bold: $font-weight-bold,
+        bolder: $font-weight-bolder
+      )
+    ),
     "text-align": (
       responsive: true,
       property: text-align,
