@@ -1156,6 +1156,124 @@ template {
   border-top-right-radius: calc(0.25rem - 1px);
 }
 
+/* line 3, scss/_nav.scss */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+/* line 11, scss/_nav.scss */
+.nav-link {
+  display: block;
+  padding: 0.5rem 1rem;
+}
+
+/* line 15, scss/_nav.scss */
+.nav-link:hover, .nav-link:focus {
+  text-decoration: none;
+}
+
+/* line 23, scss/_nav.scss */
+.nav-tabs {
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* line 26, scss/_nav.scss */
+.nav-tabs .nav-item {
+  margin-bottom: -1px;
+}
+
+/* line 30, scss/_nav.scss */
+.nav-tabs .nav-link {
+  border: 1px solid transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+/* line 34, scss/_nav.scss */
+.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+  border-color: #e9ecef #e9ecef #dee2e6;
+}
+
+/* line 40, scss/_nav.scss */
+.nav-tabs .nav-link {
+  color: #495057;
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+/* line 50, scss/_nav.scss */
+.nav-pills .nav-link {
+  border-radius: 0.25rem;
+}
+
+/* line 56, scss/_nav.scss */
+.nav-fill .nav-item {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+/* line 63, scss/_nav.scss */
+.nav-justified .nav-item {
+  flex-basis: 0;
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* line 74, scss/_nav.scss */
+.tab-content > .tab-pane {
+  display: none;
+}
+
+/* line 77, scss/_nav.scss */
+.tab-content > .active {
+  display: block;
+}
+
+/* line 3, scss/_navbar.scss */
+.navbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+
+/* line 12, scss/_navbar.scss */
+.navbar > [class^="container"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* line 22, scss/_navbar.scss */
+.navbar-brand {
+  display: inline-block;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-right: 1rem;
+  font-size: 2rem;
+  line-height: inherit;
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  /* line 22, scss/_navbar.scss */
+  .navbar-brand {
+    font-size: calc(1.325rem + 0.9vw) ;
+  }
+}
+
+/* line 31, scss/_navbar.scss */
+.navbar-brand:hover, .navbar-brand:focus {
+  text-decoration: none;
+}
+
 /* line 31, scss/mixins/_utilities.scss */
 .font-weight-light {
   font-weight: 300 !important;

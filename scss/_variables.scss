@@ -1,7 +1,10 @@
 
 // 色関連
 $white: #fff !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
 $gray-600: #6c757d !default;
+$gray-700: #495057 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
 $blue: #007bff !default;
@@ -23,6 +26,9 @@ $font-family-base: $font-family-sans-serif !default;
 
 $font-size-base: 1.6rem !default;
 $line-height-base: 1.5 !default;
+$font-size-lg: $font-size-base * 1.25 !default;
+$font-size-sm: $font-size-base * .875 !default;
+$nav-tabs-link-active-color: $gray-700 !default;
 
 $text-muted: $gray-600 !default;
 
@@ -56,6 +62,29 @@ $table-cell-padding: .75rem !default;
 $table-caption-color: $text-muted !default;
 // form
 $label-margin-bottom: .5rem !default;
+
+// nav
+$nav-link-padding-y: .5rem !default;
+$nav-link-padding-x: 1rem !default;
+
+$nav-tabs-border-color: $gray-300 !default;
+$nav-tabs-border-width: $border-width !default;
+$nav-tabs-border-radius: $border-radius !default;
+$nav-tabs-link-hover-border-color:  $gray-200 $gray-200 $nav-tabs-border-color !default;
+$nav-tabs-link-active-bg: $body-bg !default;
+$nav-tabs-link-active-border-color: $gray-300 $gray-300 $nav-tabs-link-active-bg !default;
+
+$nav-pills-border-radius: $border-radius !default; 
+
+$navbar-brand-font-size: $font-size-lg !default;
+
+$nav-link-height: $font-size-base * $line-height-base + $nav-link-padding-y * 2 !default;
+
+// navbar
+$navbar-padding-y: $spacer / 2 !default;
+$navbar-padding-x: $spacer !default;
+$navbar-brand-height: $navbar-brand-font-size * $line-height-base !default;
+$navbar-brand-padding-y: ($nav-link-height - $navbar-brand-height) / 2 !default;
 
 // cards
 $card-bg: $white !default;
