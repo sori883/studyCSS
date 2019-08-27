@@ -1274,6 +1274,28 @@ template {
   text-decoration: none;
 }
 
+/* line 38, scss/_navbar.scss */
+.navbar-brand-center {
+  display: inline-block;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  font-size: 2rem;
+  line-height: inherit;
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  /* line 38, scss/_navbar.scss */
+  .navbar-brand-center {
+    font-size: calc(1.325rem + 0.9vw) ;
+  }
+}
+
+/* line 46, scss/_navbar.scss */
+.navbar-brand-center:hover, .navbar-brand-center:focus {
+  text-decoration: none;
+}
+
 /* line 31, scss/mixins/_utilities.scss */
 .font-weight-light {
   font-weight: 300 !important;

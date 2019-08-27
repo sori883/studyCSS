@@ -3,7 +3,7 @@
 .navbar {
   position: relative;
   display: flex;
-  flex-wrap: wrap; // allow us to do the line break for collapsing content
+  flex-wrap: wrap; // 画面サイズが小さくなった時に周りこみを許可する
   align-items: center;
   justify-content: space-between; // space out brand from logo
   padding: $navbar-padding-y $navbar-padding-x;
@@ -33,3 +33,20 @@
     text-decoration: none;
   }
 }
+
+// brand logo center
+.navbar-brand-center {
+  display: inline-block;
+  padding-top: $navbar-brand-padding-y;
+  padding-bottom: $navbar-brand-padding-y;
+  @include font-size($navbar-brand-font-size);
+  line-height: inherit;
+  white-space: nowrap;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+
