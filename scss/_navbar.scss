@@ -33,20 +33,3 @@
     text-decoration: none;
   }
 }
-
-// brand logo center
-.navbar-brand-center {
-  display: inline-block;
-  padding-top: $navbar-brand-padding-y;
-  padding-bottom: $navbar-brand-padding-y;
-  @include font-size($navbar-brand-font-size);
-  line-height: inherit;
-  white-space: nowrap;
-
-  &:hover,
-  &:focus {
-    text-decoration: none;
-  }
-}
-
-

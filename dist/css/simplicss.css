@@ -1274,26 +1274,32 @@ template {
   text-decoration: none;
 }
 
-/* line 38, scss/_navbar.scss */
-.navbar-brand-center {
-  display: inline-block;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  font-size: 2rem;
-  line-height: inherit;
-  white-space: nowrap;
+/* line 6, scss/helpers/_position.scss */
+.fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
 }
 
-@media (max-width: 1200px) {
-  /* line 38, scss/_navbar.scss */
-  .navbar-brand-center {
-    font-size: calc(1.325rem + 0.9vw) ;
+/* line 15, scss/helpers/_position.scss */
+.fixed-bottom {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  /* line 24, scss/helpers/_position.scss */
+  .sticky-top {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
   }
-}
-
-/* line 46, scss/_navbar.scss */
-.navbar-brand-center:hover, .navbar-brand-center:focus {
-  text-decoration: none;
 }
 
 /* line 31, scss/mixins/_utilities.scss */
