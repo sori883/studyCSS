@@ -1,0 +1,1 @@
+{"version":3,"file":"simplicss.js","sources":["../../js/helloworld.js","../../js/script.js"],"sourcesContent":["export default function hello() {\r\n  console.log('hello, world!');\r\n}","import hello from './helloworld';\r\nhello();"],"names":["hello","console","log"],"mappings":";;;;;EAAe,SAASA,KAAT,GAAiB;EAC9BC,EAAAA,OAAO,CAACC,GAAR,CAAY,eAAZ;EACD;;ECDDF,KAAK;;;;"}

@@ -18,7 +18,8 @@
     "css-copy": "cpx \"dist/css/simplicss.min.css\" \"site/assets/css/\" ",
     "watch": "npm-run-all --parallel watch-*",
     "watch-css": "nodemon --watch scss/ --ext scss --exec \"npm run css\"",
-    "watch-server": "browser-sync start --server ./ --startPath site/"
+    "watch-server": "browser-sync start --server ./ --startPath site/",
+    "js-compile-standalone": "rollup --config build/rollup.config.js --sourcemap"
   },
   "style": "dist/css/simplicss.css",
   "sass": "scss/simplicss.scss",
