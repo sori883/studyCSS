@@ -9,17 +9,17 @@
   "main": "dist/css",
   "scripts": {
     "dist": "npm-run-all css-lint css-compile css-prefix css-minify css-copy",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "css": "npm-run-all css-*",
     "css-lint": "stylelint \"scss/**/*.scss\"",
     "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --source-comments --precision 6 scss/ -o dist/css/ && npm run css-copy",
     "css-prefix": "postcss --config build/postcss.config.js --replace \"dist/css/*.css\" \"!dist/css/*.min.css\"",
     "css-minify": "cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss.min.css dist/css/simplicss.css && cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss-grid.min.css dist/css/simplicss-grid.css && cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss-reboot.min.css dist/css/simplicss-reboot.css",
     "css-copy": "cpx \"dist/css/simplicss.min.css\" \"site/assets/css/\" ",
+    "js-compile-standalone": "rollup --environment BUNDLE:false --config build/rollup.config.js --sourcemap",
+    "js-compile-bundle": "rollup --environment BUNDLE:true --config build/rollup.config.js --sourcemap",
     "watch": "npm-run-all --parallel watch-*",
     "watch-css": "nodemon --watch scss/ --ext scss --exec \"npm run css\"",
     "watch-server": "browser-sync start --server ./ --startPath site/",
-    "js-compile-standalone": "rollup --config build/rollup.config.js --sourcemap"
   },
   "style": "dist/css/simplicss.css",
   "sass": "scss/simplicss.scss",
@@ -58,5 +58,9 @@
     "shx": "^0.3.2",
     "stylelint": "^10.1.0",
     "stylelint-config-twbs-bootstrap": "^0.4.0"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "jquery": "1.9.1 - 3"
   }
 }

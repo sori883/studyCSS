@@ -4,14 +4,16 @@ const path = require('path')
 const babel = require('rollup-plugin-babel')
 const resolve = require('rollup-plugin-node-resolve')
 
+const BUNDLE = process.env.BUNDLE === 'true'
 
 let fileDest = 'simplicss.js'
 const external = ['jquery']
 
 const plugins = [
+  // babelをインスタンス化すると.babelrc.jsが実行されるみたい。
   babel({
-    exclude: 'node_modules/**', // Only transpile our source code
-    externalHelpersWhitelist: [ // Include only required helpers
+    exclude: 'node_modules/**', // 参考：https://ja.stackoverflow.com/q/36894
+    externalHelpersWhitelist: [ // 必要なhelperのみを追加
       'defineProperties',
       'createClass',
       'inheritsLoose',
@@ -22,17 +24,23 @@ const plugins = [
 ]
 
 const globals = {
-  jquery: 'jQuery' // Ensure we use jQuery which is always available even in noConflict mode
+  jquery: 'jQuery'
+}
+
+if (BUNDLE) {
+  fileDest = 'simplicss.bundle.js'
+  external.pop() //含まないライブラリ（jquery）を削除
+  plugins.push(resolve())
 }
 
 module.exports = {
-  input: path.resolve(__dirname, '../js/script.js'),
+  input: path.resolve(__dirname, '../js/src/index.js'),
   output: {
     file: path.resolve(__dirname, `../dist/js/${fileDest}`),
     format: 'umd',
-    globals,
+    globals, //output.globalsを使用して、外部モジュールjqueryに対応するブラウザーのグローバル変数名を指定します（「jquery」と推測）
     name: 'simplicss'
   },
-  external,
-  plugins
+  external, // 含まない外部ライブラリ
+  plugins //babelとかjqueryとか含むやつら
 }
