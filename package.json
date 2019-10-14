@@ -15,10 +15,14 @@
     "css-prefix": "postcss --config build/postcss.config.js --replace \"dist/css/*.css\" \"!dist/css/*.min.css\"",
     "css-minify": "cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss.min.css dist/css/simplicss.css && cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss-grid.min.css dist/css/simplicss-grid.css && cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss-reboot.min.css dist/css/simplicss-reboot.css",
     "css-copy": "cpx \"dist/css/simplicss.min.css\" \"site/assets/css/\" ",
+    "js": "npm-run-all js-*",
     "js-compile-standalone": "rollup --environment BUNDLE:false --config build/rollup.config.js --sourcemap",
     "js-compile-bundle": "rollup --environment BUNDLE:true --config build/rollup.config.js --sourcemap",
+    "js-minify-standalone": "uglifyjs --compress typeofs=false --mangle --comments \"/^!/\" --source-map \"content=dist/js/simplicss.js.map,includeSources,url=simplicss.min.js.map\" --output dist/js/simplicss.min.js dist/js/simplicss.js",
+    "js-minify-bundle": "uglifyjs --compress typeofs=false --mangle --comments \"/^!/\" --source-map \"content=dist/js/simplicss.bundle.js.map,includeSources,url=simplicss.bundle.min.js.map\" --output dist/js/simplicss.bundle.min.js dist/js/simplicss.bundle.js",
     "watch": "npm-run-all --parallel watch-*",
     "watch-css": "nodemon --watch scss/ --ext scss --exec \"npm run css\"",
+    "watch-js": "nodemon --watch js/src --ext js --exec \"npm run js\"",
     "watch-server": "browser-sync start --server ./ --startPath site/"
   },
   "style": "dist/css/simplicss.css",
@@ -57,7 +61,8 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "shx": "^0.3.2",
     "stylelint": "^10.1.0",
-    "stylelint-config-twbs-bootstrap": "^0.4.0"
+    "stylelint-config-twbs-bootstrap": "^0.4.0",
+    "uglify-js": "^3.6.1"
   },
   "dependencies": {},
   "peerDependencies": {
