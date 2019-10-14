@@ -1,1 +1,1 @@
-{"version":3,"file":"simplicss.js","sources":["../../js/src/index.js"],"sourcesContent":["import $ from 'jquery'\r\n\r\n$(document).ready(function(){\r\n  $(\".scroll\").smoothScroll();\r\n});\r\n"],"names":["$","document","ready","smoothScroll"],"mappings":";;;;;;;;EAEAA,CAAC,CAACC,QAAD,CAAD,CAAYC,KAAZ,CAAkB,YAAU;EAC1BF,EAAAA,CAAC,CAAC,SAAD,CAAD,CAAaG,YAAb;EACD,CAFD;;;;"}
+{"version":3,"file":"simplicss.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;"}

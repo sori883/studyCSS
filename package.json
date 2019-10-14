@@ -19,7 +19,7 @@
     "js-compile-bundle": "rollup --environment BUNDLE:true --config build/rollup.config.js --sourcemap",
     "watch": "npm-run-all --parallel watch-*",
     "watch-css": "nodemon --watch scss/ --ext scss --exec \"npm run css\"",
-    "watch-server": "browser-sync start --server ./ --startPath site/",
+    "watch-server": "browser-sync start --server ./ --startPath site/"
   },
   "style": "dist/css/simplicss.css",
   "sass": "scss/simplicss.scss",
