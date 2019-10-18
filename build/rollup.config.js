@@ -8,7 +8,6 @@ const BUNDLE = process.env.BUNDLE === 'true'
 
 let fileDest = 'simplicss.js'
 const external = ['jquery']
-
 const plugins = [
   // babelをインスタンス化すると.babelrc.jsが実行されるみたい。
   babel({
@@ -22,7 +21,6 @@ const plugins = [
     ]
   })
 ]
-
 const globals = {
   jquery: 'jQuery'
 }

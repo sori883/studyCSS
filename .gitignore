@@ -4,6 +4,7 @@
 # OS or Editor Files
 .DS_Store
 .vscode/
+shell.lnk
 
 
 # folders to ignore
