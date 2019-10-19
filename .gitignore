@@ -9,3 +9,4 @@ shell.lnk
 
 # folders to ignore
 node_modules/
+js/coverage/
