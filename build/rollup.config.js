@@ -21,6 +21,7 @@ const plugins = [
     ]
   })
 ]
+
 const globals = {
   jquery: 'jQuery'
 }
