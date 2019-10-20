@@ -68,7 +68,7 @@ if (bundle) {
   conf.detectBrowsers = detectBrowsers
   files = files.concat([
     jqueryFile, 
-    'js/src/index.js'
+    'dist/js/simplicss.js'
   ])
 } else{
   frameworks.push('detectBrowsers')

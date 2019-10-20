@@ -1,7 +1,5 @@
-function add(a, b) {
-  return a + b;
-}
+import Util from './util'
 
-function subtract(a, b) {
-  return a - b;
+export {
+  Util
 }
