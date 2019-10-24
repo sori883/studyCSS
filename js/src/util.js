@@ -18,10 +18,12 @@ const MAX_UID = 1000000
 const MILLISECONDS_MULTIPLIER = 1000
 
 // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+// オブジェクトの型を判定する
 function toType(obj) {
   return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase()
 }
 
+//
 function getSpecialTransitionEndEvent() {
   return {
     bindType: TRANSITION_END,

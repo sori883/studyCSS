@@ -33,4 +33,4 @@
   Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
-//# sourceMappingURL=simplicss.js.map
+//# sourceMappingURL=simplicss.bundle.js.map

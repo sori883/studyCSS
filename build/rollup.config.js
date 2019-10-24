@@ -28,7 +28,7 @@ const globals = {
 
 if (BUNDLE) {
   fileDest = 'simplicss.bundle.js'
-  external.pop() //含まないライブラリ（jquery）を削除
+  external.pop() //含まないライブラリを追加
   plugins.push(resolve())
 }
 

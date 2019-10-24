@@ -25,11 +25,14 @@ const plugins = [
     ]
   })
 ]
+
+// TODO: プラグイン追加
 const bsPlugins = {
+  Alert: path.resolve(__dirname, '../js/src/alert.js'),
   Util: path.resolve(__dirname, '../js/src/util.js')
 }
 const rootPath = TEST ? '../js/coverage/dist/' : '../js/dist/'
-  
+
 function build(plugin) {
   console.log(`Building ${plugin} plugin...`)
 

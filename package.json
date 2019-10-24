@@ -27,6 +27,7 @@
     "js-test-karma-old": "cross-env USE_OLD_JQUERY=true npm run js-test-karma",
     "js-test-karma-bundle": "cross-env BUNDLE=true npm run js-test-karma",
     "js-test-karma-bundle-old": "cross-env BUNDLE=true USE_OLD_JQUERY=true npm run js-test-karma",
+    "js-test-integration": "rollup --config js/tests/integration/rollup.bundle.js",
     "js-copy": "cpx \"dist/js/simplicss.min.js\" \"site/assets/js/\" ",
     "watch": "npm-run-all --parallel watch-*",
     "watch-css": "nodemon --watch scss/ --ext scss --exec \"npm run css\"",
