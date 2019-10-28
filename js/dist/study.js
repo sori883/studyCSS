@@ -29,4 +29,4 @@
 	hello();
 
 }));
-//# sourceMappingURL=util.js.map
+//# sourceMappingURL=study.js.map

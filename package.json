@@ -32,6 +32,7 @@
     "watch": "npm-run-all --parallel watch-*",
     "watch-css": "nodemon --watch scss/ --ext scss --exec \"npm run css\"",
     "watch-js": "nodemon --watch js/src --ext js --exec \"npm run js\"",
+    "watch-js-study": "nodemon --watch js/src --ext js --exec \"npm run js-compile-standalone\"",
     "watch-server": "browser-sync start --server ./ --startPath site/"
   },
   "style": "dist/css/simplicss.css",

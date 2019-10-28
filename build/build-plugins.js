@@ -28,7 +28,7 @@ const plugins = [
 
 // TODO: プラグイン追加
 const bsPlugins = {
-  Util: path.resolve(__dirname, '../js/src/util.js')
+  study: path.resolve(__dirname, '../js/src/study.js')
 }
 const rootPath = TEST ? '../js/coverage/dist/' : '../js/dist/'
 
@@ -40,11 +40,11 @@ function build(plugin) {
     jquery: 'jQuery'
   }
 
-  // Do not bundle Util in plugins
-  //  if (plugin !== 'Util') {
-  //    external.push(bsPlugins.Util)
-  //    globals[bsPlugins.Util] = 'Util'
-  // }
+  //Do not bundle Util in plugins
+   if (plugin !== 'Util') {
+     external.push(bsPlugins.Util)
+     globals[bsPlugins.Util] = 'Util'
+  }
 
   const pluginFilename = `${plugin.toLowerCase()}.js`
 

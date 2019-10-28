@@ -1,5 +1,5 @@
-import Util from './util'
+import Study from './study'
 
 export {
-  Util
+  Study
 }
