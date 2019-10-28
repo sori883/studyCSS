@@ -13,6 +13,7 @@ import $ from 'jquery'
  * ------------------------------------------------------------------------
  */
 
+ // transitionendイベント用で変数になってるのはprefixをつけるから？
 const TRANSITION_END = 'transitionend'
 const MAX_UID = 1000000
 const MILLISECONDS_MULTIPLIER = 1000

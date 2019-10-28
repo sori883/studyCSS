@@ -17,14 +17,17 @@
    * Private TransitionEnd Helpers
    * ------------------------------------------------------------------------
    */
+  // transitionendイベント用で変数になってるのはprefixをつけるから？
 
   var TRANSITION_END = 'transitionend';
   var MAX_UID = 1000000;
   var MILLISECONDS_MULTIPLIER = 1000; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+  // オブジェクトの型を判定する
 
   function toType(obj) {
     return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
-  }
+  } //
+
 
   function getSpecialTransitionEndEvent() {
     return {
