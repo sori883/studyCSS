@@ -41,5 +41,5 @@ module.exports = {
     name: 'simplicss'
   },
   external, // 含まない外部ライブラリ
-  plugins //babelとかjqueryとか含むやつら
+  plugins //babelとか含むやつら
 }

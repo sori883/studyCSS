@@ -1,5 +1,7 @@
-import Study from './study'
+import Alert from './alert'
+import Util from './util'
 
 export {
-  Study
+  Alert,
+  Util
 }

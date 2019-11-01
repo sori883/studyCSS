@@ -6,33 +6,66 @@
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
-  var NAME = 'study';
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
 
-  var Study =
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
+  var NAME = 'alert';
+  var VERSION = '0.5.2';
+
+  var JQUERY_NO_CONFLICT = $.fn[NAME]; // アラート消す用
+
+  var Alert =
   /*#__PURE__*/
   function () {
-    function Study(target) {
-      this.element = target;
-    }
+    function Alert(element) {
+      this._element = element;
+    } // バージョンのゲッター
 
-    var _proto = Study.prototype;
 
-    _proto.out = function out() {
-      return this.element;
+    var _proto = Alert.prototype;
+
+    _proto.close = function close(element) {
+      // コンストラクタで取得したelement
+      var rootElement = this._element; // closeの引数があったら_getRootElementを発動！
+      // class="close"の指定があったときかな
+
+      if (element) {
+        rootElement = this._getRootElement(element);
+      }
+
+      var customEvent = this._triggerCloseEvent(rootElement);
+
+      if (customEvent.isDefaultPrevented()) {
+        return;
+      }
+
+      this._removeElement(rootElement);
     };
 
-    return Study;
+    _createClass(Alert, null, [{
+      key: "VERSION",
+      get: function get() {
+        return VERSION;
+      }
+    }]);
+
+    return Alert;
   }();
 
-  var study = new Study();
-  console.log(study.out());
-
-  $.fn[NAME] = function () {
-    this.css("background-color", "green");
-    return this;
-  };
-
-  exports.Study = Study;
+  exports.Alert = Alert;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

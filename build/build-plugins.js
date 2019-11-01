@@ -28,7 +28,7 @@ const plugins = [
 
 // TODO: プラグイン追加
 const bsPlugins = {
-  study: path.resolve(__dirname, '../js/src/study.js')
+  study: path.resolve(__dirname, '../js/src/alert.js')
 }
 const rootPath = TEST ? '../js/coverage/dist/' : '../js/dist/'
 

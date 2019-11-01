@@ -78,16 +78,26 @@ const Util = {
   },
 
   getSelectorFromElement(element) {
+    // 引数elementのdata-target属性の値を取得
     let selector = element.getAttribute('data-target')
 
+    // data-targetが存在しないか#の場合
     if (!selector || selector === '#') {
+      // 引数elementのhref属性の値を取得
       const hrefAttr = element.getAttribute('href')
+      // hrefAttrがなかったら左のhrefAttrを返す=ifはfalseになり''が代入される
+      // hrefAttrがあったら#かどうかを判定して、#じゃなかったらtrimする。
+      // trim: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/String/trim
       selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : ''
     }
 
     try {
+      // html内のdata-targetもしくはhregで指定されているselectorを返す
+      // data-targetかtrimされたhrefのどっちか
+      // なかったらnullを返す
       return document.querySelector(selector) ? selector : null
     } catch (err) {
+      // エラーになったらnullを返す
       return null
     }
   },
