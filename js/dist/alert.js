@@ -23,124 +23,151 @@
     return Constructor;
   }
 
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
   var NAME = 'alert';
-  var VERSION = '4.3.1';
-  var DATA_KEY = 'bs.alert';
-  var EVENT_KEY = "." + DATA_KEY;
-  var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var VERSION = '0.5.2';
+  var DATA_KEY = 'sc.alert'; // アラート閉じた時のイベントとかに使うみたい
+  // http://bootstrap3.cyberlab.info/javascript/alerts-events.html
+
+  var EVENT_KEY = "." + DATA_KEY; // イベントを無効にする用
+  // https://getbootstrap.jp/docs/4.1/getting-started/javascript/
+
+  var DATA_API_KEY = '.data-api'; // 他のフレームワークと名前衝突を回避する用
+
+  var JQUERY_NO_CONFLICT = $.fn[NAME]; // アラート消す用
+
   var Selector = {
     DISMISS: '[data-dismiss="alert"]'
-  };
+  }; // イベント用の名前
+  // e.g. close.sc.alert
+
   var Event = {
     CLOSE: "close" + EVENT_KEY,
     CLOSED: "closed" + EVENT_KEY,
     CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
-  };
+  }; // htmlのクラス名
+
   var ClassName = {
     ALERT: 'alert',
     FADE: 'fade',
     SHOW: 'show'
   };
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
 
   var Alert =
   /*#__PURE__*/
   function () {
     function Alert(element) {
       this._element = element;
-    } // Getters
+    } // バージョンのゲッター
 
 
     var _proto = Alert.prototype;
 
-    // Public
+    // public method
     _proto.close = function close(element) {
-      var rootElement = this._element;
+      // コンストラクタで取得したelement
+      var rootElement = this._element; // closeにelementが引数で渡されていたら
 
       if (element) {
+        // data-targetもしくはhrefで指定された要素を取得
+        // data-targetもしくはhrefがなかったら直近の.alert要素を取得
         rootElement = this._getRootElement(element);
-      }
+      } //
 
-      var customEvent = this._triggerCloseEvent(rootElement);
+
+      var customEvent = this._triggerCloseEvent(rootElement); // イベントがブラウザの処理を禁止した場合は闇に葬り去る
+      // http://www.jquerystudy.info/reference/events/isDefaultPrevented.html
+
 
       if (customEvent.isDefaultPrevented()) {
         return;
-      }
+      } // showクラスを削除する
+      // fadeクラスがなかった場合、要素を削除する
+
 
       this._removeElement(rootElement);
-    };
+    } // this._elementを削除するみたい
+    ;
 
     _proto.dispose = function dispose() {
       $.removeData(this._element, DATA_KEY);
       this._element = null;
-    } // Private
+    } // private method
+    // closeで使ってるやつ
     ;
 
     _proto._getRootElement = function _getRootElement(element) {
+      // elementのdata-targetもしくはhrefで指定されているselectorを取得
       var selector = Util.getSelectorFromElement(element);
-      var parent = false;
+      var parent = false; // selectorがあった場合
 
       if (selector) {
+        // data-targetもしくはhrefで指定されている要素を取得
+        // 開始タグから終了タグまで持ってくるみたい
         parent = document.querySelector(selector);
-      }
+      } // 上のifを通らなかったか通ってもnullが帰ってきた場合
+
 
       if (!parent) {
+        // data-targetもしくはhrefが指定されてないので、一番近い.alertを取得する
         parent = $(element).closest("." + ClassName.ALERT)[0];
       }
 
       return parent;
-    };
+    } // closeで使ってるやつ
+    ;
 
     _proto._triggerCloseEvent = function _triggerCloseEvent(element) {
-      var closeEvent = $.Event(Event.CLOSE);
-      $(element).trigger(closeEvent);
+      // close.sc.alertになるんだなぁ
+      var closeEvent = $.Event(Event.CLOSE); // https://www.sejuku.net/blog/40012#trigger
+      // イベントを発生させるみたい
+
+      $(element).trigger(closeEvent); // closeEvent返すんか
+
       return closeEvent;
-    };
+    } // closeで使ってるやつ
+    ;
 
     _proto._removeElement = function _removeElement(element) {
-      var _this = this;
-
-      $(element).removeClass(ClassName.SHOW);
+      // showクラスを削除
+      $(element).removeClass(ClassName.SHOW); // fadeクラスを持ってなかった場合
 
       if (!$(element).hasClass(ClassName.FADE)) {
+        // デストロイするみたい
         this._destroyElement(element);
 
-        return;
+        return; // eslint-disable-line no-useless-return
       }
-
-      var transitionDuration = Util.getTransitionDurationFromElement(element);
-      $(element).one(Util.TRANSITION_END, function (event) {
-        return _this._destroyElement(element, event);
-      }).emulateTransitionEnd(transitionDuration);
-    };
+    } // _removeElementで使ってるやつ
+    ;
 
     _proto._destroyElement = function _destroyElement(element) {
-      $(element).detach().trigger(Event.CLOSED).remove();
-    } // Static
+      $(element) // elementを。。。
+      .detach() // elementを消す（値は保持しておくけど）
+      .trigger(Event.CLOSED) // イベントcloseを発動する
+      .remove(); // elementの持つ子要素をすべて削除
+      // https://qiita.com/BRSF/items/1aa9d154bde497b0baa0#remove%E3%81%AE%E5%A0%B4%E5%90%88
+    } // static
     ;
 
     Alert._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var $element = $(this);
-        var data = $element.data(DATA_KEY);
+        // jqueryのelementを取得
+        var $element = $(this); // elementのdata-sc.alertを取得?
+
+        var data = $element.data(DATA_KEY); // dataがなかったら
 
         if (!data) {
-          data = new Alert(this);
+          // アラートをインスタンス化
+          // thisはelement
+          data = new Alert(this); // elementにdata-sc.alertを設定
+          // 中身はdata
+
           $element.data(DATA_KEY, data);
-        }
+        } // configがcloseだったら・・・・
+
 
         if (config === 'close') {
+          // dataにclose、thisの配列を突っ込む
           data[config](this);
         }
       });
@@ -149,8 +176,10 @@
     Alert._handleDismiss = function _handleDismiss(alertInstance) {
       return function (event) {
         if (event) {
+          // イベントの動作を停止させる
           event.preventDefault();
-        }
+        } // closeメソッド実行すると思う
+
 
         alertInstance.close(this);
       };
@@ -167,20 +196,26 @@
   }();
   /**
    * ------------------------------------------------------------------------
-   * Data Api implementation
+   * Data Apiの定義
    * ------------------------------------------------------------------------
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DISMISS, Alert._handleDismiss(new Alert()));
+  $(document).on(Event.CLICK_DATA_API, // click.sc.alert.data-api
+  Selector.DISMISS, // [data-dismiss="alert"]
+  Alert._handleDismiss(new Alert()) // staticのやつ実行するんだね
+  );
   /**
    * ------------------------------------------------------------------------
    * jQuery
    * ------------------------------------------------------------------------
    */
+  // .alertは_jQueryInterface
 
-  $.fn[NAME] = Alert._jQueryInterface;
-  $.fn[NAME].Constructor = Alert;
+  $.fn[NAME] = Alert._jQueryInterface; // .alert.ConstructorはAlert
+
+  $.fn[NAME].Constructor = Alert; // .alert.noConflict
+  // 衝突回避用
 
   $.fn[NAME].noConflict = function () {
     $.fn[NAME] = JQUERY_NO_CONFLICT;

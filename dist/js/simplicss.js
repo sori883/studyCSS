@@ -22,10 +22,218 @@
     return Constructor;
   }
 
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.3.1): util.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+  /**
+   * ------------------------------------------------------------------------
+   * Private TransitionEnd Helpers
+   * ------------------------------------------------------------------------
+   */
+  // transitionendイベント用で変数になってるのはprefixをつけるから？
+
+  var TRANSITION_END = 'transitionend';
+  var MAX_UID = 1000000;
+  var MILLISECONDS_MULTIPLIER = 1000; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+  // オブジェクトの型を判定する
+
+  function toType(obj) {
+    return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
+  } //
+
+
+  function getSpecialTransitionEndEvent() {
+    return {
+      bindType: TRANSITION_END,
+      delegateType: TRANSITION_END,
+      handle: function handle(event) {
+        if ($(event.target).is(this)) {
+          return event.handleObj.handler.apply(this, arguments); // eslint-disable-line prefer-rest-params
+        }
+
+        return undefined; // eslint-disable-line no-undefined
+      }
+    };
+  }
+
+  function transitionEndEmulator(duration) {
+    var _this = this;
+
+    var called = false;
+    $(this).one(Util.TRANSITION_END, function () {
+      called = true;
+    });
+    setTimeout(function () {
+      if (!called) {
+        Util.triggerTransitionEnd(_this);
+      }
+    }, duration);
+    return this;
+  }
+
+  function setTransitionEndSupport() {
+    $.fn.emulateTransitionEnd = transitionEndEmulator;
+    $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
+  }
+  /**
+   * --------------------------------------------------------------------------
+   * Public Util Api
+   * --------------------------------------------------------------------------
+   */
+
+
+  var Util = {
+    TRANSITION_END: 'bsTransitionEnd',
+    getUID: function getUID(prefix) {
+      do {
+        // eslint-disable-next-line no-bitwise
+        prefix += ~~(Math.random() * MAX_UID); // "~~" acts like a faster Math.floor() here
+      } while (document.getElementById(prefix));
+
+      return prefix;
+    },
+    getSelectorFromElement: function getSelectorFromElement(element) {
+      // 引数elementのdata-target属性の値を取得
+      var selector = element.getAttribute('data-target'); // data-targetが存在しないか#の場合
+
+      if (!selector || selector === '#') {
+        // 引数elementのhref属性の値を取得
+        var hrefAttr = element.getAttribute('href'); // hrefAttrがなかったら左のhrefAttrを返す=ifはfalseになり''が代入される
+        // hrefAttrがあったら#かどうかを判定して、#じゃなかったらtrimする。
+        // trim: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/String/trim
+
+        selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : '';
+      }
+
+      try {
+        // html内のdata-targetもしくはhregで指定されているselectorを返す
+        // data-targetかtrimされたhrefのどっちか
+        // なかったらnullを返す
+        return document.querySelector(selector) ? selector : null;
+      } catch (err) {
+        // エラーになったらnullを返す
+        return null;
+      }
+    },
+    getTransitionDurationFromElement: function getTransitionDurationFromElement(element) {
+      if (!element) {
+        return 0;
+      } // Get transition-duration of the element
+
+
+      var transitionDuration = $(element).css('transition-duration');
+      var transitionDelay = $(element).css('transition-delay');
+      var floatTransitionDuration = parseFloat(transitionDuration);
+      var floatTransitionDelay = parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+
+      if (!floatTransitionDuration && !floatTransitionDelay) {
+        return 0;
+      } // If multiple durations are defined, take the first
+
+
+      transitionDuration = transitionDuration.split(',')[0];
+      transitionDelay = transitionDelay.split(',')[0];
+      return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+    },
+    reflow: function reflow(element) {
+      return element.offsetHeight;
+    },
+    triggerTransitionEnd: function triggerTransitionEnd(element) {
+      $(element).trigger(TRANSITION_END);
+    },
+    // TODO: Remove in v5
+    supportsTransitionEnd: function supportsTransitionEnd() {
+      return Boolean(TRANSITION_END);
+    },
+    isElement: function isElement(obj) {
+      return (obj[0] || obj).nodeType;
+    },
+    typeCheckConfig: function typeCheckConfig(componentName, config, configTypes) {
+      for (var property in configTypes) {
+        if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
+          var expectedTypes = configTypes[property];
+          var value = config[property];
+          var valueType = value && Util.isElement(value) ? 'element' : toType(value);
+
+          if (!new RegExp(expectedTypes).test(valueType)) {
+            throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
+          }
+        }
+      }
+    },
+    findShadowRoot: function findShadowRoot(element) {
+      if (!document.documentElement.attachShadow) {
+        return null;
+      } // Can find the shadow root otherwise it'll return the document
+
+
+      if (typeof element.getRootNode === 'function') {
+        var root = element.getRootNode();
+        return root instanceof ShadowRoot ? root : null;
+      }
+
+      if (element instanceof ShadowRoot) {
+        return element;
+      } // when we don't find a shadow root
+
+
+      if (!element.parentNode) {
+        return null;
+      }
+
+      return Util.findShadowRoot(element.parentNode);
+    },
+    jQueryDetection: function jQueryDetection() {
+      if (typeof $ === 'undefined') {
+        throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
+      }
+
+      var version = $.fn.jquery.split(' ')[0].split('.');
+      var minMajor = 1;
+      var ltMajor = 2;
+      var minMinor = 9;
+      var minPatch = 1;
+      var maxMajor = 4;
+
+      if (version[0] < ltMajor && version[1] < minMinor || version[0] === minMajor && version[1] === minMinor && version[2] < minPatch || version[0] >= maxMajor) {
+        throw new Error('Bootstrap\'s JavaScript requires at least jQuery v1.9.1 but less than v4.0.0');
+      }
+    }
+  };
+  Util.jQueryDetection();
+  setTransitionEndSupport();
+
   var NAME = 'alert';
   var VERSION = '0.5.2';
+  var DATA_KEY = 'sc.alert'; // アラート閉じた時のイベントとかに使うみたい
+  // http://bootstrap3.cyberlab.info/javascript/alerts-events.html
+
+  var EVENT_KEY = "." + DATA_KEY; // イベントを無効にする用
+  // https://getbootstrap.jp/docs/4.1/getting-started/javascript/
+
+  var DATA_API_KEY = '.data-api'; // 他のフレームワークと名前衝突を回避する用
 
   var JQUERY_NO_CONFLICT = $.fn[NAME]; // アラート消す用
+
+  var Selector = {
+    DISMISS: '[data-dismiss="alert"]'
+  }; // イベント用の名前
+  // e.g. close.sc.alert
+
+  var Event = {
+    CLOSE: "close" + EVENT_KEY,
+    CLOSED: "closed" + EVENT_KEY,
+    CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+  }; // htmlのクラス名
+
+  var ClassName = {
+    ALERT: 'alert',
+    FADE: 'fade',
+    SHOW: 'show'
+  };
 
   var Alert =
   /*#__PURE__*/
@@ -37,22 +245,128 @@
 
     var _proto = Alert.prototype;
 
+    // public method
     _proto.close = function close(element) {
+      //このクラス内のthisはalertクラス
       // コンストラクタで取得したelement
-      var rootElement = this._element; // closeの引数があったら_getRootElementを発動！
-      // class="close"の指定があったときかな
+      var rootElement = this._element; // closeにelementが引数で渡されていたら
 
       if (element) {
+        // div.alertを取得
         rootElement = this._getRootElement(element);
-      }
+      } //カスタムイベントを作成
 
-      var customEvent = this._triggerCloseEvent(rootElement);
+
+      var customEvent = this._triggerCloseEvent(rootElement); // イベントがブラウザの処理を禁止していた場合は闇に葬り去る
+      // http://www.jquerystudy.info/reference/events/isDefaultPrevented.html
+
 
       if (customEvent.isDefaultPrevented()) {
         return;
-      }
+      } // showクラスを削除する
+      // fadeクラスがなかった場合、要素を削除する
+
 
       this._removeElement(rootElement);
+    } // this._elementを削除するみたい
+    ;
+
+    _proto.dispose = function dispose() {
+      $.removeData(this._element, DATA_KEY);
+      this._element = null;
+    } // private method
+    // closeで使ってるやつ
+    ;
+
+    _proto._getRootElement = function _getRootElement(element) {
+      // elementのdata-targetもしくはhrefで指定されているselectorを取得
+      var selector = Util.getSelectorFromElement(element);
+      var parent = false; // selectorがあった場合
+
+      if (selector) {
+        // data-targetもしくはhrefで指定されている要素を取得
+        // 開始タグから終了タグまで持ってくるみたい
+        parent = document.querySelector(selector);
+      } // 上のifを通らなかったか通ってもnullが帰ってきた場合
+
+
+      if (!parent) {
+        // data-targetもしくはhrefが指定されてないので、一番近い.alertを取得する
+        parent = $(element).closest("." + ClassName.ALERT)[0];
+      }
+
+      return parent;
+    } // closeで使ってるやつ
+    ;
+
+    _proto._triggerCloseEvent = function _triggerCloseEvent(element) {
+      // close.sc.alertイベントを定義
+      var closeEvent = $.Event(Event.CLOSE);
+      $(element).trigger(closeEvent); //closeイベントを発生
+      // closeEvent返すんか
+
+      return closeEvent;
+    } // closeで使ってるやつ
+    ;
+
+    _proto._removeElement = function _removeElement(element) {
+      // showクラスを削除
+      $(element).removeClass(ClassName.SHOW); // fadeクラスを持ってなかった場合
+
+      if (!$(element).hasClass(ClassName.FADE)) {
+        // アラートを削除
+        this._destroyElement(element);
+
+        return; // eslint-disable-line no-useless-return
+      }
+    } // _removeElementで使ってるやつ
+    ;
+
+    _proto._destroyElement = function _destroyElement(element) {
+      $(element) // elementを。。。
+      .detach() // elementを隔離
+      .trigger(Event.CLOSED) // closedイベントを発生させる
+      .remove(); // element削除
+      // https://qiita.com/BRSF/items/1aa9d154bde497b0baa0#remove%E3%81%AE%E5%A0%B4%E5%90%88
+    } // static
+    ;
+
+    Alert._jQueryInterface = function _jQueryInterface(config) {
+      return this.each(function () {
+        // elementを格納
+        var $element = $(this); // elementのdata-sc.alert属性を取得
+
+        var data = $element.data(DATA_KEY); // dataがなかったら
+
+        if (!data) {
+          // アラートをインスタンス化
+          // thisはelement
+          data = new Alert(this); // elementにdata-sc.alertを設定
+          // 中身はdata
+
+          $element.data(DATA_KEY, data);
+        } // configがcloseだったら・・・・
+
+
+        if (config === 'close') {
+          // alert.close(element)になる
+          data[config](this);
+        }
+      });
+    };
+
+    Alert._handleDismiss = function _handleDismiss(alertInstance) {
+      return function (event) {
+        // イベントがあったら      
+        if (event) {
+          // イベントの動作を停止させる
+          event.preventDefault();
+        } // 引数で受け取ったalertインスタンスのcloseを実行
+        // 引数はhtmlのbutton
+
+
+        alertInstance.close(this);
+      };
     };
 
     _createClass(Alert, null, [{
@@ -64,8 +378,37 @@
 
     return Alert;
   }();
+  /**
+   * ------------------------------------------------------------------------
+   * Data Apiの定義
+   * ------------------------------------------------------------------------
+   */
+  // ここがブラウザで使う部分みたい
+
+
+  $(document).on(Event.CLICK_DATA_API, // click.sc.alert.data-api
+  Selector.DISMISS, // [data-dismiss="alert"]
+  Alert._handleDismiss(new Alert()) // staticのやつ実行するんだね
+  );
+  /**
+   * ------------------------------------------------------------------------
+   * jQuery
+   * ------------------------------------------------------------------------
+   */
+  // .alertは_jQueryInterface
+
+  $.fn[NAME] = Alert._jQueryInterface; // .alert.ConstructorはAlert
+
+  $.fn[NAME].Constructor = Alert; // .alert.noConflict
+  // 衝突回避用
+
+  $.fn[NAME].noConflict = function () {
+    $.fn[NAME] = JQUERY_NO_CONFLICT;
+    return Alert._jQueryInterface;
+  };
 
   exports.Alert = Alert;
+  exports.Util = Util;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
