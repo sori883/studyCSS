@@ -67,7 +67,7 @@ if (bundle) {
   conf.customLaunchers = customLaunchers
   conf.detectBrowsers = detectBrowsers
   files = files.concat([
-    jqueryFile, 
+    jqueryFile,
     'dist/js/simplicss.js'
   ])
 } else{

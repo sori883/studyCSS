@@ -24,8 +24,8 @@
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.3.1): util.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * simplicss (v4.3.1): util.js
+   * Licensed under MIT (https://github.com/twbs/simplicss/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
   /**
@@ -188,7 +188,7 @@
     },
     jQueryDetection: function jQueryDetection() {
       if (typeof $ === 'undefined') {
-        throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
+        throw new TypeError('simplicss\'s JavaScript requires jQuery. jQuery must be included before simplicss\'s JavaScript.');
       }
 
       var version = $.fn.jquery.split(' ')[0].split('.');
@@ -199,7 +199,7 @@
       var maxMajor = 4;
 
       if (version[0] < ltMajor && version[1] < minMinor || version[0] === minMajor && version[1] === minMinor && version[2] < minPatch || version[0] >= maxMajor) {
-        throw new Error('Bootstrap\'s JavaScript requires at least jQuery v1.9.1 but less than v4.0.0');
+        throw new Error('simplicss\'s JavaScript requires at least jQuery v1.9.1 but less than v4.0.0');
       }
     }
   };
@@ -310,6 +310,8 @@
     ;
 
     _proto._removeElement = function _removeElement(element) {
+      var _this = this;
+
       // showクラスを削除
       $(element).removeClass(ClassName.SHOW); // fadeクラスを持ってなかった場合
 
@@ -319,6 +321,11 @@
 
         return; // eslint-disable-line no-useless-return
       }
+
+      var transitionDuration = Util.getTransitionDurationFromElement(element);
+      $(element).one(Util.TRANSITION_END, function (event) {
+        return _this._destroyElement(element, event);
+      }).emulateTransitionEnd(transitionDuration);
     } // _removeElementで使ってるやつ
     ;
 

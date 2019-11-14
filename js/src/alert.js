@@ -1,3 +1,10 @@
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v4.3.1): alert.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
 import $ from 'jquery'
 import Util from './util'
 
@@ -123,6 +130,15 @@ class Alert {
       this._destroyElement(element)
       return // eslint-disable-line no-useless-return
     }
+
+    // 要素の変化にかかる時間を取得
+    const transitionDuration = Util.getTransitionDurationFromElement(element)
+
+    $(element)
+      //.oneは一回だけ実行するイベント
+      .one(Util.TRANSITION_END, (event) => this._destroyElement(element, event))
+      .emulateTransitionEnd(transitionDuration)
+
   }
 
   // _removeElementで使ってるやつ

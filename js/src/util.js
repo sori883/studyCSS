@@ -1,7 +1,7 @@
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.3.1): util.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * simplicss (v4.3.1): util.js
+ * Licensed under MIT (https://github.com/twbs/simplicss/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
@@ -67,7 +67,7 @@ function setTransitionEndSupport() {
 
 const Util = {
 
-  TRANSITION_END: 'bsTransitionEnd',
+  TRANSITION_END: 'scTransitionEnd',
 
   getUID(prefix) {
     do {
@@ -102,28 +102,32 @@ const Util = {
     }
   },
 
+  // 要素から遷移時間を取得
   getTransitionDurationFromElement(element) {
+    // エレメントがなかったら0を返す
     if (!element) {
       return 0
     }
 
-    // Get transition-duration of the element
+    // transition-durationとtransition-delayの値を取得
     let transitionDuration = $(element).css('transition-duration')
     let transitionDelay = $(element).css('transition-delay')
 
+    // 浮動小数点を取得
     const floatTransitionDuration = parseFloat(transitionDuration)
     const floatTransitionDelay = parseFloat(transitionDelay)
 
-    // Return 0 if element or transition duration is not found
+    // cssプロパティ、値がなければ0を返す
     if (!floatTransitionDuration && !floatTransitionDelay) {
       return 0
     }
 
-    // If multiple durations are defined, take the first
+    // 複数値が指定されてたら最初の1つだけ取得する
     transitionDuration = transitionDuration.split(',')[0]
     transitionDelay = transitionDelay.split(',')[0]
 
-    return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER
+    // 変化にかかる時間(transitionDuration)と変化が始める時間(transitionDelay)を足して1000をかけて(秒にする)返す
+    return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER // ×1000する
   },
 
   reflow(element) {
@@ -186,7 +190,7 @@ const Util = {
 
   jQueryDetection() {
     if (typeof $ === 'undefined') {
-      throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.')
+      throw new TypeError('simplicss\'s JavaScript requires jQuery. jQuery must be included before simplicss\'s JavaScript.')
     }
 
     const version = $.fn.jquery.split(' ')[0].split('.')
@@ -197,7 +201,7 @@ const Util = {
     const maxMajor = 4
 
     if (version[0] < ltMajor && version[1] < minMinor || version[0] === minMajor && version[1] === minMinor && version[2] < minPatch || version[0] >= maxMajor) {
-      throw new Error('Bootstrap\'s JavaScript requires at least jQuery v1.9.1 but less than v4.0.0')
+      throw new Error('simplicss\'s JavaScript requires at least jQuery v1.9.1 but less than v4.0.0')
     }
   }
 }
