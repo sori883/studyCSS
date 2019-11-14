@@ -38,23 +38,28 @@ function getSpecialTransitionEndEvent() {
   }
 }
 
+// transitionの遷移時間を引数でもらう
 function transitionEndEmulator(duration) {
   let called = false
 
+  // 呼び出しもとのエレメントでTRANSITION_ENDを実行
   $(this).one(Util.TRANSITION_END, () => {
+    // コールバックをtrueにする
     called = true
   })
 
   setTimeout(() => {
+    // falseだったらtriggerTransitionEndを実行する
     if (!called) {
       Util.triggerTransitionEnd(this)
     }
-  }, duration)
-
+  }, duration) // settimeoutの時間は引数の遷移時間
+  // エレメントを返す
   return this
 }
 
 function setTransitionEndSupport() {
+  // Jqueryのカスタムプラグインを作成
   $.fn.emulateTransitionEnd = transitionEndEmulator
   $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent()
 }
@@ -134,6 +139,7 @@ const Util = {
     return element.offsetHeight
   },
 
+  // 引数エレメントでtrainsition_endイベントを実行する
   triggerTransitionEnd(element) {
     $(element).trigger(TRANSITION_END)
   },

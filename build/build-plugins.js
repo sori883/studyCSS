@@ -27,7 +27,7 @@ const plugins = [
 ]
 
 // TODO: プラグイン追加
-const bsPlugins = {
+const scPlugins = {
   Alert: path.resolve(__dirname, '../js/src/alert.js'),
   Util: path.resolve(__dirname, '../js/src/util.js')
 }
@@ -43,14 +43,14 @@ function build(plugin) {
 
   //Do not bundle Util in plugins
    if (plugin !== 'Util') {
-     external.push(bsPlugins.Util)
-     globals[bsPlugins.Util] = 'Util'
+     external.push(scPlugins.Util)
+     globals[scPlugins.Util] = 'Util'
   }
 
   const pluginFilename = `${plugin.toLowerCase()}.js`
 
   rollup.rollup({
-    input: bsPlugins[plugin],
+    input: scPlugins[plugin],
     plugins,
     external
   }).then((bundle) => {
@@ -66,4 +66,4 @@ function build(plugin) {
   })
 }
 
-Object.keys(bsPlugins).forEach((plugin) => build(plugin))
+Object.keys(scPlugins).forEach((plugin) => build(plugin))

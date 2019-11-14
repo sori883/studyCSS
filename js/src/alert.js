@@ -54,7 +54,7 @@ class Alert {
   // public method
 
   close(element) {
-    //このクラス内のthisはalertクラス
+    // このクラス内のthisはalertクラス
 
     // コンストラクタで取得したelement
     let rootElement = this._element
@@ -65,7 +65,7 @@ class Alert {
       rootElement = this._getRootElement(element)
     }
 
-    //カスタムイベントを作成
+    // カスタムイベントを作成
     const customEvent = this._triggerCloseEvent(rootElement)
 
     // イベントがブラウザの処理を禁止していた場合は闇に葬り去る
@@ -114,7 +114,7 @@ class Alert {
     // close.sc.alertイベントを定義
     const closeEvent = $.Event(Event.CLOSE)
 
-    $(element).trigger(closeEvent) //closeイベントを発生
+    $(element).trigger(closeEvent) // closeイベントを発生
     // closeEvent返すんか
     return closeEvent
   }
@@ -135,10 +135,11 @@ class Alert {
     const transitionDuration = Util.getTransitionDurationFromElement(element)
 
     $(element)
-      //.oneは一回だけ実行するイベント
+      // .oneは一回だけ実行するイベント。TRANSITION_ENDはイベント名。
+      // エレメントを削除してclosedイベントを実行する
       .one(Util.TRANSITION_END, (event) => this._destroyElement(element, event))
+      // util.jsのtransitionEndEmulatorを実行
       .emulateTransitionEnd(transitionDuration)
-
   }
 
   // _removeElementで使ってるやつ
@@ -179,7 +180,7 @@ class Alert {
 
   static _handleDismiss(alertInstance) {
     return function (event) {
-      // イベントがあったら      
+      // イベントがあったら
       if (event) {
         // イベントの動作を停止させる
         event.preventDefault()

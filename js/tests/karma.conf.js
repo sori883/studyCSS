@@ -80,6 +80,8 @@ if (bundle) {
   )
   files = files.concat([
     jqueryFile,
+    'js/coverage/dist/util.js',
+    'js/coverage/dist/!(util|index).js'
   ])
   reporters.push('coverage-istanbul')
   conf.customLaunchers = customLaunchers

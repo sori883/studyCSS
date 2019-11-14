@@ -64,17 +64,17 @@
 
     // public method
     _proto.close = function close(element) {
+      //このクラス内のthisはalertクラス
       // コンストラクタで取得したelement
       var rootElement = this._element; // closeにelementが引数で渡されていたら
 
       if (element) {
-        // data-targetもしくはhrefで指定された要素を取得
-        // data-targetもしくはhrefがなかったら直近の.alert要素を取得
+        // div.alertを取得
         rootElement = this._getRootElement(element);
-      } //
+      } //カスタムイベントを作成
 
 
-      var customEvent = this._triggerCloseEvent(rootElement); // イベントがブラウザの処理を禁止した場合は闇に葬り去る
+      var customEvent = this._triggerCloseEvent(rootElement); // イベントがブラウザの処理を禁止していた場合は闇に葬り去る
       // http://www.jquerystudy.info/reference/events/isDefaultPrevented.html
 
 
@@ -117,42 +117,52 @@
     ;
 
     _proto._triggerCloseEvent = function _triggerCloseEvent(element) {
-      // close.sc.alertになるんだなぁ
-      var closeEvent = $.Event(Event.CLOSE); // https://www.sejuku.net/blog/40012#trigger
-      // イベントを発生させるみたい
-
-      $(element).trigger(closeEvent); // closeEvent返すんか
+      // close.sc.alertイベントを定義
+      var closeEvent = $.Event(Event.CLOSE);
+      $(element).trigger(closeEvent); //closeイベントを発生
+      // closeEvent返すんか
 
       return closeEvent;
     } // closeで使ってるやつ
     ;
 
     _proto._removeElement = function _removeElement(element) {
+      var _this = this;
+
       // showクラスを削除
       $(element).removeClass(ClassName.SHOW); // fadeクラスを持ってなかった場合
 
       if (!$(element).hasClass(ClassName.FADE)) {
-        // デストロイするみたい
+        // アラートを削除
         this._destroyElement(element);
 
         return; // eslint-disable-line no-useless-return
-      }
+      } // 要素の変化にかかる時間を取得
+
+
+      var transitionDuration = Util.getTransitionDurationFromElement(element);
+      $(element) //.oneは一回だけ実行するイベント。TRANSITION_ENDはイベント名。
+      // エレメントを削除してclosedイベントを実行する
+      .one(Util.TRANSITION_END, function (event) {
+        return _this._destroyElement(element, event);
+      }) // util.jsのtransitionEndEmulatorを実行
+      .emulateTransitionEnd(transitionDuration);
     } // _removeElementで使ってるやつ
     ;
 
     _proto._destroyElement = function _destroyElement(element) {
       $(element) // elementを。。。
-      .detach() // elementを消す（値は保持しておくけど）
-      .trigger(Event.CLOSED) // イベントcloseを発動する
-      .remove(); // elementの持つ子要素をすべて削除
+      .detach() // elementを隔離
+      .trigger(Event.CLOSED) // closedイベントを発生させる
+      .remove(); // element削除
       // https://qiita.com/BRSF/items/1aa9d154bde497b0baa0#remove%E3%81%AE%E5%A0%B4%E5%90%88
     } // static
     ;
 
     Alert._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        // jqueryのelementを取得
-        var $element = $(this); // elementのdata-sc.alertを取得?
+        // elementを格納
+        var $element = $(this); // elementのdata-sc.alert属性を取得
 
         var data = $element.data(DATA_KEY); // dataがなかったら
 
@@ -167,7 +177,7 @@
 
 
         if (config === 'close') {
-          // dataにclose、thisの配列を突っ込む
+          // alert.close(element)になる
           data[config](this);
         }
       });
@@ -175,10 +185,12 @@
 
     Alert._handleDismiss = function _handleDismiss(alertInstance) {
       return function (event) {
+        // イベントがあったら      
         if (event) {
           // イベントの動作を停止させる
           event.preventDefault();
-        } // closeメソッド実行すると思う
+        } // 引数で受け取ったalertインスタンスのcloseを実行
+        // 引数はhtmlのbutton
 
 
         alertInstance.close(this);
@@ -199,6 +211,7 @@
    * Data Apiの定義
    * ------------------------------------------------------------------------
    */
+  // ここがブラウザで使う部分みたい
 
 
   $(document).on(Event.CLICK_DATA_API, // click.sc.alert.data-api

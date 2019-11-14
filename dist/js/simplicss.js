@@ -57,24 +57,31 @@
         return undefined; // eslint-disable-line no-undefined
       }
     };
-  }
+  } // transitionの遷移時間を引数でもらう
+
 
   function transitionEndEmulator(duration) {
     var _this = this;
 
-    var called = false;
+    var called = false; // 呼び出しもとのエレメントでTRANSITION_ENDを実行
+
     $(this).one(Util.TRANSITION_END, function () {
+      // コールバックをtrueにする
       called = true;
     });
     setTimeout(function () {
+      // falseだったらtriggerTransitionEndを実行する
       if (!called) {
         Util.triggerTransitionEnd(_this);
       }
-    }, duration);
+    }, duration); // settimeoutの時間は引数の遷移時間
+    // エレメントを返す
+
     return this;
   }
 
   function setTransitionEndSupport() {
+    // Jqueryのカスタムプラグインを作成
     $.fn.emulateTransitionEnd = transitionEndEmulator;
     $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
   }
@@ -86,7 +93,7 @@
 
 
   var Util = {
-    TRANSITION_END: 'bsTransitionEnd',
+    TRANSITION_END: 'scTransitionEnd',
     getUID: function getUID(prefix) {
       do {
         // eslint-disable-next-line no-bitwise
@@ -118,29 +125,34 @@
         return null;
       }
     },
+    // 要素から遷移時間を取得
     getTransitionDurationFromElement: function getTransitionDurationFromElement(element) {
+      // エレメントがなかったら0を返す
       if (!element) {
         return 0;
-      } // Get transition-duration of the element
+      } // transition-durationとtransition-delayの値を取得
 
 
       var transitionDuration = $(element).css('transition-duration');
-      var transitionDelay = $(element).css('transition-delay');
+      var transitionDelay = $(element).css('transition-delay'); // 浮動小数点を取得
+
       var floatTransitionDuration = parseFloat(transitionDuration);
-      var floatTransitionDelay = parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+      var floatTransitionDelay = parseFloat(transitionDelay); // cssプロパティ、値がなければ0を返す
 
       if (!floatTransitionDuration && !floatTransitionDelay) {
         return 0;
-      } // If multiple durations are defined, take the first
+      } // 複数値が指定されてたら最初の1つだけ取得する
 
 
       transitionDuration = transitionDuration.split(',')[0];
-      transitionDelay = transitionDelay.split(',')[0];
-      return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+      transitionDelay = transitionDelay.split(',')[0]; // 変化にかかる時間(transitionDuration)と変化が始める時間(transitionDelay)を足して1000をかけて(秒にする)返す
+
+      return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER; // ×1000する
     },
     reflow: function reflow(element) {
       return element.offsetHeight;
     },
+    // 引数エレメントでtrainsition_endイベントを実行する
     triggerTransitionEnd: function triggerTransitionEnd(element) {
       $(element).trigger(TRANSITION_END);
     },
@@ -247,14 +259,14 @@
 
     // public method
     _proto.close = function close(element) {
-      //このクラス内のthisはalertクラス
+      // このクラス内のthisはalertクラス
       // コンストラクタで取得したelement
       var rootElement = this._element; // closeにelementが引数で渡されていたら
 
       if (element) {
         // div.alertを取得
         rootElement = this._getRootElement(element);
-      } //カスタムイベントを作成
+      } // カスタムイベントを作成
 
 
       var customEvent = this._triggerCloseEvent(rootElement); // イベントがブラウザの処理を禁止していた場合は闇に葬り去る
@@ -302,7 +314,7 @@
     _proto._triggerCloseEvent = function _triggerCloseEvent(element) {
       // close.sc.alertイベントを定義
       var closeEvent = $.Event(Event.CLOSE);
-      $(element).trigger(closeEvent); //closeイベントを発生
+      $(element).trigger(closeEvent); // closeイベントを発生
       // closeEvent返すんか
 
       return closeEvent;
@@ -320,12 +332,16 @@
         this._destroyElement(element);
 
         return; // eslint-disable-line no-useless-return
-      }
+      } // 要素の変化にかかる時間を取得
+
 
       var transitionDuration = Util.getTransitionDurationFromElement(element);
-      $(element).one(Util.TRANSITION_END, function (event) {
+      $(element) // .oneは一回だけ実行するイベント。TRANSITION_ENDはイベント名。
+      // エレメントを削除してclosedイベントを実行する
+      .one(Util.TRANSITION_END, function (event) {
         return _this._destroyElement(element, event);
-      }).emulateTransitionEnd(transitionDuration);
+      }) // util.jsのtransitionEndEmulatorを実行
+      .emulateTransitionEnd(transitionDuration);
     } // _removeElementで使ってるやつ
     ;
 
@@ -364,7 +380,7 @@
 
     Alert._handleDismiss = function _handleDismiss(alertInstance) {
       return function (event) {
-        // イベントがあったら      
+        // イベントがあったら
         if (event) {
           // イベントの動作を停止させる
           event.preventDefault();
