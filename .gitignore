@@ -5,7 +5,7 @@
 .DS_Store
 .vscode/
 shell.lnk
-
+.cache
 
 # folders to ignore
 node_modules/
