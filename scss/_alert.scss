@@ -1,0 +1,38 @@
+.alert {
+  position: relative;
+  padding: $alert-padding-y $alert-padding-x;
+  margin-bottom: $alert-margin-bottom;
+  border: $alert-border-width solid transparent;
+  @include border-radius($alert-border-radius);
+}
+
+// アラートの見出し
+.alert-heading {
+  // $headings-colorの変更と競合しないように変更
+  color: inherit;
+}
+
+.alert-link {
+  font-weight: $alert-link-font-weight;
+}
+
+// 閉じることが出来るアラート
+.alert-dismissible {
+  padding-right: $close-font-size + $alert-padding-x * 2;
+
+  // closeボタンの位置調整
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: $alert-padding-y $alert-padding-x;
+    color: inherit;
+  }
+}
+
+// 色つきのアラートを作成する
+@each $color, $value in $theme-colors {
+  .alert-#{$color} {
+    @include alert-variant(theme-color-level($color, $alert-bg-level), theme-color-level($color, $alert-border-level), theme-color-level($color, $alert-color-level));
+  }
+}

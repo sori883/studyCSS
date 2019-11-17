@@ -1,0 +1,40 @@
+// 色の再度で
+@function color-yiq($color, $dark: $yiq-text-dark, $light: $yiq-text-light) {
+  $r: red($color);
+  $g: green($color);
+  $b: blue($color);
+
+  $yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+
+  @if ($yiq >= $yiq-contrasted-threshold) {
+    @return $dark;
+  } @else {
+    @return $light;
+  }
+}
+
+// Color mapから色を取得する
+@function color($key: "blue") {
+  @return map-get($colors, $key);
+}
+
+// Theme color mapから色を取得する
+@function theme-color($key: "primary") {
+  @return map-get($theme-colors, $key);
+}
+
+// gray mapから色を取得する
+@function gray($key: "100") {
+  @return map-get($grays, $key);
+}
+
+// theme colorから彩度をつけて返す
+@function theme-color-level($color-name: "primary", $level: 0) {
+  $color: theme-color($color-name);
+  $color-base: if($level > 0, $black, $white);
+  // 絶対値を取得
+  $level: abs($level);
+
+  // 2つの引数の中間地点
+  @return mix($color-base, $color, $level * $theme-color-interval);
+}

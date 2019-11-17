@@ -1,15 +1,17 @@
 
+@import "functions";
 @import "variables";
 @import "mixin";
 @import "utilities";
 
 @import "reboot";
 @import "grid";
+@import "transitions";
 @import "card";
 @import "nav";
 @import "navbar";
+@import "alert";
 
 @import "helpers";
-
-@import "utilities/api";
+@import "utilities";
 

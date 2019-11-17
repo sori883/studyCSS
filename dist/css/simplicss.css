@@ -1103,6 +1103,43 @@ template {
   }
 }
 
+/* line 2, scss/_transitions.scss */
+.fade {
+  transition: opacity 0.15s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* line 2, scss/_transitions.scss */
+  .fade {
+    transition: none;
+  }
+}
+
+/* line 5, scss/_transitions.scss */
+.fade:not(.show) {
+  opacity: 0;
+}
+
+/* line 11, scss/_transitions.scss */
+.collapse:not(.show) {
+  display: none;
+}
+
+/* line 16, scss/_transitions.scss */
+.collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* line 16, scss/_transitions.scss */
+  .collapsing {
+    transition: none;
+  }
+}
+
 /* line 3, scss/_card.scss */
 .card {
   position: relative;
@@ -1272,6 +1309,175 @@ template {
 /* line 31, scss/_navbar.scss */
 .navbar-brand:hover, .navbar-brand:focus {
   text-decoration: none;
+}
+
+/* line 1, scss/_alert.scss */
+.alert {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+/* line 10, scss/_alert.scss */
+.alert-heading {
+  color: inherit;
+}
+
+/* line 15, scss/_alert.scss */
+.alert-link {
+  font-weight: 700;
+}
+
+/* line 20, scss/_alert.scss */
+.alert-dismissible {
+  padding-right: 4.9rem;
+}
+
+/* line 24, scss/_alert.scss */
+.alert-dismissible .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.75rem 1.25rem;
+  color: inherit;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-primary {
+  color: #004085;
+  background: #cce5ff linear-gradient(180deg, #d4e9ff, #cce5ff) repeat-x;
+  border-color: #b8daff;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-primary hr {
+  border-top-color: #9fcdff;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-primary .alert-link {
+  color: #002752;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-secondary {
+  color: #383d41;
+  background: #e2e3e5 linear-gradient(180deg, #e6e7e9, #e2e3e5) repeat-x;
+  border-color: #d6d8db;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-secondary hr {
+  border-top-color: #c8cbcf;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-secondary .alert-link {
+  color: #202326;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-success {
+  color: #155724;
+  background: #d4edda linear-gradient(180deg, #daf0e0, #d4edda) repeat-x;
+  border-color: #c3e6cb;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-success hr {
+  border-top-color: #b1dfbb;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-success .alert-link {
+  color: #0b2e13;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-info {
+  color: #0c5460;
+  background: #d1ecf1 linear-gradient(180deg, #d8eff3, #d1ecf1) repeat-x;
+  border-color: #bee5eb;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-info hr {
+  border-top-color: #abdde5;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-info .alert-link {
+  color: #062c33;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-warning {
+  color: #856404;
+  background: #fff3cd linear-gradient(180deg, #fff5d5, #fff3cd) repeat-x;
+  border-color: #ffeeba;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-warning hr {
+  border-top-color: #ffe8a1;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-warning .alert-link {
+  color: #533f03;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-danger {
+  color: #721c24;
+  background: #f8d7da linear-gradient(180deg, #f9dde0, #f8d7da) repeat-x;
+  border-color: #f5c6cb;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-danger hr {
+  border-top-color: #f1b0b7;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-danger .alert-link {
+  color: #491217;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-light {
+  color: #818182;
+  background: #fefefe linear-gradient(180deg, #fefefe, #fefefe) repeat-x;
+  border-color: #fdfdfe;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-light hr {
+  border-top-color: #ececf6;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-light .alert-link {
+  color: #686868;
+}
+
+/* line 35, scss/_alert.scss */
+.alert-dark {
+  color: #1b1e21;
+  background: #d6d8d9 linear-gradient(180deg, #dcdedf, #d6d8d9) repeat-x;
+  border-color: #c6c8ca;
+}
+
+/* line 6, scss/mixins/_alert.scss */
+.alert-dark hr {
+  border-top-color: #b9bbbe;
+}
+
+/* line 10, scss/mixins/_alert.scss */
+.alert-dark .alert-link {
+  color: #040505;
 }
 
 /* line 6, scss/helpers/_position.scss */

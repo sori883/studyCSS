@@ -1,0 +1,14 @@
+// stylelint-disable property-blacklist
+@mixin transition($transition...) {
+  // ,が含まれる引数の場合は...を入れる
+    @if length($transition) == 0 {
+      transition: $transition-base;
+    } @else {
+      transition: $transition;
+    }
+
+    // 設定のアニメーションが無効化になってたらアニメーションをなしにする
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+}
