@@ -1,14 +1,15 @@
 @import "vendor/rfs";
 
 @import "mixins/breakpoints";
+@import "mixins/hover";
 @import "mixins/grid-framework";
 @import "mixins/grid";
 
 @import "mixins/alert";
+@import "mixins/buttons";
 
 @import "mixins/gradients";
 @import "mixins/transition";
-
-@import "mixins/utilities";
+@import "mixins/box-shadow";
 
 @import "mixins/border-radius";

@@ -1,4 +1,4 @@
-// 色の再度で
+// 色の彩度で明るいかくらいか返すよ
 @function color-yiq($color, $dark: $yiq-text-dark, $light: $yiq-text-light) {
   $r: red($color);
   $g: green($color);
