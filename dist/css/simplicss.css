@@ -2277,6 +2277,50 @@ fieldset:disabled a.btn {
   color: #040505;
 }
 
+/* line 1, scss/_close.scss */
+.close {
+  float: right;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+}
+
+@media (max-width: 1200px) {
+  /* line 1, scss/_close.scss */
+  .close {
+    font-size: calc(1.365rem + 1.38vw) ;
+  }
+}
+
+/* line 2, scss/mixins/_hover.scss */
+.close:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
+  opacity: .75;
+}
+
+/* line 25, scss/_close.scss */
+button.close {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* line 34, scss/_close.scss */
+a.close.disabled {
+  pointer-events: none;
+}
+
 /* line 6, scss/helpers/_position.scss */
 .fixed-top {
   position: fixed;
