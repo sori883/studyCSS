@@ -92,6 +92,39 @@ fieldset:disabled a.btn {
     pointer-events: none;
   }
 
-  // ここにアクティブは必要ないみたい
 }
 
+//
+// ボタンサイズ
+//
+
+.btn-lg {
+  @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-line-height-lg, $btn-border-radius-lg);
+}
+
+.btn-sm {
+  @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+}
+
+//
+// ブロックボタン
+//
+
+.btn-block {
+  display: block;
+  width: 100%;
+
+  // 複数のボタンがあったらスペース空けるようにする
+  + .btn-block {
+    margin-top: $btn-block-spacing-y;
+  }
+}
+
+// inputに.btn-blockを指定した時にwidthを上書きする
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  &.btn-block {
+    width: 100%;
+  }
+}

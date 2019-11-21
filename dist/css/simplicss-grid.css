@@ -1,34 +1,4 @@
 @charset "UTF-8";
-/* line 3, scss/utilities/_align.scss */
-.align-baseline {
-  vertical-align: baseline !important;
-}
-
-/* line 4, scss/utilities/_align.scss */
-.align-top {
-  vertical-align: top !important;
-}
-
-/* line 5, scss/utilities/_align.scss */
-.align-middle {
-  vertical-align: middle !important;
-}
-
-/* line 6, scss/utilities/_align.scss */
-.align-bottom {
-  vertical-align: bottom !important;
-}
-
-/* line 7, scss/utilities/_align.scss */
-.align-text-bottom {
-  vertical-align: text-bottom !important;
-}
-
-/* line 8, scss/utilities/_align.scss */
-.align-text-top {
-  vertical-align: text-top !important;
-}
-
 /* line 8, scss/_reboot.scss */
 *,
 *::before,
@@ -1131,5 +1101,35 @@ template {
   .offset-xl-11 {
     margin-left: 91.666667%;
   }
+}
+
+/* line 3, scss/utilities/_align.scss */
+.align-baseline {
+  vertical-align: baseline !important;
+}
+
+/* line 4, scss/utilities/_align.scss */
+.align-top {
+  vertical-align: top !important;
+}
+
+/* line 5, scss/utilities/_align.scss */
+.align-middle {
+  vertical-align: middle !important;
+}
+
+/* line 6, scss/utilities/_align.scss */
+.align-bottom {
+  vertical-align: bottom !important;
+}
+
+/* line 7, scss/utilities/_align.scss */
+.align-text-bottom {
+  vertical-align: text-bottom !important;
+}
+
+/* line 8, scss/utilities/_align.scss */
+.align-text-top {
+  vertical-align: text-top !important;
 }
 /*# sourceMappingURL=simplicss-grid.css.map */
