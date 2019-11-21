@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="assets/css/simplicss.min.css">
-    <title>simplicss</title>
+    <title>Simplicss</title>
     <style>
       body{
         height: 10000px;
@@ -32,15 +32,10 @@
         color: #fff;
       }
 
-      #card-section {
-        padding-top: 10rem;
-        margin-top: -10rem;
+      section {
+        margin-top: 2rem;
       }
 
-      #japanese-justify-section {
-        padding-top: 10rem;
-        margin-top: -10rem;
-      }
     </style>
   </head>
   <body>
@@ -48,15 +43,17 @@
       <h1 class="navbar-brand"><a href="#">Simplicss</a></h1>
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link active" href="#card-section">Cards</a>
+          <a class="nav-link active" href="#cards">cards</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#japanese-justify-section">日本語justify</a>
+          <a class="nav-link" href="#japanese-text-justify">日本語justify</a>
         </li>
       </ul>
     </nav>
+    
+    <section id="cards"><!-- cards -->
     <div class="container">
-      <h2 id="card-section" class="text-left">cards</h2>
+      <h2 class="text-left">cards</h2>
       <div class="row">
         <div class="col-md-4">
           <div class="card">
@@ -89,7 +86,12 @@
           </div>
         </div>
       </div>
-      <h2 id="japanese-justify-section" class="text-left">日本語のtext-justify</h2>
+    </div>
+    </section><!-- end cards  -->
+
+    <section id="japanese-text-justify"><!-- japanese text-justify -->
+      <div class="container">
+      <h2 class="text-left">日本語のtext-justify</h2>
       <div class="row">
         <div class="col-md-4">
           <ul class="bg-r justify-ul">
@@ -114,5 +116,58 @@
         </div>
       </div>
     </div>
+    </section><!-- end japanese text-justify -->
+    <section id="japanese-text-justify"><!-- japanese text-justify -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+          <h2 class="text-left">Inline-buttons</h2>
+          <button type="button" class="btn btn-primary">Primary</button>
+          <button type="button" class="btn btn-secondary">Secondary</button>
+          <button type="button" class="btn btn-success">Success</button>
+          <button type="button" class="btn btn-danger">Danger</button>
+          <button type="button" class="btn btn-warning">Warning</button>
+          <button type="button" class="btn btn-info">Info</button>
+          <button type="button" class="btn btn-light">Light</button>
+          <button type="button" class="btn btn-dark">Dark</button>
+          <button type="button" class="btn btn-link">Link</button>
+      </div>
+      <div class="col-md-12">
+          <h2 class="text-left">Input buttons</h2>
+          <a class="btn btn-primary" href="#" role="button">Link</a>
+          <button class="btn btn-primary" type="submit">Button</button>
+          <input class="btn btn-primary" type="button" value="Input">
+          <input class="btn btn-primary" type="submit" value="Submit">
+          <input class="btn btn-primary" type="reset" value="Reset">
+        </div>
+        <div class="col-md-12">
+          <h2 class="text-left">Sutline buttons</h2>
+          <button type="button" class="btn btn-outline-primary">Primary</button>
+          <button type="button" class="btn btn-outline-secondary">Secondary</button>
+          <button type="button" class="btn btn-outline-success">Success</button>
+          <button type="button" class="btn btn-outline-danger">Danger</button>
+          <button type="button" class="btn btn-outline-warning">Warning</button>
+          <button type="button" class="btn btn-outline-info">Info</button>
+          <button type="button" class="btn btn-outline-light">Light</button>
+          <button type="button" class="btn btn-outline-dark">Dark</button>
+        </div>
+        <div class="col-md-12">
+          <h2 class="text-left">Sizes</h2>
+          <button type="button" class="btn btn-primary btn-lg">Large button</button>
+          <button type="button" class="btn btn-primary btn-sm">Small button</button>
+        </div>
+        <div class="col-md-12">
+          <h2 class="text-left">block buttons</h2>
+          <button type="button" class="btn btn-primary btn-lg btn-block">Block button</button>
+        </div>
+        <div class="col-md-12">
+            <h2 class="text-left">Active & disabled anker buttons</h2>
+            <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Active link</a>
+            <a href="#" class="btn btn-primary btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Disabled link</a>
+          </div>
+        </div>
+    </div>
+    </section><!-- end japanese text-justify -->
+
   </body>
 </html>
