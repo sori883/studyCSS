@@ -3,5 +3,6 @@ import Util from './util'
 
 export {
   Alert,
+  Button,
   Util
 }

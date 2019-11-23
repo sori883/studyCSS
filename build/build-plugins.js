@@ -29,6 +29,7 @@ const plugins = [
 // TODO: プラグイン追加
 const scPlugins = {
   Alert: path.resolve(__dirname, '../js/src/alert.js'),
+  Button: path.resolve(__dirname, '../js/src/alert.js'),
   Util: path.resolve(__dirname, '../js/src/util.js')
 }
 const rootPath = TEST ? '../js/coverage/dist/' : '../js/dist/'
