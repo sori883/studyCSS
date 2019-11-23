@@ -1,0 +1,8 @@
+// Text truncate
+// 指定するときはinline-blockかblockである必要がある
+
+@mixin text-truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

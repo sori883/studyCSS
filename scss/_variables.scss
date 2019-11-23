@@ -215,15 +215,20 @@ $btn-line-height-lg: $input-btn-line-height-lg !default;
 // body
 $body-bg: $white !default;
 $body-color: $gray-900 !default;
+
 // h
 $headings-margin-bottom: $spacer / 2 !default;
+
 // p
 $paragraph-margin-bottom: 1rem !default;
-// a
+
+// link
 $link-color: $blue !default;
 $link-decoration: none !default;
 $link-hover-color: darken($link-color, 15%) !default;
 $link-hover-decoration: underline !default;
+$emphasized-link-hover-darken-percentage: 15% !default;
+
 // table
 $table-cell-padding: .75rem !default;
 $table-caption-color: $text-muted !default;

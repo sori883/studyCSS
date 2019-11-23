@@ -5,35 +5,20 @@
     <link rel="stylesheet" href="assets/css/simplicss.min.css">
     <title>Simplicss</title>
     <style>
-      body{
-        height: 10000px;
-      }
-      .m-top{
-        margin-top: 10rem;
-      }
-      .bg-r {
-        background: #d04255;
-      }
-      .bg-b {
-        background: #8ba7d5;
-      }
-      .bg-g {
-        background: #64c99B;
-      }
-      .row {
-        margin-bottom: 5rem;
-      }
-      .justify-ul {
+      .m-top{ margin-top: 10rem; }
+      .bg-r { background: #d04255; }
+      .bg-b { background: #8ba7d5; }
+      .bg-g { background: #64c99B; }
+      .row { margin-bottom: 5rem; }      
+      section { margin-top: 2rem; }
+
+      .ul-justify {
         list-style-type: none;
         width: 100%;
       }
       .navbar-brand > a,
       .nav-link {
         color: #fff;
-      }
-
-      section {
-        margin-top: 2rem;
       }
 
     </style>
@@ -94,30 +79,30 @@
       <h2 class="text-left">日本語のtext-justify</h2>
       <div class="row">
         <div class="col-md-4">
-          <ul class="bg-r justify-ul">
-            <li class="text-justify">あいうえお</li>
-            <li class="text-justify">かきくけこ</li>
-            <li class="text-justify">さしすせそ</li>
+          <ul class="bg-r ul-justify">
+            <li class="text-justify-last">あいうえお</li>
+            <li class="text-justify-last">かきくけこ</li>
+            <li class="text-justify-last">さしすせそ</li>
           </ul>
         </div>
         <div class="col-md-4">
-          <ul class="bg-g justify-ul">
-            <li class="text-justify">おはよう御座います</li>
-            <li class="text-justify">こんばんわ</li>
-            <li class="text-justify">お休みなさい</li>
+          <ul class="bg-g ul-justify">
+            <li class="text-justify-last">アバウト・タイム</li>
+            <li class="text-justify-last">シャイニング</li>
+            <li class="text-justify-last">最高の人生の見つけ方</li>
           </ul>
         </div>
         <div class="col-md-4">
-          <ul class="bg-b justify-ul">
-            <li class="text-justify">あつい</li>
-            <li class="text-justify">さむい</li>
-            <li class="text-justify">ちゅうかん</li>
+          <ul class="bg-b ul-justify">
+            <li class="text-justify-last">あつい</li>
+            <li class="text-justify-last">さむい</li>
+            <li class="text-justify-last">ちゅうかん</li>
           </ul>
         </div>
       </div>
     </div>
     </section><!-- end japanese text-justify -->
-    <section id="japanese-text-justify"><!-- japanese text-justify -->
+    <section id="buttons"><!-- buttons -->
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -141,7 +126,7 @@
           <input class="btn btn-primary" type="reset" value="Reset">
         </div>
         <div class="col-md-12">
-          <h2 class="text-left">Sutline buttons</h2>
+          <h2 class="text-left">Outline buttons</h2>
           <button type="button" class="btn btn-outline-primary">Primary</button>
           <button type="button" class="btn btn-outline-secondary">Secondary</button>
           <button type="button" class="btn btn-outline-success">Success</button>
@@ -167,7 +152,23 @@
           </div>
         </div>
     </div>
-    </section><!-- end japanese text-justify -->
-
+    </section><!-- end buttons -->
+    <sction id="alerts">
+        <div class="container">
+        <div class="row">
+        <h2 class="text-left">alerts</h2>
+      <div class="col-md-12">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>アラート！！</strong>多分なんか良くないことが起きてる気がする
+        </div>
+      </div>
+      </div>
+      </div>
+    </sction>
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../dist/js/simplicss.min.js"></script>
   </body>
 </html>

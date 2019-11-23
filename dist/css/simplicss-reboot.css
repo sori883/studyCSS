@@ -419,4 +419,287 @@ template {
 .align-text-top {
   vertical-align: text-top !important;
 }
+
+/* line 7, scss/utilities/_text.scss */
+.text-monospace {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+/* line 11, scss/utilities/_text.scss */
+.text-justify {
+  text-align: justify !important;
+}
+
+/* line 12, scss/utilities/_text.scss */
+.text-justify-last {
+  -moz-text-align-last: justify !important;
+  text-align-last: justify !important;
+}
+
+/* line 13, scss/utilities/_text.scss */
+.text-wrap {
+  white-space: normal !important;
+}
+
+/* line 14, scss/utilities/_text.scss */
+.text-nowrap {
+  white-space: nowrap !important;
+}
+
+/* line 15, scss/utilities/_text.scss */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* line 23, scss/utilities/_text.scss */
+.text-left {
+  text-align: left !important;
+}
+
+/* line 24, scss/utilities/_text.scss */
+.text-right {
+  text-align: right !important;
+}
+
+/* line 25, scss/utilities/_text.scss */
+.text-center {
+  text-align: center !important;
+}
+
+@media (min-width: 576px) {
+  /* line 23, scss/utilities/_text.scss */
+  .text-sm-left {
+    text-align: left !important;
+  }
+  /* line 24, scss/utilities/_text.scss */
+  .text-sm-right {
+    text-align: right !important;
+  }
+  /* line 25, scss/utilities/_text.scss */
+  .text-sm-center {
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 768px) {
+  /* line 23, scss/utilities/_text.scss */
+  .text-md-left {
+    text-align: left !important;
+  }
+  /* line 24, scss/utilities/_text.scss */
+  .text-md-right {
+    text-align: right !important;
+  }
+  /* line 25, scss/utilities/_text.scss */
+  .text-md-center {
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 992px) {
+  /* line 23, scss/utilities/_text.scss */
+  .text-lg-left {
+    text-align: left !important;
+  }
+  /* line 24, scss/utilities/_text.scss */
+  .text-lg-right {
+    text-align: right !important;
+  }
+  /* line 25, scss/utilities/_text.scss */
+  .text-lg-center {
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* line 23, scss/utilities/_text.scss */
+  .text-xl-left {
+    text-align: left !important;
+  }
+  /* line 24, scss/utilities/_text.scss */
+  .text-xl-right {
+    text-align: right !important;
+  }
+  /* line 25, scss/utilities/_text.scss */
+  .text-xl-center {
+    text-align: center !important;
+  }
+}
+
+/* line 31, scss/utilities/_text.scss */
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+
+/* line 32, scss/utilities/_text.scss */
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+/* line 33, scss/utilities/_text.scss */
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+/* line 37, scss/utilities/_text.scss */
+.font-weight-light {
+  font-weight: 300 !important;
+}
+
+/* line 38, scss/utilities/_text.scss */
+.font-weight-lighter {
+  font-weight: lighter !important;
+}
+
+/* line 39, scss/utilities/_text.scss */
+.font-weight-normal {
+  font-weight: 400 !important;
+}
+
+/* line 40, scss/utilities/_text.scss */
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+/* line 41, scss/utilities/_text.scss */
+.font-weight-bolder {
+  font-weight: bolder !important;
+}
+
+/* line 42, scss/utilities/_text.scss */
+.font-italic {
+  font-style: italic !important;
+}
+
+/* line 46, scss/utilities/_text.scss */
+.text-white {
+  color: #fff !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-primary {
+  color: #007bff !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-primary:hover, a.text-primary:focus {
+  color: #0056b3 !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-secondary {
+  color: #6c757d !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-secondary:hover, a.text-secondary:focus {
+  color: #494f54 !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-success {
+  color: #28a745 !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-success:hover, a.text-success:focus {
+  color: #19692c !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-info {
+  color: #17a2b8 !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-info:hover, a.text-info:focus {
+  color: #0f6674 !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-warning {
+  color: #ffc107 !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-warning:hover, a.text-warning:focus {
+  color: #ba8b00 !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-danger {
+  color: #dc3545 !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-danger:hover, a.text-danger:focus {
+  color: #a71d2a !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-light {
+  color: #f8f9fa !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-light:hover, a.text-light:focus {
+  color: #cbd3da !important;
+}
+
+/* line 6, scss/mixins/_text-emphasis.scss */
+.text-dark {
+  color: #343a40 !important;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+a.text-dark:hover, a.text-dark:focus {
+  color: #121416 !important;
+}
+
+/* line 52, scss/utilities/_text.scss */
+.text-body {
+  color: #212529 !important;
+}
+
+/* line 53, scss/utilities/_text.scss */
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* line 55, scss/utilities/_text.scss */
+.text-black-50 {
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* line 56, scss/utilities/_text.scss */
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* line 60, scss/utilities/_text.scss */
+.text-hide {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+/* line 64, scss/utilities/_text.scss */
+.text-decoration-none {
+  text-decoration: none !important;
+}
+
+/* line 66, scss/utilities/_text.scss */
+.text-break {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* line 73, scss/utilities/_text.scss */
+.text-reset {
+  color: inherit !important;
+}
 /*# sourceMappingURL=simplicss-reboot.css.map */
