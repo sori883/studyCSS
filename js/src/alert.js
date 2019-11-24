@@ -8,18 +8,18 @@
 import $ from 'jquery'
 import Util from './util'
 
-const NAME                = 'alert'
-const VERSION             = '0.5.2'
+const NAME = 'alert'
+const VERSION = '0.5.2'
 
-const DATA_KEY            = 'sc.alert'
+const DATA_KEY = 'sc.alert'
 // アラート閉じた時のイベントとかに使うみたい
 // http://bootstrap3.cyberlab.info/javascript/alerts-events.html
-const EVENT_KEY           = `.${DATA_KEY}`
+const EVENT_KEY = `.${DATA_KEY}`
 // イベントを無効にする用
 // https://getbootstrap.jp/docs/4.1/getting-started/javascript/
-const DATA_API_KEY        = '.data-api'
+const DATA_API_KEY = '.data-api'
 // 他のフレームワークと名前衝突を回避する用
-const JQUERY_NO_CONFLICT  = $.fn[NAME]
+const JQUERY_NO_CONFLICT = $.fn[NAME]
 
 // アラート消す用
 const Selector = {
@@ -29,8 +29,8 @@ const Selector = {
 // イベント用の名前
 // e.g. close.sc.alert
 const Event = {
-  CLOSE          : `close${EVENT_KEY}`,
-  CLOSED         : `closed${EVENT_KEY}`,
+  CLOSE : `close${EVENT_KEY}`,
+  CLOSED : `closed${EVENT_KEY}`,
   CLICK_DATA_API : `click${EVENT_KEY}${DATA_API_KEY}`
 }
 
