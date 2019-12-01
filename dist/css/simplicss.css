@@ -1749,8 +1749,6 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
-<<<<<<< HEAD
-=======
 /* line 5, scss/_button-group.scss */
 .btn-group,
 .btn-group-vertical {
@@ -1901,7 +1899,6 @@ input[type="button"].btn-block {
   pointer-events: none;
 }
 
->>>>>>> site
 /* line 2, scss/_transitions.scss */
 .fade {
   transition: opacity 0.15s linear;
