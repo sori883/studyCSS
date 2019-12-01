@@ -1702,7 +1702,7 @@ fieldset:disabled a.btn {
 }
 
 /* line 101, scss/_buttons.scss */
-.btn-lg {
+.btn-lg, .btn-group-lg > .btn {
   padding: 0.5rem 1rem;
   font-size: 2rem;
   line-height: 1.5;
@@ -1711,13 +1711,13 @@ fieldset:disabled a.btn {
 
 @media (max-width: 1200px) {
   /* line 101, scss/_buttons.scss */
-  .btn-lg {
+  .btn-lg, .btn-group-lg > .btn {
     font-size: calc(1.325rem + 0.9vw) ;
   }
 }
 
 /* line 105, scss/_buttons.scss */
-.btn-sm {
+.btn-sm, .btn-group-sm > .btn {
   padding: 0.25rem 0.5rem;
   font-size: 1.4rem;
   line-height: 1.5;
@@ -1726,7 +1726,7 @@ fieldset:disabled a.btn {
 
 @media (max-width: 1200px) {
   /* line 105, scss/_buttons.scss */
-  .btn-sm {
+  .btn-sm, .btn-group-sm > .btn {
     font-size: calc(1.265rem + 0.18vw) ;
   }
 }
@@ -1749,6 +1749,159 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
+<<<<<<< HEAD
+=======
+/* line 5, scss/_button-group.scss */
+.btn-group,
+.btn-group-vertical {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+/* line 11, scss/_button-group.scss */
+.btn-group > .btn,
+.btn-group-vertical > .btn {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+/* line 2, scss/mixins/_hover.scss */
+.btn-group > .btn:hover,
+.btn-group-vertical > .btn:hover {
+  z-index: 1;
+}
+
+/* line 19, scss/_button-group.scss */
+.btn-group > .btn:focus, .btn-group > .btn:active, .btn-group > .btn.active,
+.btn-group-vertical > .btn:focus,
+.btn-group-vertical > .btn:active,
+.btn-group-vertical > .btn.active {
+  z-index: 1;
+}
+
+/* line 28, scss/_button-group.scss */
+.btn-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+/* line 33, scss/_button-group.scss */
+.btn-toolbar .input-group {
+  width: auto;
+}
+
+/* line 40, scss/_button-group.scss */
+.btn-group > .btn:not(:first-child),
+.btn-group > .btn-group:not(:first-child) {
+  margin-left: -1px;
+}
+
+/* line 46, scss/_button-group.scss */
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn-group:not(:last-child) > .btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* line 51, scss/_button-group.scss */
+.btn-group > .btn:not(:first-child),
+.btn-group > .btn-group:not(:first-child) > .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* line 66, scss/_button-group.scss */
+.dropdown-toggle-split {
+  padding-right: 0.5625rem;
+  padding-left: 0.5625rem;
+}
+
+/* line 70, scss/_button-group.scss */
+.dropdown-toggle-split::after,
+.dropup .dropdown-toggle-split::after,
+.dropright .dropdown-toggle-split::after {
+  margin-left: 0;
+}
+
+/* line 76, scss/_button-group.scss */
+.dropleft .dropdown-toggle-split::before {
+  margin-right: 0;
+}
+
+/* line 81, scss/_button-group.scss */
+.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split {
+  padding-right: 0.375rem;
+  padding-left: 0.375rem;
+}
+
+/* line 86, scss/_button-group.scss */
+.btn-lg + .dropdown-toggle-split, .btn-group-lg > .btn + .dropdown-toggle-split {
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+}
+
+/* line 93, scss/_button-group.scss */
+.btn-group.show .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+/* line 97, scss/_button-group.scss */
+.btn-group.show .dropdown-toggle.btn-link {
+  box-shadow: none;
+}
+
+/* line 105, scss/_button-group.scss */
+.btn-group-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* line 110, scss/_button-group.scss */
+.btn-group-vertical > .btn,
+.btn-group-vertical > .btn-group {
+  width: 100%;
+}
+
+/* line 115, scss/_button-group.scss */
+.btn-group-vertical > .btn:not(:first-child),
+.btn-group-vertical > .btn-group:not(:first-child) {
+  margin-top: -1px;
+}
+
+/* line 121, scss/_button-group.scss */
+.btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle),
+.btn-group-vertical > .btn-group:not(:last-child) > .btn {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* line 126, scss/_button-group.scss */
+.btn-group-vertical > .btn:not(:first-child),
+.btn-group-vertical > .btn-group:not(:first-child) > .btn {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* line 135, scss/_button-group.scss */
+.btn-group-toggle > .btn,
+.btn-group-toggle > .btn-group > .btn {
+  margin-bottom: 0;
+}
+
+/* line 139, scss/_button-group.scss */
+.btn-group-toggle > .btn input[type="radio"],
+.btn-group-toggle > .btn input[type="checkbox"],
+.btn-group-toggle > .btn-group > .btn input[type="radio"],
+.btn-group-toggle > .btn-group > .btn input[type="checkbox"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+}
+
+>>>>>>> site
 /* line 2, scss/_transitions.scss */
 .fade {
   transition: opacity 0.15s linear;

@@ -1,0 +1,146 @@
+  
+// stylelint-disable selector-no-qualifying-type
+
+// divをとして扱う
+.btn-group,
+.btn-group-vertical {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+
+  > .btn {
+    position: relative;
+    flex: 1 1 auto;
+
+    // hover、focus、activeを全面に出してborderが適切にかかるようにする
+    @include hover() {
+      z-index: 1;
+    }
+    &:focus,
+    &:active,
+    &.active {
+      z-index: 1;
+    }
+  }
+}
+
+// ツールバーの複数のボタングループをグループ化する
+.btn-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  .input-group {
+    width: auto;
+  }
+}
+
+.btn-group {
+  // ボタンが隣あっている場合、borderが2重になるのを防ぐ
+  > .btn:not(:first-child),
+  > .btn-group:not(:first-child) {
+    margin-left: -$btn-border-width;
+  }
+
+  // border-radiusをリセットする
+  > .btn:not(:last-child):not(.dropdown-toggle),
+  > .btn-group:not(:last-child) > .btn {
+    @include border-right-radius(0);
+  }
+
+  > .btn:not(:first-child),
+  > .btn-group:not(:first-child) > .btn {
+    @include border-left-radius(0);
+  }
+}
+
+// Sizing
+
+// デフォルトのボタンサイズクラスを新しいクラスに混ぜて操作しやすくする
+.btn-group-sm > .btn { @extend .btn-sm; }
+.btn-group-lg > .btn { @extend .btn-lg; }
+
+
+// ボタンとドロップダウンの分割
+
+.dropdown-toggle-split {
+  padding-right: $btn-padding-x * .75;
+  padding-left: $btn-padding-x * .75;
+
+  &::after,
+  .dropup &::after,
+  .dropright &::after {
+    margin-left: 0;
+  }
+
+  .dropleft &::before {
+    margin-right: 0;
+  }
+}
+
+.btn-sm + .dropdown-toggle-split {
+  padding-right: $btn-padding-x-sm * .75;
+  padding-left: $btn-padding-x-sm * .75;
+}
+
+.btn-lg + .dropdown-toggle-split {
+  padding-right: $btn-padding-x-lg * .75;
+  padding-left: $btn-padding-x-lg * .75;
+}
+
+
+// activeと同じbox-shadowを設定
+.btn-group.show .dropdown-toggle {
+  @include box-shadow($btn-active-box-shadow);
+
+  // .btn-linkにはbox-shadowを表示しない
+  &.btn-link {
+    @include box-shadow(none);
+  }
+}
+
+
+// 縦のbotton-group
+
+.btn-group-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  > .btn,
+  > .btn-group {
+    width: 100%;
+  }
+
+  > .btn:not(:first-child),
+  > .btn-group:not(:first-child) {
+    margin-top: -$btn-border-width;
+  }
+
+  // border-radiusを削除する
+  > .btn:not(:last-child):not(.dropdown-toggle),
+  > .btn-group:not(:last-child) > .btn {
+    @include border-bottom-radius(0);
+  }
+
+  > .btn:not(:first-child),
+  > .btn-group:not(:first-child) > .btn {
+    @include border-top-radius(0);
+  }
+}
+
+
+// Checkbox and radio options
+.btn-group-toggle {
+  > .btn,
+  > .btn-group > .btn {
+    margin-bottom: 0; // デフォルトのラベルを上書きする
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      position: absolute;
+      clip: rect(0, 0, 0, 0);
+      pointer-events: none;
+    }
+  }
+}
