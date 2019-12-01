@@ -8,10 +8,10 @@
   ],
   "main": "dist/css",
   "scripts": {
-    "dist": "npm-run-all css-lint css-compile css-prefix css-minify css-copy",
+    "dist": "npm-run-all css-lint css-compile css-prefix css-minify",
     "css": "npm-run-all css-*",
     "css-lint": "stylelint \"scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache",
-    "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --source-comments --precision 6 scss/ -o dist/css/ && npm run css-copy",
+    "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --source-comments --precision 6 scss/ -o dist/css/",
     "css-prefix": "postcss --config build/postcss.config.js --replace \"dist/css/*.css\" \"!dist/css/*.min.css\"",
     "css-minify": "cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss.min.css dist/css/simplicss.css && cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss-grid.min.css dist/css/simplicss-grid.css && cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output dist/css/simplicss-reboot.min.css dist/css/simplicss-reboot.css",
     "js": "npm-run-all js-*",
