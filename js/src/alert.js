@@ -158,7 +158,7 @@ class Alert {
       // elementを格納
       const $element = $(this)
       // elementのdata-sc.alert属性を取得
-      let data       = $element.data(DATA_KEY)
+      let data = $element.data(DATA_KEY)
 
       // dataがなかったら
       if (!data) {
@@ -213,7 +213,7 @@ $(document).on(
  */
 
 // .alertは_jQueryInterface
-$.fn[NAME]             = Alert._jQueryInterface
+$.fn[NAME] = Alert._jQueryInterface
 // .alert.ConstructorはAlert
 $.fn[NAME].Constructor = Alert
 

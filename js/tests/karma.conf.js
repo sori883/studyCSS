@@ -91,7 +91,7 @@ if (bundle) {
     reports: ['lcov', 'text-summary'],
     thresholds: {
       emitWarning: false,
-      global: {
+      global: { // テスト結果の閾値
         statements: 90,
         branches: 86,
         functions: 89,

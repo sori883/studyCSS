@@ -64,14 +64,14 @@
 
     // public method
     _proto.close = function close(element) {
-      //このクラス内のthisはalertクラス
+      // このクラス内のthisはalertクラス
       // コンストラクタで取得したelement
       var rootElement = this._element; // closeにelementが引数で渡されていたら
 
       if (element) {
         // div.alertを取得
         rootElement = this._getRootElement(element);
-      } //カスタムイベントを作成
+      } // カスタムイベントを作成
 
 
       var customEvent = this._triggerCloseEvent(rootElement); // イベントがブラウザの処理を禁止していた場合は闇に葬り去る
@@ -119,7 +119,7 @@
     _proto._triggerCloseEvent = function _triggerCloseEvent(element) {
       // close.sc.alertイベントを定義
       var closeEvent = $.Event(Event.CLOSE);
-      $(element).trigger(closeEvent); //closeイベントを発生
+      $(element).trigger(closeEvent); // closeイベントを発生
       // closeEvent返すんか
 
       return closeEvent;
@@ -141,7 +141,7 @@
 
 
       var transitionDuration = Util.getTransitionDurationFromElement(element);
-      $(element) //.oneは一回だけ実行するイベント。TRANSITION_ENDはイベント名。
+      $(element) // .oneは一回だけ実行するイベント。TRANSITION_ENDはイベント名。
       // エレメントを削除してclosedイベントを実行する
       .one(Util.TRANSITION_END, function (event) {
         return _this._destroyElement(element, event);
@@ -185,7 +185,7 @@
 
     Alert._handleDismiss = function _handleDismiss(alertInstance) {
       return function (event) {
-        // イベントがあったら      
+        // イベントがあったら
         if (event) {
           // イベントの動作を停止させる
           event.preventDefault();

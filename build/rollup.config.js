@@ -7,7 +7,7 @@ const resolve = require('rollup-plugin-node-resolve')
 const BUNDLE = process.env.BUNDLE === 'true'
 
 let fileDest = 'simplicss.js'
-const external = ['jquery','popper.js']
+const external = ['jquery', 'popper.js']
 const plugins = [
   // babelをインスタンス化すると.babelrc.jsが実行されるみたい。
   babel({
@@ -29,8 +29,8 @@ const globals = {
 // popper用に残しておくけどjqueryだけだと意味ないよ
 if (BUNDLE) {
   fileDest = 'simplicss.bundle.js'
-  // external.pop()
-  // plugins.push(resolve())
+  external.pop()
+  plugins.push(resolve())
 }
 
 module.exports = {

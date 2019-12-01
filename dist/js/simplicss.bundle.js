@@ -430,7 +430,257 @@
     return Alert._jQueryInterface;
   };
 
+  /**
+   * ------------------------------------------------------------------------
+   * Constants
+   * ------------------------------------------------------------------------
+   */
+
+  var NAME$1 = 'button';
+  var VERSION$1 = '0.5.2';
+  var DATA_KEY$1 = 'sc.button';
+  var EVENT_KEY$1 = "." + DATA_KEY$1;
+  var DATA_API_KEY$1 = '.data-api';
+  var JQUERY_NO_CONFLICT$1 = $.fn[NAME$1];
+  var ClassName$1 = {
+    ACTIVE: 'active',
+    BUTTON: 'btn',
+    FOCUS: 'focus'
+  };
+  var Selector$1 = {
+    DATA_TOGGLE_CARROT: '[data-toggle^="button"]',
+    DATA_TOGGLES: '[data-toggle="buttons"]',
+    DATA_TOGGLE: '[data-toggle="button"]',
+    DATA_TOGGLES_BUTTONS: '[data-toggle="buttons"] .btn',
+    INPUT: 'input:not([type="hidden"])',
+    ACTIVE: '.active',
+    BUTTON: '.btn'
+  };
+  var Event$1 = {
+    CLICK_DATA_API: "click" + EVENT_KEY$1 + DATA_API_KEY$1,
+    FOCUS_BLUR_DATA_API: "focus" + EVENT_KEY$1 + DATA_API_KEY$1 + " " + ("blur" + EVENT_KEY$1 + DATA_API_KEY$1),
+    LOAD_DATA_API: "load" + EVENT_KEY$1 + DATA_API_KEY$1
+  };
+  /**
+   * ------------------------------------------------------------------------
+   * クラス
+   * ------------------------------------------------------------------------
+   */
+
+  var Button =
+  /*#__PURE__*/
+  function () {
+    function Button(element) {
+      this._element = element;
+    } // バージョンのゲッター
+
+
+    var _proto = Button.prototype;
+
+    // toggleメソッド
+    _proto.toggle = function toggle() {
+      var triggerChangeEvent = true;
+      var addAriaPressed = true; // '[data-toggle="buttons"]'をもつ要素の親要素を取得する
+
+      var rootElement = $(this._element).closest(Selector$1.DATA_TOGGLES)[0]; // rootElementがあったら
+
+      if (rootElement) {
+        // hiddenじゃないinputを取得する
+        var input = this._element.querySelector(Selector$1.INPUT); // inputがあった場合
+
+
+        if (input) {
+          // inputがradioだった場合
+          if (input.type === 'radio') {
+            // .classList.contains(クラス名)が存在するか確認する
+            // radioがチェックされててかつ、.activeクラスが存在する場合。
+            if (input.checked && this._element.classList.contains(ClassName$1.ACTIVE)) {
+              // .activeなボタンを押したらfalseにする
+              triggerChangeEvent = false;
+            } else {
+              // .activeを持つ要素を取得する。
+              var activeElement = rootElement.querySelector(Selector$1.ACTIVE); // activeElementが存在してたら
+
+              if (activeElement) {
+                // .activeクラスを削除する
+                $(activeElement).removeClass(ClassName$1.ACTIVE);
+              }
+            } // inputがcheckboxだったら
+
+          } else if (input.type === 'checkbox') {
+            // this._elementのタグ名が<label>でかつ、.activeクラスを持っていたら
+            if (this._element.tagName === 'LABEL' && input.checked === this._element.classList.contains(ClassName$1.ACTIVE)) {
+              triggerChangeEvent = false;
+            }
+          } else {
+            // radioもしくはcheckboxじゃない場合、pointless/invalid checkedをinputに追加しちゃあかん
+            triggerChangeEvent = false;
+          } // .activeクラスを持っていない場合の処理
+
+
+          if (triggerChangeEvent) {
+            // アクティブを持っていないか確認
+            input.checked = !this._element.classList.contains(ClassName$1.ACTIVE); // input要素に対してchangeを発動
+
+            $(input).trigger('change');
+          } // inputにfocusを当てる
+
+
+          input.focus();
+          addAriaPressed = false;
+        }
+      } // buttonがdisabled属性を持ってるまたは、disabledクラスを持っていた場合
+
+
+      if (!(this._element.hasAttribute('disabled') || this._element.classList.contains('disabled'))) {
+        // ボタンがinputじゃなかったら
+        if (addAriaPressed) {
+          // .activeがあったらaria-pressed属性にfalseなかったらtrue
+          this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName$1.ACTIVE));
+        } // .activeクラスを持ってたら.activeを消す
+
+
+        if (triggerChangeEvent) {
+          $(this._element).toggleClass(ClassName$1.ACTIVE);
+        }
+      }
+    } // this._elementを削除するみたい
+    ;
+
+    _proto.dispose = function dispose() {
+      $.removeData(this._element, DATA_KEY$1);
+      this._element = null;
+    } // Static
+    ;
+
+    Button._jQueryInterface = function _jQueryInterface(config) {
+      return this.each(function () {
+        // elementのdata-sc.buttonを取得
+        var data = $(this).data(DATA_KEY$1); // dataがなかったら
+
+        if (!data) {
+          // buttonをインスタンス化
+          // thisはエレメント
+          data = new Button(this); // thisにdata-sc.alertを設定
+          // 中身はボタンクラス
+
+          $(this).data(DATA_KEY$1, data);
+        } // configがtoggleだったら
+
+
+        if (config === 'toggle') {
+          // button.toggleになる
+          data[config]();
+        }
+      });
+    };
+
+    _createClass(Button, null, [{
+      key: "VERSION",
+      get: function get() {
+        return VERSION$1;
+      }
+    }]);
+
+    return Button;
+  }();
+  /**
+   * ------------------------------------------------------------------------
+   * Data Api implementation
+   * ------------------------------------------------------------------------
+   */
+
+
+  $(document) // click.sc.alert.data-api'と[data-toggle^="button"]'
+  .on(Event$1.CLICK_DATA_API, Selector$1.DATA_TOGGLE_CARROT, function (event) {
+    // イベント対象のelement
+    var button = event.target; // イベント対象のelementが.btnを持ってたら
+
+    if (!$(button).hasClass(ClassName$1.BUTTON)) {
+      // .btnを持つ要素を取得する
+      button = $(button).closest(Selector$1.BUTTON)[0];
+    } // ボタンがない、ボタンがdisable属性またはクラスを持つ場合
+
+
+    if (!button || button.hasAttribute('disabled') || button.classList.contains('disabled')) {
+      // イベントを禁止にする
+      event.preventDefault(); // firefoxのバグで指定しないとだめみたい
+    } else {
+      // hidden以外のinputボタンを取得
+      var inputBtn = button.querySelector(Selector$1.INPUT); // inputボタンが存在してdisabled属性またはクラスを持ってたら
+
+      if (inputBtn && (inputBtn.hasAttribute('disabled') || inputBtn.classList.contains('disabled'))) {
+        // イベントを禁止にする
+        event.preventDefault(); // firefoxのバグで指定しないとだめみたい
+
+        return;
+      } // ここわかりやすい
+      // https://qiita.com/Chrowa3/items/b3e2961c4930abc1369b
+
+
+      Button._jQueryInterface.call($(button), 'toggle');
+    }
+  }) // focus.sc.alert.data-api +  blur.sc.alert.data-api'と[data-toggle^="button"]'
+  .on(Event$1.FOCUS_BLUR_DATA_API, Selector$1.DATA_TOGGLE_CARROT, function (event) {
+    // button要素を取得する
+    var button = $(event.target).closest(Selector$1.BUTTON)[0]; // button要素に対して、fucusクラスをつける
+    // event,typeがfocusinならtrue、違うならfalse
+    // trueなら絶対クラスを付与、falseなら削除
+
+    $(button).toggleClass(ClassName$1.FOCUS, /^focus(in)?$/.test(event.type));
+  }); // load.sc.alert.data-api'
+
+  $(window).on(Event$1.LOAD_DATA_API, function () {
+    // windowsロード時にボタンの状態を見て.activeを追加する
+    // checkとかになってないのに.activeがついてたら削除する
+    // data-toggle内のcheckboxとradioを見つける
+    //  '[data-toggle="buttons"]をもつ .btn要素を全て取得する
+    var buttons = [].slice.call(document.querySelectorAll(Selector$1.DATA_TOGGLES_BUTTONS)); // buttonsの数だけループ回すよ
+
+    for (var i = 0, len = buttons.length; i < len; i++) {
+      // ボタンのi番目
+      var button = buttons[i]; // hidden以外のinputを取得
+
+      var input = button.querySelector(Selector$1.INPUT); // inputがcheckされているか、checked属性を持っている場合
+
+      if (input.checked || input.hasAttribute('checked')) {
+        // .activeを追加する
+        button.classList.add(ClassName$1.ACTIVE);
+      } else {
+        // check状態じゃなかったら削除
+        button.classList.remove(ClassName$1.ACTIVE);
+      }
+    } //  全ての[data-toggle="button"]を取得する
+
+
+    buttons = [].slice.call(document.querySelectorAll(Selector$1.DATA_TOGGLE));
+
+    for (var _i = 0, _len = buttons.length; _i < _len; _i++) {
+      var _button = buttons[_i]; // aria-pressedにtrueが指定されていたら
+
+      if (_button.getAttribute('aria-pressed') === 'true') {
+        _button.classList.add(ClassName$1.ACTIVE);
+      } else {
+        _button.classList.remove(ClassName$1.ACTIVE);
+      }
+    }
+  });
+  /**
+   * ------------------------------------------------------------------------
+   * jQuery
+   * ------------------------------------------------------------------------
+   */
+
+  $.fn[NAME$1] = Button._jQueryInterface;
+  $.fn[NAME$1].Constructor = Button;
+
+  $.fn[NAME$1].noConflict = function () {
+    $.fn[NAME$1] = JQUERY_NO_CONFLICT$1;
+    return Button._jQueryInterface;
+  };
+
   exports.Alert = Alert;
+  exports.Button = Button;
   exports.Util = Util;
 
   Object.defineProperty(exports, '__esModule', { value: true });
