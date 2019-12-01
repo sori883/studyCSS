@@ -1749,67 +1749,6 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
-/* line 5, scss/_button-group.scss */
-.btn-group,
-.btn-group-vertical {
-  position: relative;
-  display: inline-flex;
-  vertical-align: middle;
-}
-
-/* line 11, scss/_button-group.scss */
-.btn-group > .btn,
-.btn-group-vertical > .btn {
-  position: relative;
-  flex: 1 1 auto;
-}
-
-/* line 2, scss/mixins/_hover.scss */
-.btn-group > .btn:hover,
-.btn-group-vertical > .btn:hover {
-  z-index: 1;
-}
-
-/* line 19, scss/_button-group.scss */
-.btn-group > .btn:focus, .btn-group > .btn:active, .btn-group > .btn.active,
-.btn-group-vertical > .btn:focus,
-.btn-group-vertical > .btn:active,
-.btn-group-vertical > .btn.active {
-  z-index: 1;
-}
-
-/* line 28, scss/_button-group.scss */
-.btn-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-/* line 33, scss/_button-group.scss */
-.btn-toolbar .input-group {
-  width: auto;
-}
-
-/* line 40, scss/_button-group.scss */
-.btn-group > .btn:not(:first-child),
-.btn-group > .btn-group:not(:first-child) {
-  margin-left: -1px;
-}
-
-/* line 46, scss/_button-group.scss */
-.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
-.btn-group > .btn-group:not(:last-child) > .btn {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-/* line 51, scss/_button-group.scss */
-.btn-group > .btn:not(:first-child),
-.btn-group > .btn-group:not(:first-child) > .btn {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
 /* line 2, scss/_transitions.scss */
 .fade {
   transition: opacity 0.15s linear;
