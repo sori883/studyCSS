@@ -1899,6 +1899,306 @@ input[type="button"].btn-block {
   pointer-events: none;
 }
 
+/* line 2, scss/_dropdown.scss */
+.dropup,
+.dropright,
+.dropdown,
+.dropleft {
+  position: relative;
+}
+
+/* line 9, scss/_dropdown.scss */
+.dropdown-toggle {
+  white-space: nowrap;
+}
+
+/* line 31, scss/mixins/_caret.scss */
+.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}
+
+/* line 59, scss/mixins/_caret.scss */
+.dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+/* line 17, scss/_dropdown.scss */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1.6rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}
+
+@media (max-width: 1200px) {
+  /* line 17, scss/_dropdown.scss */
+  .dropdown-menu {
+    font-size: calc(1.285rem + 0.42vw) ;
+  }
+}
+
+/* line 42, scss/_dropdown.scss */
+.dropdown-menu-left {
+  right: auto;
+  left: 0;
+}
+
+/* line 47, scss/_dropdown.scss */
+.dropdown-menu-right {
+  right: 0;
+  left: auto;
+}
+
+@media (min-width: 576px) {
+  /* line 42, scss/_dropdown.scss */
+  .dropdown-menu-sm-left {
+    right: auto;
+    left: 0;
+  }
+  /* line 47, scss/_dropdown.scss */
+  .dropdown-menu-sm-right {
+    right: 0;
+    left: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  /* line 42, scss/_dropdown.scss */
+  .dropdown-menu-md-left {
+    right: auto;
+    left: 0;
+  }
+  /* line 47, scss/_dropdown.scss */
+  .dropdown-menu-md-right {
+    right: 0;
+    left: auto;
+  }
+}
+
+@media (min-width: 992px) {
+  /* line 42, scss/_dropdown.scss */
+  .dropdown-menu-lg-left {
+    right: auto;
+    left: 0;
+  }
+  /* line 47, scss/_dropdown.scss */
+  .dropdown-menu-lg-right {
+    right: 0;
+    left: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* line 42, scss/_dropdown.scss */
+  .dropdown-menu-xl-left {
+    right: auto;
+    left: 0;
+  }
+  /* line 47, scss/_dropdown.scss */
+  .dropdown-menu-xl-right {
+    right: 0;
+    left: auto;
+  }
+}
+
+/* line 56, scss/_dropdown.scss */
+.dropup .dropdown-menu {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.125rem;
+}
+
+/* line 31, scss/mixins/_caret.scss */
+.dropup .dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0.3em solid;
+  border-left: 0.3em solid transparent;
+}
+
+/* line 59, scss/mixins/_caret.scss */
+.dropup .dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+/* line 70, scss/_dropdown.scss */
+.dropright .dropdown-menu {
+  top: 0;
+  right: auto;
+  left: 100%;
+  margin-top: 0;
+  margin-left: 0.125rem;
+}
+
+/* line 31, scss/mixins/_caret.scss */
+.dropright .dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid transparent;
+  border-right: 0;
+  border-bottom: 0.3em solid transparent;
+  border-left: 0.3em solid;
+}
+
+/* line 59, scss/mixins/_caret.scss */
+.dropright .dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+/* line 80, scss/_dropdown.scss */
+.dropright .dropdown-toggle::after {
+  vertical-align: 0;
+}
+
+/* line 88, scss/_dropdown.scss */
+.dropleft .dropdown-menu {
+  top: 0;
+  right: 100%;
+  left: auto;
+  margin-top: 0;
+  margin-right: 0.125rem;
+}
+
+/* line 31, scss/mixins/_caret.scss */
+.dropleft .dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+}
+
+/* line 46, scss/mixins/_caret.scss */
+.dropleft .dropdown-toggle::after {
+  display: none;
+}
+
+/* line 50, scss/mixins/_caret.scss */
+.dropleft .dropdown-toggle::before {
+  display: inline-block;
+  margin-right: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid transparent;
+  border-right: 0.3em solid;
+  border-bottom: 0.3em solid transparent;
+}
+
+/* line 59, scss/mixins/_caret.scss */
+.dropleft .dropdown-toggle:empty::after {
+  margin-left: 0;
+}
+
+/* line 98, scss/_dropdown.scss */
+.dropleft .dropdown-toggle::before {
+  vertical-align: 0;
+}
+
+/* line 107, scss/_dropdown.scss */
+.dropdown-menu[x-placement^="top"], .dropdown-menu[x-placement^="right"], .dropdown-menu[x-placement^="bottom"], .dropdown-menu[x-placement^="left"] {
+  right: auto;
+  bottom: auto;
+}
+
+/* line 118, scss/_dropdown.scss */
+.dropdown-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+}
+
+/* line 124, scss/_dropdown.scss */
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+/* line 6, scss/mixins/_hover.scss */
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #16181b;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+
+/* line 153, scss/_dropdown.scss */
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #007bff;
+}
+
+/* line 160, scss/_dropdown.scss */
+.dropdown-item.disabled, .dropdown-item:disabled {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: transparent;
+}
+
+/* line 169, scss/_dropdown.scss */
+.dropdown-menu.show {
+  display: block;
+}
+
+/* line 174, scss/_dropdown.scss */
+.dropdown-header {
+  display: block;
+  padding: 0.5rem 1.5rem;
+  margin-bottom: 0;
+  font-size: 1.4rem;
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  /* line 174, scss/_dropdown.scss */
+  .dropdown-header {
+    font-size: calc(1.265rem + 0.18vw) ;
+  }
+}
+
+/* line 184, scss/_dropdown.scss */
+.dropdown-item-text {
+  display: block;
+  padding: 0.25rem 1.5rem;
+  color: #212529;
+}
+
 /* line 2, scss/_transitions.scss */
 .fade {
   transition: opacity 0.15s linear;
