@@ -151,6 +151,7 @@ class Button {
       // elementのdata-sc.buttonを取得
       let data = $(this).data(DATA_KEY)
 
+
       // dataがなかったら
       if (!data) {
         // buttonをインスタンス化
@@ -160,7 +161,7 @@ class Button {
         // 中身はボタンクラス
         $(this).data(DATA_KEY, data)
       }
-
+      
       // configがtoggleだったら
       if (config === 'toggle') {
         // button.toggleになる
