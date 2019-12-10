@@ -23,13 +23,15 @@ const plugins = [
 ]
 
 const globals = {
-  jquery: 'jQuery'
+  jquery: 'jQuery',
+  'popper.js': 'Popper'
 }
 
 // popper用に残しておくけどjqueryだけだと意味ないよ
 if (BUNDLE) {
   fileDest = 'simplicss.bundle.js'
   external.pop()
+  delete globals['popper.js']
   plugins.push(resolve())
 }
 
