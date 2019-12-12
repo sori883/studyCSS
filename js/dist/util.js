@@ -144,17 +144,27 @@
     supportsTransitionEnd: function supportsTransitionEnd() {
       return Boolean(TRANSITION_END);
     },
+    // hrん吸うがdom要素か判定する
     isElement: function isElement(obj) {
       return (obj[0] || obj).nodeType;
     },
+    // Nameとconfigとdefauly typeでexpectedTypesとvalueTypeが一致しなかったら、エラーを投げる
     typeCheckConfig: function typeCheckConfig(componentName, config, configTypes) {
+      // default typeの分だけループ
       for (var property in configTypes) {
+        // Object.prototype.hasOwnPropertyにconfigtypeのpropertyを渡す
+        // Object.prototype.hasOwnPropertyはオブジェクトにpropertyがあるか判定する
         if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
-          var expectedTypes = configTypes[property];
-          var value = config[property];
-          var valueType = value && Util.isElement(value) ? 'element' : toType(value);
+          // configtypeのプロパティを取得
+          var expectedTypes = configTypes[property]; // toggleを格納
+
+          var value = config[property]; // valueが存在してdom要素だった場合はelementを格納
+          // falseの場合は型を判定して格納
+
+          var valueType = value && Util.isElement(value) ? 'element' : toType(value); //  expectedTypesとvalueTypeが一致しないか確認
 
           if (!new RegExp(expectedTypes).test(valueType)) {
+            // エラーを投げる
             throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
           }
         }

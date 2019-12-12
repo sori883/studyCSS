@@ -149,19 +149,30 @@ const Util = {
     return Boolean(TRANSITION_END)
   },
 
+  // 引数がdom要素か判定する
   isElement(obj) {
     return (obj[0] || obj).nodeType
   },
 
+  // Nameとconfigとdefauly typeでexpectedTypesとvalueTypeが一致しなかったら、エラーを投げる
   typeCheckConfig(componentName, config, configTypes) {
+    // default typeの分だけループ
     for (const property in configTypes) {
+      // Object.prototype.hasOwnPropertyにconfigtypeのpropertyを渡す
+      // Object.prototype.hasOwnPropertyはオブジェクトにpropertyがあるか判定する
       if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
+        // configtypeのプロパティを取得
         const expectedTypes = configTypes[property]
-        const value         = config[property]
-        const valueType     = value && Util.isElement(value)
+        // toggleを格納
+        const value = config[property]
+        // valueが存在してdom要素だった場合はelementを格納
+        // falseの場合は型を判定して格納
+        const valueType = value && Util.isElement(value)
           ? 'element' : toType(value)
 
+        //  expectedTypesとvalueTypeが一致しないか確認
         if (!new RegExp(expectedTypes).test(valueType)) {
+          // エラーを投げる
           throw new Error(
             `${componentName.toUpperCase()}: ` +
             `Option "${property}" provided type "${valueType}" ` +
