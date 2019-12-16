@@ -161,7 +161,7 @@ class Button {
         // 中身はボタンクラス
         $(this).data(DATA_KEY, data)
       }
-      
+
       // configがtoggleだったら
       if (config === 'toggle') {
         // button.toggleになる

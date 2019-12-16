@@ -140,8 +140,6 @@
     ;
 
     _proto.dispose = function dispose() {
-      console.dir(this._element);
-      console.dir(DATA_KEY);
       $.removeData(this._element, DATA_KEY);
       this._element = null;
     } // Static
@@ -164,8 +162,6 @@
 
         if (config === 'toggle') {
           // button.toggleになる
-          data[config]();
-        } else {
           data[config]();
         }
       });
