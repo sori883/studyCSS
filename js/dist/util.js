@@ -144,7 +144,7 @@
     supportsTransitionEnd: function supportsTransitionEnd() {
       return Boolean(TRANSITION_END);
     },
-    // hrん吸うがdom要素か判定する
+    // 引数がdom要素か判定する
     isElement: function isElement(obj) {
       return (obj[0] || obj).nodeType;
     },

@@ -115,11 +115,11 @@ class Dropdown {
     static get VERSION() {
       return VERSION
     }
-  
+
     static get Default() {
       return Default
     }
-  
+
     static get DefaultType() {
       return DefaultType
     }
@@ -129,18 +129,18 @@ class Dropdown {
       if (this._element.disabled || $(this._element).hasClass(ClassName.DISABLED)) {
         return
       }
-  
+
       // メニューが.showを持ってるか判定
       const isActive = $(this._menu).hasClass(ClassName.SHOW)
-  
+
       // メニューを閉じる
       Dropdown._clearMenus()
-  
+
       // .showを持ってたら処理終了
       if (isActive) {
         return
       }
-  
+
       // 下のshowを発動
       this.show(true)
     }
@@ -225,6 +225,66 @@ class Dropdown {
     $(parent)
       .toggleClass(ClassName.SHOW)
       .trigger($.Event(Event.SHOWN, relatedTarget))
+  }
+
+  hide() {
+    // disableクラス、属性も持っていた場合と、メニューがshowを持っていた場合は処理を終了させる
+    if (this._element.disabled || $(this._element).hasClass(ClassName.DISABLED) || !$(this._menu).hasClass(ClassName.SHOW)) {
+      return
+    }
+
+    // this._elementをターゲットにする
+    const relatedTarget = {
+      relatedTarget: this._element
+    }
+    // ターゲットに対してhideイベントを定義する
+    const hideEvent = $.Event(Event.HIDE, relatedTarget)
+    // dropdownの親要素を取得する
+    const parent = Dropdown._getParentFromElement(this._element)
+
+    // 親要素に対してhideイベントを実行する
+    $(parent).trigger(hideEvent)
+
+    // hideイベントがブラウザの動作を止めていたら処理を終了する
+    if (hideEvent.isDefaultPrevented()) {
+      return
+    }
+
+    // popperがあった場合は、削除する
+    if (this._popper) {
+      this._popper.destroy()
+    }
+
+    // this._menuのshowクラスを切り替える
+    $(this._menu).toggleClass(ClassName.SHOW)
+    // 親要素に対して、showクラスを切り替えて、hiddenイベントを発動する
+    $(parent)
+      .toggleClass(ClassName.SHOW)
+      .trigger($.Event(Event.HIDDEN, relatedTarget))
+  }
+
+  dispose() {
+    // this_elementのdata-apiを削除する
+    $.removeData(this._element, DATA_KEY)
+    // this_elementのイベントを削除
+    $(this._element).off(EVENT_KEY)
+    this._element = null
+    this._menu = null
+    // popperがnullじゃなかったら、削除してnullにする
+    if (this._popper !== null) {
+      this._popper.destroy()
+      this._popper = null
+    }
+  }
+
+  update() {
+    // dropdownがnavbarにあるか確認
+    this._inNavbar = this._detectNavbar()
+    // popperがnullじゃなかったら
+    if (this._popper !== null) {
+      // popper要素の位置を変更
+      this._popper.scheduleUpdate()
+    }
   }
 
    // Private
@@ -323,7 +383,7 @@ class Dropdown {
     if (typeof this._config.offset === 'function') {
       // dataはpopperみたい
       offset.fn = (data) => {
-        //data.offsetに展開して格納
+        // data.offsetに展開して格納
         data.offsets = {
           ...data.offsets,
           ...this._config.offset(data.offsets, this._element) || {}
@@ -490,7 +550,7 @@ class Dropdown {
       // documentからselectorの要素を取得する
       parent = document.querySelector(selector)
     }
-    
+
     // parentが存在していたらparentを返す
     // そうでなければ、elementのparentNodeで返す
     // parentNodeは親ノード
@@ -499,13 +559,7 @@ class Dropdown {
 
   // eslint-disable-next-line complexity
   static _dataApiKeydownHandler(event) {
-    // If not input/textarea:
-    //  - And not a key in REGEXP_KEYDOWN => not a dropdown command
-    // If input/textarea:
-    //  - If space key => not a dropdown command
-    //  - If key is other than escape
-    //    - If key is not up or down => not a dropdown command
-    //    - If trigger inside the menu => not a dropdown command
+    // inputとtextareaの場合は、dropdownのコマンドを無効化する
     if (/input|textarea/i.test(event.target.tagName)
       ? event.which === SPACE_KEYCODE || event.which !== ESCAPE_KEYCODE &&
       (event.which !== ARROW_DOWN_KEYCODE && event.which !== ARROW_UP_KEYCODE ||
@@ -513,51 +567,111 @@ class Dropdown {
       return
     }
 
+    // イベントを無効化して、伝藩しないようにする
     event.preventDefault()
     event.stopPropagation()
 
+    // disable属性または、disableクラスを持っていた場合、処理を終了する
     if (this.disabled || $(this).hasClass(ClassName.DISABLED)) {
       return
     }
 
+    // dropdownの親要素を取得する
     const parent   = Dropdown._getParentFromElement(this)
+    // parentが.showクラスを持っているか判定
     const isActive = $(parent).hasClass(ClassName.SHOW)
 
+    // isActiveがfalseか、event.whichがエスケープキーだった場合、処理を終了させる
     if (!isActive && event.which === ESCAPE_KEYCODE) {
       return
     }
 
+    // isActiveがfalseまたは、isActiveがtrueかつエスケープキーが押下された場合もしくは、スペースキーが押下された場合
     if (!isActive || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
+      // エスキープキーだった場合
       if (event.which === ESCAPE_KEYCODE) {
+        // parentのdata_toggleを持つ要素を取得
         const toggle = parent.querySelector(Selector.DATA_TOGGLE)
+        // toggleをフォーカスする
         $(toggle).trigger('focus')
       }
 
+      // クリップイベントを発動する
       $(this).trigger('click')
       return
     }
 
+    // disableしてないdropdown-menuとdropdown-itemを取得して、visibleのみを残す
     const items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS))
       .filter((item) => $(item).is(':visible'))
 
+    // itemsで取得したものがなかったら処理終了
     if (items.length === 0) {
       return
     }
 
+    // event.targetが何番目か取得する
     let index = items.indexOf(event.target)
 
-    if (event.which === ARROW_UP_KEYCODE && index > 0) { // Up
+    // 上キーが押されていて、indexが0よりおおきかったら
+    if (event.which === ARROW_UP_KEYCODE && index > 0) {
+      // indexを-1する
       index--
     }
 
-    if (event.which === ARROW_DOWN_KEYCODE && index < items.length - 1) { // Down
+    // 下キーが押されていて、indexがindexの長さ-1より小さかったら
+    if (event.which === ARROW_DOWN_KEYCODE && index < items.length - 1) {
+      // indexを＋1する
       index++
     }
 
+      // indexが0より小さかったら
     if (index < 0) {
+      // indexを0にする
       index = 0
     }
 
+    // drop-down-itemのindex番目をfucusする
     items[index].focus()
   }
 }
+
+/**
+ * ------------------------------------------------------------------------
+ * Data Api implementation
+ * ------------------------------------------------------------------------
+ */
+
+$(document)
+  // data-toggle="dropdown"のキーイベントを登録
+  .on(Event.KEYDOWN_DATA_API, Selector.DATA_TOGGLE, Dropdown._dataApiKeydownHandler)
+  // .dropdown-menuのキーイベントを登録
+  .on(Event.KEYDOWN_DATA_API, Selector.MENU, Dropdown._dataApiKeydownHandler)
+  // クリックイベントを登録
+  .on(`${Event.CLICK_DATA_API} ${Event.KEYUP_DATA_API}`, Dropdown._clearMenus)
+  // [data-toggle="dropdown"]のイベント伝藩を止めて、jQueryInterfaceをcallする
+  .on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
+    event.preventDefault()
+    event.stopPropagation()
+    Dropdown._jQueryInterface.call($(this), 'toggle')
+  })
+  // イベントが伝藩しないようにする
+  .on(Event.CLICK_DATA_API, Selector.FORM_CHILD, (e) => {
+    e.stopPropagation()
+  })
+
+/**
+ * ------------------------------------------------------------------------
+ * jQuery
+ * ------------------------------------------------------------------------
+ */
+
+$.fn[NAME] = Dropdown._jQueryInterface
+$.fn[NAME].Constructor = Dropdown
+$.fn[NAME].noConflict = () => {
+  $.fn[NAME] = JQUERY_NO_CONFLICT
+  return Dropdown._jQueryInterface
+}
+
+
+export default Dropdown
