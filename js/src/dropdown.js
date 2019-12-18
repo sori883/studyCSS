@@ -96,7 +96,7 @@ const DefaultType = {
  */
 
 class Dropdown {
-  // エレメントとtoggle
+  // button.dropdown-toggleと、configがobjectならobject、違うならnull
   constructor(element, config) {
     this._element = element
     this._popper = null
@@ -104,9 +104,9 @@ class Dropdown {
     this._config = this._getConfig(config)
     // .dropdown-menuを取得
     this._menu = this._getMenuElement()
-    // dropdownがnavbarに存在しているか確認
+    // dropdownがnavbarに内包されているか確認
     this._inNavbar = this._detectNavbar()
-    // クリックイベントの設定
+    // クリックイベントの設定（ここでtoggleも登録）
     this._addEventListeners()
   }
 
@@ -296,28 +296,31 @@ class Dropdown {
       event.preventDefault()
       // 親要素のイベントが実行されないようにeventの伝播を禁止する
       event.stopPropagation()
-      // 要素の表示を切り替える
+      // toggleを発動する
       this.toggle()
     })
   }
 
   // configを取得
+  // 引数はtoggleだとnullでそうじゃなかったらobject
   _getConfig(config) {
+    // configにdefaultの設定を$(this._element).data()、configの順に上書きしていく感じ
     config = {
       // default
       ...this.constructor.Default,
-      // 要素に格納してあるデータとキーを取得する
+      //  data-toggle="dropdown" data-display="static" を取得してるみたい
+      // dataって単純にdata属性全部取得する
       ...$(this._element).data(),
-      // toggle
+      // 引数のconfig（object用？）
       ...config
     }
 
     Util.typeCheckConfig(
       // dropdown
       NAME,
-      // toggle
+      // 上で作ったconfigが入ってる
       config,
-      // default type
+      // default typeがそのまま入ってる
       this.constructor.DefaultType
     )
 
@@ -327,15 +330,16 @@ class Dropdown {
   _getMenuElement() {
     // this._menuが存在しなかった場合
     if (!this._menu) {
-      // this._elementの親要素を返す
+      // this._elementの親要素を返す。div.dropdownとかbtn-groupとか
       const parent = Dropdown._getParentFromElement(this._element)
 
       // parentが存在していた場合
       if (parent) {
-        // .dropdown-menuをthis._menuに格納する
+        // parentの中から.dropdown-menuを取得してthis._menuに格納する
         this._menu = parent.querySelector(Selector.MENU)
       }
     }
+
     // this._menuが存在してたらそのまま返す。
     // 存在してなかったら、取得して返す
     return this._menu
@@ -435,20 +439,29 @@ class Dropdown {
 
   // Static
 
+  // callの通り、configはtoggle
   static _jQueryInterface(config) {
     return this.each(function () {
+      // こんな感じで使わないとdataには入らない
+      // $('.dropdown-toggle').data('sc.dropdown', '')
       let data = $(this).data(DATA_KEY)
+      // configはtoggleの場合はnullになる。
       const _config = typeof config === 'object' ? config : null
-
       if (!data) {
+        // thisはdropdown-toggle(button)
+        // つまりelement
         data = new Dropdown(this, _config)
+        // elementにsc.dropdownでdataをセットする
         $(this).data(DATA_KEY, data)
       }
-
+      // toggleの場合はstring
       if (typeof config === 'string') {
+        // dataのtoggleを指してるみたい
         if (typeof data[config] === 'undefined') {
+          // toggleメソッドがなかったらスロー
           throw new TypeError(`No method named "${config}"`)
         }
+        // toggle関数を発動する
         data[config]()
       }
     })
@@ -470,6 +483,7 @@ class Dropdown {
       // togglesの親ノードを取得する
       const parent = Dropdown._getParentFromElement(toggles[i])
       // toggle要素のsc.dropdownを取得する
+      // jqueryInterfaceをで設定してdataを取得する（dataはdropdownのコンストラクタで定義した変数）
       const context = $(toggles[i]).data(DATA_KEY)
       // 連想配列にtoggleを追加
       const relatedTarget = {
@@ -477,6 +491,7 @@ class Dropdown {
       }
 
       // イベントが存在してイベントがclickだったら
+      // bottonクリックのロキにイベントが発動してる
       if (event && event.type === 'click') {
         // relatedTargetのclickイベントにイベントを追加
         relatedTarget.clickEvent = event
@@ -484,24 +499,28 @@ class Dropdown {
 
       // sc.dropdownが存在していたら
       if (!context) {
-        // 処理を継続する
+        // 更新式に行く
+        // つまり、クリックされてないものはcontextがないので、更新式に飛ばされて次のボタンの判定に入る
         continue
       }
 
       // contextのmenuをdropdownmenuに代入
       const dropdownMenu = context._menu
-      // parentがshowクラスを持ってたら
+
+      // parentがshowクラスを持っていなかったら
       if (!$(parent).hasClass(ClassName.SHOW)) {
-        // 処理を継続
+        // メニューが開いていないので、更新式に行く
         continue
       }
 
       // イベントが存在してるのが前提
       // イベントがclickで、イベントのターゲットタグがinputもしくはtextareaまたは、イベントがキーを離してイベントキーがタブ以外でparentの中にイベントのターゲット要素が含まれている場合
+      // /input|textarea/i.test(event.target.tagName) はmenu-itemがinputかtextareaの場合はtrue
       if (event && (event.type === 'click' &&
           /input|textarea/i.test(event.target.tagName) || event.type === 'keyup' && event.which === TAB_KEYCODE) &&
-          $.contains(parent, event.target)) {
-        // 処理を継続
+          $.contains(parent, event.target)) { // parentにevent.targetが含まれているか。つまりparentのdropdownにクリックしたメニューが含まれているか
+        // つまりmenuを閉じなくてもいいイベントの場合はメニューを閉じる処理しませんよってことみたい
+        // 更新式に行く
         continue
       }
 
@@ -513,7 +532,7 @@ class Dropdown {
       $(parent).trigger(hideEvent)
       // hideがブラウザの動作を停止していたら
       if (hideEvent.isDefaultPrevented()) {
-        // 処理を継続する
+        // 更新式に行く
         continue
       }
 
@@ -541,9 +560,11 @@ class Dropdown {
   }
 
   static _getParentFromElement(element) {
+    // elementがボタンの要素全部になってる
     let parent
-    // data-targetかtrimされたhrefのどっちかを返す
+    // data-targetがないのでnullです。
     const selector = Util.getSelectorFromElement(element)
+    
 
     // selectorが存在した場合
     if (selector) {
@@ -647,7 +668,7 @@ $(document)
   .on(Event.KEYDOWN_DATA_API, Selector.DATA_TOGGLE, Dropdown._dataApiKeydownHandler)
   // .dropdown-menuのキーイベントを登録
   .on(Event.KEYDOWN_DATA_API, Selector.MENU, Dropdown._dataApiKeydownHandler)
-  // クリックイベントを登録
+  // メニュークリーンを登録
   .on(`${Event.CLICK_DATA_API} ${Event.KEYUP_DATA_API}`, Dropdown._clearMenus)
   // [data-toggle="dropdown"]のイベント伝藩を止めて、jQueryInterfaceをcallする
   .on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {

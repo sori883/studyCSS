@@ -12,7 +12,7 @@
 
       <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" ="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -189,13 +189,14 @@
         </div>
         <div class="col-sm-3 mt-4">
           <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle hoge" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
               Dropdown menu without Popper.js
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="#">Action</a>
               <a class="dropdown-item" href="#">Another action</a>
               <a class="dropdown-item" href="#">Something else here</a>
+              <textarea class="dropdown-item"></textarea>
             </div>
           </div>
         </div>
@@ -207,5 +208,18 @@
     <script src="../../../node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="../../dist/util.js"></script>
     <script src="../../dist/dropdown.js"></script>
+    <script>
+      // show下ときの
+      // $(".dropdown-toggle").on('show.sc.dropdown', function(){
+      //   console.log('unko');
+      // });
+      // noConflict
+      // $(document).ready(function(){
+      //   console.log('hoge')
+      //   $.fn.simplicssDropdown = $.fn.dropdown.noConflict()
+      // });
+
+
+    </script>
   </body>
 </html>
