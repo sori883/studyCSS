@@ -5,6 +5,7 @@
 .DS_Store
 .vscode/
 shell.lnk
+simplicss.code-workspace
 .cache
 
 # folders to ignore

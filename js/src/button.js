@@ -151,6 +151,7 @@ class Button {
       // elementのdata-sc.buttonを取得
       let data = $(this).data(DATA_KEY)
 
+
       // dataがなかったら
       if (!data) {
         // buttonをインスタンス化

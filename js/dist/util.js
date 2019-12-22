@@ -92,8 +92,7 @@
 
       if (!selector || selector === '#') {
         // 引数elementのhref属性の値を取得
-        var hrefAttr = element.getAttribute('href'); // hrefAttrがなかったら左のhrefAttrを返す=ifはfalseになり''が代入される
-        // hrefAttrがあったら#かどうかを判定して、#じゃなかったらtrimする。
+        var hrefAttr = element.getAttribute('href'); // hrefAttrがあったら#かどうかを判定して、trueならhrefAttrをtrimして返す。falseなら、空文字を入れる
         // trim: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/String/trim
 
         selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : '';
@@ -101,7 +100,7 @@
 
       try {
         // html内のdata-targetもしくはhregで指定されているselectorを返す
-        // data-targetかtrimされたhrefのどっちか
+        // data-targetの対象を返す
         // なかったらnullを返す
         return document.querySelector(selector) ? selector : null;
       } catch (err) {
@@ -144,17 +143,29 @@
     supportsTransitionEnd: function supportsTransitionEnd() {
       return Boolean(TRANSITION_END);
     },
+    // 引数がdom要素か判定する
+    // 違う場合はundefinedを返す
     isElement: function isElement(obj) {
       return (obj[0] || obj).nodeType;
     },
+    // Nameとconfigとdefauly typeでexpectedTypesとvalueTypeが一致しなかったら、エラーを投げる
     typeCheckConfig: function typeCheckConfig(componentName, config, configTypes) {
+      // default typeの分だけループ
+      // dropdownだとoffset、flipなどなど
       for (var property in configTypes) {
+        // Object.prototype.hasOwnPropertyはオブジェクトにpropertyがあるか判定する
+        // offsetプロパティが、configTypesにあるか
         if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
-          var expectedTypes = configTypes[property];
-          var value = config[property];
-          var valueType = value && Util.isElement(value) ? 'element' : toType(value);
+          // configTypesからプロパティの値を取得
+          var expectedTypes = configTypes[property]; // configの中からpropertyの値を取得
+
+          var value = config[property]; // valueが存在してdom要素だった場合はelementを格納
+          // falseの場合は型を判定して格納
+
+          var valueType = value && Util.isElement(value) ? 'element' : toType(value); //  expectedTypesとvalueTypeが一致してない場合
 
           if (!new RegExp(expectedTypes).test(valueType)) {
+            // エラーを投げる。エラーが投げられたら処理は終了
             throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
           }
         }

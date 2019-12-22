@@ -30,6 +30,7 @@ const plugins = [
 const scPlugins = {
   Alert: path.resolve(__dirname, '../js/src/alert.js'),
   Button: path.resolve(__dirname, '../js/src/button.js'),
+  Dropdown: path.resolve(__dirname, '../js/src/dropdown.js'),
   Util: path.resolve(__dirname, '../js/src/util.js')
 }
 const rootPath = TEST ? '../js/coverage/dist/' : '../js/dist/'
@@ -37,9 +38,10 @@ const rootPath = TEST ? '../js/coverage/dist/' : '../js/dist/'
 function build(plugin) {
   console.log(`Building ${plugin} plugin...`)
 
-  const external = ['jquery']
+  const external = ['jquery', 'popper.js']
   const globals = {
-    jquery: 'jQuery'
+    jquery: 'jQuery',
+    'popper.js': 'Popper'
   }
 
   //Do not bundle Util in plugins
