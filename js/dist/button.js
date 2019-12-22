@@ -227,8 +227,7 @@
     // checkとかになってないのに.activeがついてたら削除する
     // data-toggle内のcheckboxとradioを見つける
     //  '[data-toggle="buttons"]をもつ .btn要素を全て取得する
-    var buttons = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLES_BUTTONS));
-    console.log(buttons); // buttonsの数だけループ回すよ
+    var buttons = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLES_BUTTONS)); // buttonsの数だけループ回すよ
 
     for (var i = 0, len = buttons.length; i < len; i++) {
       // ボタンのi番目
