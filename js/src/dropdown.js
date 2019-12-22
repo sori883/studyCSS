@@ -136,12 +136,12 @@ class Dropdown {
       // メニューを閉じる
       Dropdown._clearMenus()
 
-      // .showを持ってたら処理終了
+      // .showを持ってたらshowする必要ないので処理終了
       if (isActive) {
         return
       }
 
-      // 下のshowを発動
+      // 下のshowを発動。popperは使う
       this.show(true)
     }
 
@@ -151,15 +151,16 @@ class Dropdown {
         return
       }
 
-      // showを指定するターゲットを指定
+      // .dropdown-toggleをrelatedTargetに入れる
       const relatedTarget = {
         relatedTarget: this._element
       }
 
-      // show.sc.dropdownイベントを定義して、ターゲットを渡す
+      // show.sc.dropdownイベントを定義して、relatedTargetを渡す
       const showEvent = $.Event(Event.SHOW, relatedTarget)
 
       // エレメントの親要素を取得
+      // .dropdown
       const parent = Dropdown._getParentFromElement(this._element)
 
       // parentに対してshoweventを発動する
@@ -170,7 +171,7 @@ class Dropdown {
         return
       }
 
-    // NavbarでドロップダウンのPopper.jsを完全に無効にする
+    // navに入ってない状態でusepopperが使われる時
     if (!this._inNavbar && usePopper) {
       /**
        * Check for Popper dependency
@@ -181,15 +182,16 @@ class Dropdown {
         throw new TypeError('Simplicss\'s dropdowns require Popper.js (https://popper.js.org/)')
       }
 
-      // エレメントを格納
+      // .data-toggle要素を格納
       let referenceElement = this._element
 
-      // parentaだったら
+      // this._configはDefault
+      // parentだったら
       if (this._config.reference === 'parent') {
         // this._elementの親要素を格納する
         referenceElement = parent
-        // this._config.referenceがdom要素だったら
       } else if (Util.isElement(this._config.reference)) {
+        // this._config.referenceがdom要素だったら
         // this._config.referenceを突っ込む
         referenceElement = this._config.reference
 
@@ -198,17 +200,17 @@ class Dropdown {
           referenceElement = this._config.reference[0]
         }
       }
-
       // boundaryがscrollParentじゃない場合は、位置をstaticに設定してメニューが親をエスケープ出来るようにする
       if (this._config.boundary !== 'scrollParent') {
         // parentに.position-staticを追加
         $(parent).addClass(ClassName.POSITION_STATIC)
       }
       // popperをインスタンス化
+      // referenceElementはdata-toggle、this._menuはメニュー、this._getPopperConfig()はpopperのコンフィグ
       this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig())
     }
 
-        // タッチデバイスの場合、空のマウスオーバリスナーを追加
+    // タッチデバイスの場合、空のマウスオーバリスナーを追加
     if ('ontouchstart' in document.documentElement &&
         $(parent).closest(Selector.NAVBAR_NAV).length === 0) {
       $(document.body).children().on('mouseover', null, $.noop)
@@ -216,10 +218,10 @@ class Dropdown {
 
     // フォーカスさせる。キーイベントのため？
     this._element.focus()
-    // aria-expanded属性を付与してtrueを設定する
+    // showのときはaria-expanded属性を付与してtrueを設定する
     this._element.setAttribute('aria-expanded', true)
 
-    // menueの.showを切り替える
+    // menuの.showを切り替える
     $(this._menu).toggleClass(ClassName.SHOW)
     // parentの.showを切り替えて、表示後のイベントをrelatedTargerに対して発動する
     $(parent)
@@ -232,14 +234,13 @@ class Dropdown {
     if (this._element.disabled || $(this._element).hasClass(ClassName.DISABLED) || !$(this._menu).hasClass(ClassName.SHOW)) {
       return
     }
-
     // this._elementをターゲットにする
     const relatedTarget = {
       relatedTarget: this._element
     }
     // ターゲットに対してhideイベントを定義する
     const hideEvent = $.Event(Event.HIDE, relatedTarget)
-    // dropdownの親要素を取得する
+    // .dropdownを取得する
     const parent = Dropdown._getParentFromElement(this._element)
 
     // 親要素に対してhideイベントを実行する
@@ -346,7 +347,7 @@ class Dropdown {
   }
 
   _getPlacement() {
-    // this.elementの親要素を取得
+    // this.elementの親要素を取得（.dropdown）
     const $parentDropdown = $(this._element.parentNode)
     // bottom-startを格納。初期値
     let placement = AttachmentMap.BOTTOM
@@ -454,6 +455,7 @@ class Dropdown {
         // elementにsc.dropdownでdataをセットする
         $(this).data(DATA_KEY, data)
       }
+
       // toggleの場合はstring
       if (typeof config === 'string') {
         // dataのtoggleを指してるみたい
@@ -525,13 +527,15 @@ class Dropdown {
       }
 
       // hideイベントオブジェクトを定義する。
-      // relatedTargetはイベント発生時に実行する関数に渡す値
+      // relatedTargetはイベント発生時に実行する関数に渡す値(data-toggle="dropdown"を持つ要素)
       // http://www.jquerystudy.info/reference/events/event.html
       const hideEvent = $.Event(Event.HIDE, relatedTarget)
       // parent要素に対して、hideEventを発生去せる
+      // parentは.dropdown
       $(parent).trigger(hideEvent)
       // hideがブラウザの動作を停止していたら
       if (hideEvent.isDefaultPrevented()) {
+        // 利用ユーザが特定の要素に対してe.preventDefault()みたいなのを書いたら処理をしない
         // 更新式に行く
         continue
       }
@@ -543,16 +547,16 @@ class Dropdown {
 
       // toggleに'aria-expanded=falseを設定
       toggles[i].setAttribute('aria-expanded', 'false')
-
       // contextにpopperがあったら
       if (context._popper) {
-        // 削除する
+        // popperインスタンスを削除
         context._popper.destroy()
       }
 
       // .dropdown-menuの.showを削除
       $(dropdownMenu).removeClass(ClassName.SHOW)
       // parentの.showを削除してhiddenイベントを定義しつつ発動
+      // parentは.dropdown
       $(parent)
         .removeClass(ClassName.SHOW)
         .trigger($.Event(Event.HIDDEN, relatedTarget))

@@ -187,12 +187,12 @@
 
       var isActive = $(this._menu).hasClass(ClassName.SHOW); // メニューを閉じる
 
-      Dropdown._clearMenus(); // .showを持ってたら処理終了
+      Dropdown._clearMenus(); // .showを持ってたらshowする必要ないので処理終了
 
 
       if (isActive) {
         return;
-      } // 下のshowを発動
+      } // 下のshowを発動。popperは使う
 
 
       this.show(true);
@@ -206,14 +206,15 @@
       // dropdownもしくはメニューがdisableになってたら処理終了
       if (this._element.disabled || $(this._element).hasClass(ClassName.DISABLED) || $(this._menu).hasClass(ClassName.SHOW)) {
         return;
-      } // showを指定するターゲットを指定
+      } // .dropdown-toggleをrelatedTargetに入れる
 
 
       var relatedTarget = {
         relatedTarget: this._element
-      }; // show.sc.dropdownイベントを定義して、ターゲットを渡す
+      }; // show.sc.dropdownイベントを定義して、relatedTargetを渡す
 
       var showEvent = $.Event(Event.SHOW, relatedTarget); // エレメントの親要素を取得
+      // .dropdown
 
       var parent = Dropdown._getParentFromElement(this._element); // parentに対してshoweventを発動する
 
@@ -222,7 +223,7 @@
 
       if (showEvent.isDefaultPrevented()) {
         return;
-      } // NavbarでドロップダウンのPopper.jsを完全に無効にする
+      } // navに入ってない状態でusepopperが使われる時
 
 
       if (!this._inNavbar && usePopper) {
@@ -233,15 +234,17 @@
         // popperが読み込まれているか確認
         if (typeof Popper === 'undefined') {
           throw new TypeError('Simplicss\'s dropdowns require Popper.js (https://popper.js.org/)');
-        } // エレメントを格納
+        } // .data-toggle要素を格納
 
 
-        var referenceElement = this._element; // parentaだったら
+        var referenceElement = this._element; // this._configはDefault
+        // parentだったら
 
         if (this._config.reference === 'parent') {
           // this._elementの親要素を格納する
-          referenceElement = parent; // this._config.referenceがdom要素だったら
+          referenceElement = parent;
         } else if (Util.isElement(this._config.reference)) {
+          // this._config.referenceがdom要素だったら
           // this._config.referenceを突っ込む
           referenceElement = this._config.reference; // jquery要素か確認する
 
@@ -255,6 +258,7 @@
           // parentに.position-staticを追加
           $(parent).addClass(ClassName.POSITION_STATIC);
         } // popperをインスタンス化
+        // referenceElementはdata-toggle、this._menuはメニュー、this._getPopperConfig()はpopperのコンフィグ
 
 
         this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig());
@@ -266,10 +270,10 @@
       } // フォーカスさせる。キーイベントのため？
 
 
-      this._element.focus(); // aria-expanded属性を付与してtrueを設定する
+      this._element.focus(); // showのときはaria-expanded属性を付与してtrueを設定する
 
 
-      this._element.setAttribute('aria-expanded', true); // menueの.showを切り替える
+      this._element.setAttribute('aria-expanded', true); // menuの.showを切り替える
 
 
       $(this._menu).toggleClass(ClassName.SHOW); // parentの.showを切り替えて、表示後のイベントをrelatedTargerに対して発動する
@@ -288,7 +292,7 @@
         relatedTarget: this._element
       }; // ターゲットに対してhideイベントを定義する
 
-      var hideEvent = $.Event(Event.HIDE, relatedTarget); // dropdownの親要素を取得する
+      var hideEvent = $.Event(Event.HIDE, relatedTarget); // .dropdownを取得する
 
       var parent = Dropdown._getParentFromElement(this._element); // 親要素に対してhideイベントを実行する
 
@@ -381,7 +385,7 @@
     };
 
     _proto._getPlacement = function _getPlacement() {
-      // this.elementの親要素を取得
+      // this.elementの親要素を取得（.dropdown）
       var $parentDropdown = $(this._element.parentNode); // bottom-startを格納。初期値
 
       var placement = AttachmentMap.BOTTOM; // dropupを持ってたら
@@ -547,15 +551,17 @@
           // 更新式に行く
           continue;
         } // hideイベントオブジェクトを定義する。
-        // relatedTargetはイベント発生時に実行する関数に渡す値
+        // relatedTargetはイベント発生時に実行する関数に渡す値(data-toggle="dropdown"を持つ要素)
         // http://www.jquerystudy.info/reference/events/event.html
 
 
         var hideEvent = $.Event(Event.HIDE, relatedTarget); // parent要素に対して、hideEventを発生去せる
+        // parentは.dropdown
 
         $(parent).trigger(hideEvent); // hideがブラウザの動作を停止していたら
 
         if (hideEvent.isDefaultPrevented()) {
+          // 利用ユーザが特定の要素に対してe.preventDefault()みたいなのを書いたら処理をしない
           // 更新式に行く
           continue;
         } // タッチデバイスだった場合、iOS用のマウスオーバリスナーを削除
@@ -569,12 +575,13 @@
         toggles[i].setAttribute('aria-expanded', 'false'); // contextにpopperがあったら
 
         if (context._popper) {
-          // 削除する
+          // popperインスタンスを削除
           context._popper.destroy();
         } // .dropdown-menuの.showを削除
 
 
         $(dropdownMenu).removeClass(ClassName.SHOW); // parentの.showを削除してhiddenイベントを定義しつつ発動
+        // parentは.dropdown
 
         $(parent).removeClass(ClassName.SHOW).trigger($.Event(Event.HIDDEN, relatedTarget));
       }

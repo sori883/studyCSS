@@ -189,7 +189,7 @@
         </div>
         <div class="col-sm-3 mt-4">
           <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle hoge" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+            <button id="oho" class="btn btn-secondary dropdown-toggle hoge" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
               Dropdown menu without Popper.js
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -209,7 +209,7 @@
     <script src="../../dist/util.js"></script>
     <script src="../../dist/dropdown.js"></script>
     <script>
-      // show下ときの
+      // showしたときの
       // $(".dropdown-toggle").on('show.sc.dropdown', function(){
       //   console.log('unko');
       // });
@@ -218,8 +218,12 @@
       //   console.log('hoge')
       //   $.fn.simplicssDropdown = $.fn.dropdown.noConflict()
       // });
-
-
+      // hideイベントでpreventDefault
+      // $('.dropdown').on('hide.sc.dropdown', function (e) {
+      //   e.preventDefault()
+      // })
+      // hide
+      $('.hoge').dropdown('hide')
     </script>
   </body>
 </html>
