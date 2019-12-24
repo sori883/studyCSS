@@ -261,7 +261,7 @@
         // referenceElementはdata-toggle、this._menuはメニュー、this._getPopperConfig()はpopperのコンフィグ
 
 
-        this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig());
+        console.log(referenceElement);
       } // タッチデバイスの場合、空のマウスオーバリスナーを追加
 
 

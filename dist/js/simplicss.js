@@ -158,8 +158,7 @@
 
       if (!selector || selector === '#') {
         // 引数elementのhref属性の値を取得
-        var hrefAttr = element.getAttribute('href'); // hrefAttrがなかったら左のhrefAttrを返す=ifはfalseになり''が代入される
-        // hrefAttrがあったら#かどうかを判定して、#じゃなかったらtrimする。
+        var hrefAttr = element.getAttribute('href'); // hrefAttrがあったら#かどうかを判定して、trueならhrefAttrをtrimして返す。falseなら、空文字を入れる
         // trim: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/String/trim
 
         selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : '';
@@ -167,7 +166,7 @@
 
       try {
         // html内のdata-targetもしくはhregで指定されているselectorを返す
-        // data-targetかtrimされたhrefのどっちか
+        // data-targetの対象を返す
         // なかったらnullを返す
         return document.querySelector(selector) ? selector : null;
       } catch (err) {
@@ -211,26 +210,28 @@
       return Boolean(TRANSITION_END);
     },
     // 引数がdom要素か判定する
+    // 違う場合はundefinedを返す
     isElement: function isElement(obj) {
       return (obj[0] || obj).nodeType;
     },
     // Nameとconfigとdefauly typeでexpectedTypesとvalueTypeが一致しなかったら、エラーを投げる
     typeCheckConfig: function typeCheckConfig(componentName, config, configTypes) {
       // default typeの分だけループ
+      // dropdownだとoffset、flipなどなど
       for (var property in configTypes) {
-        // Object.prototype.hasOwnPropertyにconfigtypeのpropertyを渡す
         // Object.prototype.hasOwnPropertyはオブジェクトにpropertyがあるか判定する
+        // offsetプロパティが、configTypesにあるか
         if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
-          // configtypeのプロパティを取得
-          var expectedTypes = configTypes[property]; // toggleを格納
+          // configTypesからプロパティの値を取得
+          var expectedTypes = configTypes[property]; // configの中からpropertyの値を取得
 
           var value = config[property]; // valueが存在してdom要素だった場合はelementを格納
           // falseの場合は型を判定して格納
 
-          var valueType = value && Util.isElement(value) ? 'element' : toType(value); //  expectedTypesとvalueTypeが一致しないか確認
+          var valueType = value && Util.isElement(value) ? 'element' : toType(value); //  expectedTypesとvalueTypeが一致してない場合
 
           if (!new RegExp(expectedTypes).test(valueType)) {
-            // エラーを投げる
+            // エラーを投げる。エラーが投げられたら処理は終了
             throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
           }
         }
@@ -827,16 +828,16 @@
   var Dropdown =
   /*#__PURE__*/
   function () {
-    // エレメントとtoggle
+    // button.dropdown-toggleと、configがobjectならobject、違うならnull
     function Dropdown(element, config) {
       this._element = element;
       this._popper = null; // configを取得
 
       this._config = this._getConfig(config); // .dropdown-menuを取得
 
-      this._menu = this._getMenuElement(); // dropdownがnavbarに存在しているか確認
+      this._menu = this._getMenuElement(); // dropdownがnavbarに内包されているか確認
 
-      this._inNavbar = this._detectNavbar(); // クリックイベントの設定
+      this._inNavbar = this._detectNavbar(); // クリックイベントの設定（ここでtoggleも登録）
 
       this._addEventListeners();
     } // Getters
@@ -853,12 +854,12 @@
 
       var isActive = $(this._menu).hasClass(ClassName$2.SHOW); // メニューを閉じる
 
-      Dropdown._clearMenus(); // .showを持ってたら処理終了
+      Dropdown._clearMenus(); // .showを持ってたらshowする必要ないので処理終了
 
 
       if (isActive) {
         return;
-      } // 下のshowを発動
+      } // 下のshowを発動。popperは使う
 
 
       this.show(true);
@@ -872,14 +873,15 @@
       // dropdownもしくはメニューがdisableになってたら処理終了
       if (this._element.disabled || $(this._element).hasClass(ClassName$2.DISABLED) || $(this._menu).hasClass(ClassName$2.SHOW)) {
         return;
-      } // showを指定するターゲットを指定
+      } // .dropdown-toggleをrelatedTargetに入れる
 
 
       var relatedTarget = {
         relatedTarget: this._element
-      }; // show.sc.dropdownイベントを定義して、ターゲットを渡す
+      }; // show.sc.dropdownイベントを定義して、relatedTargetを渡す
 
       var showEvent = $.Event(Event$2.SHOW, relatedTarget); // エレメントの親要素を取得
+      // .dropdown
 
       var parent = Dropdown._getParentFromElement(this._element); // parentに対してshoweventを発動する
 
@@ -888,7 +890,7 @@
 
       if (showEvent.isDefaultPrevented()) {
         return;
-      } // NavbarでドロップダウンのPopper.jsを完全に無効にする
+      } // navに入ってない状態でusepopperが使われる時
 
 
       if (!this._inNavbar && usePopper) {
@@ -899,15 +901,17 @@
         // popperが読み込まれているか確認
         if (typeof Popper === 'undefined') {
           throw new TypeError('Simplicss\'s dropdowns require Popper.js (https://popper.js.org/)');
-        } // エレメントを格納
+        } // .data-toggle要素を格納
 
 
-        var referenceElement = this._element; // parentaだったら
+        var referenceElement = this._element; // this._configはDefault
+        // parentだったら
 
         if (this._config.reference === 'parent') {
           // this._elementの親要素を格納する
-          referenceElement = parent; // this._config.referenceがdom要素だったら
+          referenceElement = parent;
         } else if (Util.isElement(this._config.reference)) {
+          // this._config.referenceがdom要素だったら
           // this._config.referenceを突っ込む
           referenceElement = this._config.reference; // jquery要素か確認する
 
@@ -921,9 +925,10 @@
           // parentに.position-staticを追加
           $(parent).addClass(ClassName$2.POSITION_STATIC);
         } // popperをインスタンス化
+        // referenceElementはdata-toggle、this._menuはメニュー、this._getPopperConfig()はpopperのコンフィグ
 
 
-        this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig());
+        console.log(referenceElement);
       } // タッチデバイスの場合、空のマウスオーバリスナーを追加
 
 
@@ -932,10 +937,10 @@
       } // フォーカスさせる。キーイベントのため？
 
 
-      this._element.focus(); // aria-expanded属性を付与してtrueを設定する
+      this._element.focus(); // showのときはaria-expanded属性を付与してtrueを設定する
 
 
-      this._element.setAttribute('aria-expanded', true); // menueの.showを切り替える
+      this._element.setAttribute('aria-expanded', true); // menuの.showを切り替える
 
 
       $(this._menu).toggleClass(ClassName$2.SHOW); // parentの.showを切り替えて、表示後のイベントをrelatedTargerに対して発動する
@@ -954,7 +959,7 @@
         relatedTarget: this._element
       }; // ターゲットに対してhideイベントを定義する
 
-      var hideEvent = $.Event(Event$2.HIDE, relatedTarget); // dropdownの親要素を取得する
+      var hideEvent = $.Event(Event$2.HIDE, relatedTarget); // .dropdownを取得する
 
       var parent = Dropdown._getParentFromElement(this._element); // 親要素に対してhideイベントを実行する
 
@@ -1010,18 +1015,20 @@
         // this._elementイベント禁止
         event.preventDefault(); // 親要素のイベントが実行されないようにeventの伝播を禁止する
 
-        event.stopPropagation(); // 要素の表示を切り替える
+        event.stopPropagation(); // toggleを発動する
 
         _this.toggle();
       });
     } // configを取得
+    // 引数はtoggleだとnullでそうじゃなかったらobject
     ;
 
     _proto._getConfig = function _getConfig(config) {
+      // configにdefaultの設定を$(this._element).data()、configの順に上書きしていく感じ
       config = _objectSpread2({}, this.constructor.Default, {}, $(this._element).data(), {}, config);
       Util.typeCheckConfig( // dropdown
-      NAME$2, // toggle
-      config, // default type
+      NAME$2, // 上で作ったconfigが入ってる
+      config, // default typeがそのまま入ってる
       this.constructor.DefaultType);
       return config;
     };
@@ -1029,12 +1036,12 @@
     _proto._getMenuElement = function _getMenuElement() {
       // this._menuが存在しなかった場合
       if (!this._menu) {
-        // this._elementの親要素を返す
+        // this._elementの親要素を返す。div.dropdownとかbtn-groupとか
         var parent = Dropdown._getParentFromElement(this._element); // parentが存在していた場合
 
 
         if (parent) {
-          // .dropdown-menuをthis._menuに格納する
+          // parentの中から.dropdown-menuを取得してthis._menuに格納する
           this._menu = parent.querySelector(Selector$2.MENU);
         }
       } // this._menuが存在してたらそのまま返す。
@@ -1045,7 +1052,7 @@
     };
 
     _proto._getPlacement = function _getPlacement() {
-      // this.elementの親要素を取得
+      // this.elementの親要素を取得（.dropdown）
       var $parentDropdown = $(this._element.parentNode); // bottom-startを格納。初期値
 
       var placement = AttachmentMap.BOTTOM; // dropupを持ってたら
@@ -1126,23 +1133,33 @@
 
       return _objectSpread2({}, popperConfig, {}, this._config.popperConfig);
     } // Static
+    // callの通り、configはtoggle
     ;
 
     Dropdown._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY$2);
+        // こんな感じで使わないとdataには入らない
+        // $('.dropdown-toggle').data('sc.dropdown', '')
+        var data = $(this).data(DATA_KEY$2); // configはtoggleの場合はnullになる。
 
         var _config = typeof config === 'object' ? config : null;
 
         if (!data) {
-          data = new Dropdown(this, _config);
+          // thisはdropdown-toggle(button)
+          // つまりelement
+          data = new Dropdown(this, _config); // elementにsc.dropdownでdataをセットする
+
           $(this).data(DATA_KEY$2, data);
-        }
+        } // toggleの場合はstring
+
 
         if (typeof config === 'string') {
+          // dataのtoggleを指してるみたい
           if (typeof data[config] === 'undefined') {
+            // toggleメソッドがなかったらスロー
             throw new TypeError("No method named \"" + config + "\"");
-          }
+          } // toggle関数を発動する
+
 
           data[config]();
         }
@@ -1162,6 +1179,7 @@
       for (var i = 0, len = toggles.length; i < len; i++) {
         // togglesの親ノードを取得する
         var parent = Dropdown._getParentFromElement(toggles[i]); // toggle要素のsc.dropdownを取得する
+        // jqueryInterfaceをで設定してdataを取得する（dataはdropdownのコンストラクタで定義した変数）
 
 
         var context = $(toggles[i]).data(DATA_KEY$2); // 連想配列にtoggleを追加
@@ -1169,6 +1187,7 @@
         var relatedTarget = {
           relatedTarget: toggles[i]
         }; // イベントが存在してイベントがclickだったら
+        // bottonクリックのロキにイベントが発動してる
 
         if (event && event.type === 'click') {
           // relatedTargetのclickイベントにイベントを追加
@@ -1177,34 +1196,40 @@
 
 
         if (!context) {
-          // 処理を継続する
+          // 更新式に行く
+          // つまり、クリックされてないものはcontextがないので、更新式に飛ばされて次のボタンの判定に入る
           continue;
         } // contextのmenuをdropdownmenuに代入
 
 
-        var dropdownMenu = context._menu; // parentがshowクラスを持ってたら
+        var dropdownMenu = context._menu; // parentがshowクラスを持っていなかったら
 
         if (!$(parent).hasClass(ClassName$2.SHOW)) {
-          // 処理を継続
+          // メニューが開いていないので、更新式に行く
           continue;
         } // イベントが存在してるのが前提
         // イベントがclickで、イベントのターゲットタグがinputもしくはtextareaまたは、イベントがキーを離してイベントキーがタブ以外でparentの中にイベントのターゲット要素が含まれている場合
+        // /input|textarea/i.test(event.target.tagName) はmenu-itemがinputかtextareaの場合はtrue
 
 
         if (event && (event.type === 'click' && /input|textarea/i.test(event.target.tagName) || event.type === 'keyup' && event.which === TAB_KEYCODE) && $.contains(parent, event.target)) {
-          // 処理を継続
+          // parentにevent.targetが含まれているか。つまりparentのdropdownにクリックしたメニューが含まれているか
+          // つまりmenuを閉じなくてもいいイベントの場合はメニューを閉じる処理しませんよってことみたい
+          // 更新式に行く
           continue;
         } // hideイベントオブジェクトを定義する。
-        // relatedTargetはイベント発生時に実行する関数に渡す値
+        // relatedTargetはイベント発生時に実行する関数に渡す値(data-toggle="dropdown"を持つ要素)
         // http://www.jquerystudy.info/reference/events/event.html
 
 
         var hideEvent = $.Event(Event$2.HIDE, relatedTarget); // parent要素に対して、hideEventを発生去せる
+        // parentは.dropdown
 
         $(parent).trigger(hideEvent); // hideがブラウザの動作を停止していたら
 
         if (hideEvent.isDefaultPrevented()) {
-          // 処理を継続する
+          // 利用ユーザが特定の要素に対してe.preventDefault()みたいなのを書いたら処理をしない
+          // 更新式に行く
           continue;
         } // タッチデバイスだった場合、iOS用のマウスオーバリスナーを削除
 
@@ -1217,19 +1242,21 @@
         toggles[i].setAttribute('aria-expanded', 'false'); // contextにpopperがあったら
 
         if (context._popper) {
-          // 削除する
+          // popperインスタンスを削除
           context._popper.destroy();
         } // .dropdown-menuの.showを削除
 
 
         $(dropdownMenu).removeClass(ClassName$2.SHOW); // parentの.showを削除してhiddenイベントを定義しつつ発動
+        // parentは.dropdown
 
         $(parent).removeClass(ClassName$2.SHOW).trigger($.Event(Event$2.HIDDEN, relatedTarget));
       }
     };
 
     Dropdown._getParentFromElement = function _getParentFromElement(element) {
-      var parent; // data-targetかtrimされたhrefのどっちかを返す
+      // elementがボタンの要素全部になってる
+      var parent; // data-targetがないのでnullです。
 
       var selector = Util.getSelectorFromElement(element); // selectorが存在した場合
 
@@ -1345,7 +1372,7 @@
 
   $(document) // data-toggle="dropdown"のキーイベントを登録
   .on(Event$2.KEYDOWN_DATA_API, Selector$2.DATA_TOGGLE, Dropdown._dataApiKeydownHandler) // .dropdown-menuのキーイベントを登録
-  .on(Event$2.KEYDOWN_DATA_API, Selector$2.MENU, Dropdown._dataApiKeydownHandler) // クリックイベントを登録
+  .on(Event$2.KEYDOWN_DATA_API, Selector$2.MENU, Dropdown._dataApiKeydownHandler) // メニュークリーンを登録
   .on(Event$2.CLICK_DATA_API + " " + Event$2.KEYUP_DATA_API, Dropdown._clearMenus) // [data-toggle="dropdown"]のイベント伝藩を止めて、jQueryInterfaceをcallする
   .on(Event$2.CLICK_DATA_API, Selector$2.DATA_TOGGLE, function (event) {
     event.preventDefault();

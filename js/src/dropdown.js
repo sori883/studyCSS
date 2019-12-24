@@ -207,6 +207,7 @@ class Dropdown {
       }
       // popperをインスタンス化
       // referenceElementはdata-toggle、this._menuはメニュー、this._getPopperConfig()はpopperのコンフィグ
+      // ちなみにここでdropdownメニューを表示している
       this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig())
     }
 
@@ -568,7 +569,6 @@ class Dropdown {
     let parent
     // data-targetがないのでnullです。
     const selector = Util.getSelectorFromElement(element)
-    
 
     // selectorが存在した場合
     if (selector) {
