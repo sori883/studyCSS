@@ -98,7 +98,7 @@
   background-size: 100% 100%;
 }
 
-// navbarを折りたたむあb書を設定するための、navbar-expand-*を作成する
+// navbarを折りたたむための、navbar-expand-*を作成する
 .navbar-expand {
   @each $breakpoint in map-keys($grid-breakpoints) {
     $next: breakpoint-next($breakpoint, $grid-breakpoints);

@@ -1,15 +1,30 @@
+// 次のbreakpointの名前を返す。最後の名前の場合はnullを返す
+@function breakpoint-next($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map-keys($breakpoints)) {
+  $n: index($breakpoint-names, $name);
+  // nth($breakpoint-names, $n + 1)が名前を取得している部分
+  @return if($n != null and $n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
+}
+
+// name(mdとか)をキーとして、breakpointを取得する
+@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+  $min: map-get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+// @media(max-width)用。
+// safariの丸め込みバグのため、.02pxを引く
+// see https://bugs.webkit.org/show_bug.cgi?id=178261
+@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+  $next: breakpoint-next($name, $breakpoints);
+  @return if($next, breakpoint-min($next, $breakpoints) - .02, null);
+}
+
 // -xlとかの名前を作成
 // null（xs）のときはなんにも返さない
 @function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
   @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
 }
 
-
-// name(mdとか)をキーとして、画面サイズを取得する
-@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
-  $min: map-get($breakpoints, $name);
-  @return if($min != 0, $min, null);
-}
 
 // mediaのmin-widthを作成するよ
 @mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
