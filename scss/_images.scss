@@ -1,0 +1,38 @@
+// 親要素を超えて大きくならないようなレスポンシブ画像
+//
+// google mapとかの内部イメージに対して、cssが反映されないように<img>ではなく、明示的なクラスを作成
+.img-fluid {
+  @include img-fluid();
+}
+
+
+// サムネイル
+.img-thumbnail {
+  padding: $thumbnail-padding;
+  background-color: $thumbnail-bg;
+  border: $thumbnail-border-width solid $thumbnail-border-color;
+  @include border-radius($thumbnail-border-radius);
+  @include box-shadow($thumbnail-box-shadow);
+
+  // 横幅を親要素の100%にする。heightはauto
+  @include img-fluid();
+}
+
+//
+// Figures
+//
+
+.figure {
+  // キャプションが画像と揃うようにする
+  display: inline-block;
+}
+
+.figure-img {
+  margin-bottom: $spacer / 2;
+  line-height: 1;
+}
+
+.figure-caption {
+  @include font-size($figure-caption-font-size);
+  color: $figure-caption-color;
+}
