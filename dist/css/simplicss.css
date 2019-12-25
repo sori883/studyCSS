@@ -1,4 +1,36 @@
 @charset "UTF-8";
+/* line 1, scss/_root.scss */
+:root {
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, "BlinkMacSystemFont", "Helvetica Neue", Helvetica, "Arial", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 /* line 8, scss/_reboot.scss */
 *,
 *::before,
@@ -2475,211 +2507,193 @@ input[type="button"].btn-block {
   background-size: 100% 100%;
 }
 
+@media (max-width: 575.98px) {
+  /* line 109, scss/_navbar.scss */
+  .navbar-expand-sm > .container,
+  .navbar-expand-sm > .container-fluid, .navbar-expand-sm > .container-sm, .navbar-expand-sm > .container-md, .navbar-expand-sm > .container-lg, .navbar-expand-sm > .container-xl {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 576px) {
+  /* line 107, scss/_navbar.scss */
+  .navbar-expand-sm {
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+  }
+  /* line 130, scss/_navbar.scss */
+  .navbar-expand-sm .navbar-nav {
+    flex-direction: row;
+  }
+  /* line 133, scss/_navbar.scss */
+  .navbar-expand-sm .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+  /* line 137, scss/_navbar.scss */
+  .navbar-expand-sm .navbar-nav .nav-link {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  /* line 144, scss/_navbar.scss */
+  .navbar-expand-sm > .container,
+  .navbar-expand-sm > .container-fluid, .navbar-expand-sm > .container-sm, .navbar-expand-sm > .container-md, .navbar-expand-sm > .container-lg, .navbar-expand-sm > .container-xl {
+    flex-wrap: nowrap;
+  }
+  /* line 159, scss/_navbar.scss */
+  .navbar-expand-sm .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+  }
+  /* line 166, scss/_navbar.scss */
+  .navbar-expand-sm .navbar-toggler {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* line 109, scss/_navbar.scss */
+  .navbar-expand-md > .container,
+  .navbar-expand-md > .container-fluid, .navbar-expand-md > .container-sm, .navbar-expand-md > .container-md, .navbar-expand-md > .container-lg, .navbar-expand-md > .container-xl {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  /* line 107, scss/_navbar.scss */
+  .navbar-expand-md {
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+  }
+  /* line 130, scss/_navbar.scss */
+  .navbar-expand-md .navbar-nav {
+    flex-direction: row;
+  }
+  /* line 133, scss/_navbar.scss */
+  .navbar-expand-md .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+  /* line 137, scss/_navbar.scss */
+  .navbar-expand-md .navbar-nav .nav-link {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  /* line 144, scss/_navbar.scss */
+  .navbar-expand-md > .container,
+  .navbar-expand-md > .container-fluid, .navbar-expand-md > .container-sm, .navbar-expand-md > .container-md, .navbar-expand-md > .container-lg, .navbar-expand-md > .container-xl {
+    flex-wrap: nowrap;
+  }
+  /* line 159, scss/_navbar.scss */
+  .navbar-expand-md .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+  }
+  /* line 166, scss/_navbar.scss */
+  .navbar-expand-md .navbar-toggler {
+    display: none;
+  }
+}
+
+@media (max-width: 991.98px) {
+  /* line 109, scss/_navbar.scss */
+  .navbar-expand-lg > .container,
+  .navbar-expand-lg > .container-fluid, .navbar-expand-lg > .container-sm, .navbar-expand-lg > .container-md, .navbar-expand-lg > .container-lg, .navbar-expand-lg > .container-xl {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  /* line 107, scss/_navbar.scss */
+  .navbar-expand-lg {
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+  }
+  /* line 130, scss/_navbar.scss */
+  .navbar-expand-lg .navbar-nav {
+    flex-direction: row;
+  }
+  /* line 133, scss/_navbar.scss */
+  .navbar-expand-lg .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+  /* line 137, scss/_navbar.scss */
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  /* line 144, scss/_navbar.scss */
+  .navbar-expand-lg > .container,
+  .navbar-expand-lg > .container-fluid, .navbar-expand-lg > .container-sm, .navbar-expand-lg > .container-md, .navbar-expand-lg > .container-lg, .navbar-expand-lg > .container-xl {
+    flex-wrap: nowrap;
+  }
+  /* line 159, scss/_navbar.scss */
+  .navbar-expand-lg .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+  }
+  /* line 166, scss/_navbar.scss */
+  .navbar-expand-lg .navbar-toggler {
+    display: none;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  /* line 109, scss/_navbar.scss */
+  .navbar-expand-xl > .container,
+  .navbar-expand-xl > .container-fluid, .navbar-expand-xl > .container-sm, .navbar-expand-xl > .container-md, .navbar-expand-xl > .container-lg, .navbar-expand-xl > .container-xl {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* line 107, scss/_navbar.scss */
+  .navbar-expand-xl {
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+  }
+  /* line 130, scss/_navbar.scss */
+  .navbar-expand-xl .navbar-nav {
+    flex-direction: row;
+  }
+  /* line 133, scss/_navbar.scss */
+  .navbar-expand-xl .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+  /* line 137, scss/_navbar.scss */
+  .navbar-expand-xl .navbar-nav .nav-link {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  /* line 144, scss/_navbar.scss */
+  .navbar-expand-xl > .container,
+  .navbar-expand-xl > .container-fluid, .navbar-expand-xl > .container-sm, .navbar-expand-xl > .container-md, .navbar-expand-xl > .container-lg, .navbar-expand-xl > .container-xl {
+    flex-wrap: nowrap;
+  }
+  /* line 159, scss/_navbar.scss */
+  .navbar-expand-xl .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+  }
+  /* line 166, scss/_navbar.scss */
+  .navbar-expand-xl .navbar-toggler {
+    display: none;
+  }
+}
+
 /* line 107, scss/_navbar.scss */
 .navbar-expand {
   flex-flow: row nowrap;
   justify-content: flex-start;
 }
 
-@media (max-width: breakpoint-max(xs, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))) {
-  /* line 109, scss/_navbar.scss */
-  .navbar-expand > .container,
-  .navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-/* line 130, scss/_navbar.scss */
-.navbar-expand .navbar-nav {
-  flex-direction: row;
-}
-
-/* line 133, scss/_navbar.scss */
-.navbar-expand .navbar-nav .dropdown-menu {
-  position: absolute;
-}
-
-/* line 137, scss/_navbar.scss */
-.navbar-expand .navbar-nav .nav-link {
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
-}
-
-/* line 144, scss/_navbar.scss */
+/* line 109, scss/_navbar.scss */
 .navbar-expand > .container,
 .navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-  flex-wrap: nowrap;
-}
-
-/* line 159, scss/_navbar.scss */
-.navbar-expand .navbar-collapse {
-  display: flex !important;
-  flex-basis: auto;
-}
-
-/* line 166, scss/_navbar.scss */
-.navbar-expand .navbar-toggler {
-  display: none;
-}
-
-/* line 107, scss/_navbar.scss */
-.navbar-expand {
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-}
-
-@media (max-width: breakpoint-max(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))) {
-  /* line 109, scss/_navbar.scss */
-  .navbar-expand > .container,
-  .navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-/* line 130, scss/_navbar.scss */
-.navbar-expand .navbar-nav {
-  flex-direction: row;
-}
-
-/* line 133, scss/_navbar.scss */
-.navbar-expand .navbar-nav .dropdown-menu {
-  position: absolute;
-}
-
-/* line 137, scss/_navbar.scss */
-.navbar-expand .navbar-nav .nav-link {
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
-}
-
-/* line 144, scss/_navbar.scss */
-.navbar-expand > .container,
-.navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-  flex-wrap: nowrap;
-}
-
-/* line 159, scss/_navbar.scss */
-.navbar-expand .navbar-collapse {
-  display: flex !important;
-  flex-basis: auto;
-}
-
-/* line 166, scss/_navbar.scss */
-.navbar-expand .navbar-toggler {
-  display: none;
-}
-
-/* line 107, scss/_navbar.scss */
-.navbar-expand {
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-}
-
-@media (max-width: breakpoint-max(md, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))) {
-  /* line 109, scss/_navbar.scss */
-  .navbar-expand > .container,
-  .navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-/* line 130, scss/_navbar.scss */
-.navbar-expand .navbar-nav {
-  flex-direction: row;
-}
-
-/* line 133, scss/_navbar.scss */
-.navbar-expand .navbar-nav .dropdown-menu {
-  position: absolute;
-}
-
-/* line 137, scss/_navbar.scss */
-.navbar-expand .navbar-nav .nav-link {
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
-}
-
-/* line 144, scss/_navbar.scss */
-.navbar-expand > .container,
-.navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-  flex-wrap: nowrap;
-}
-
-/* line 159, scss/_navbar.scss */
-.navbar-expand .navbar-collapse {
-  display: flex !important;
-  flex-basis: auto;
-}
-
-/* line 166, scss/_navbar.scss */
-.navbar-expand .navbar-toggler {
-  display: none;
-}
-
-/* line 107, scss/_navbar.scss */
-.navbar-expand {
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-}
-
-@media (max-width: breakpoint-max(lg, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))) {
-  /* line 109, scss/_navbar.scss */
-  .navbar-expand > .container,
-  .navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-/* line 130, scss/_navbar.scss */
-.navbar-expand .navbar-nav {
-  flex-direction: row;
-}
-
-/* line 133, scss/_navbar.scss */
-.navbar-expand .navbar-nav .dropdown-menu {
-  position: absolute;
-}
-
-/* line 137, scss/_navbar.scss */
-.navbar-expand .navbar-nav .nav-link {
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
-}
-
-/* line 144, scss/_navbar.scss */
-.navbar-expand > .container,
-.navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-  flex-wrap: nowrap;
-}
-
-/* line 159, scss/_navbar.scss */
-.navbar-expand .navbar-collapse {
-  display: flex !important;
-  flex-basis: auto;
-}
-
-/* line 166, scss/_navbar.scss */
-.navbar-expand .navbar-toggler {
-  display: none;
-}
-
-/* line 107, scss/_navbar.scss */
-.navbar-expand {
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-}
-
-@media (max-width: breakpoint-max(xl, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))) {
-  /* line 109, scss/_navbar.scss */
-  .navbar-expand > .container,
-  .navbar-expand > .container-fluid, .navbar-expand > .container-sm, .navbar-expand > .container-md, .navbar-expand > .container-lg, .navbar-expand > .container-xl {
-    padding-right: 0;
-    padding-left: 0;
-  }
+  padding-right: 0;
+  padding-left: 0;
 }
 
 /* line 130, scss/_navbar.scss */
@@ -3066,6 +3080,51 @@ button.close {
 /* line 34, scss/_close.scss */
 a.close.disabled {
   pointer-events: none;
+}
+
+/* line 1, scss/_media.scss */
+.media {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* line 6, scss/_media.scss */
+.media-body {
+  flex: 1;
+}
+
+/* line 4, scss/_images.scss */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+/* line 10, scss/_images.scss */
+.img-thumbnail {
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075);
+  max-width: 100%;
+  height: auto;
+}
+
+/* line 25, scss/_images.scss */
+.figure {
+  display: inline-block;
+}
+
+/* line 30, scss/_images.scss */
+.figure-img {
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+/* line 35, scss/_images.scss */
+.figure-caption {
+  font-size: 90%;
+  color: #6c757d;
 }
 
 /* line 6, scss/helpers/_position.scss */

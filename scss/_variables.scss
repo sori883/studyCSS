@@ -321,6 +321,18 @@ $alert-bg-level: -10 !default;
 $alert-border-level: -9 !default;
 $alert-color-level: 6 !default;
 
+// image-thumbnail
+$thumbnail-padding: .25rem !default;
+$thumbnail-bg: $body-bg !default;
+$thumbnail-border-width: $border-width !default;
+$thumbnail-border-color: $gray-300 !default;
+$thumbnail-border-radius: $border-radius !default;
+$thumbnail-box-shadow: 0 1px 2px rgba($black, .075) !default;
+
+// figures
+$figure-caption-font-size: 90% !default;
+$figure-caption-color: $gray-600 !default;
+
 // navbar
 $navbar-padding-y: $spacer / 2 !default;
 $navbar-padding-x: $spacer !default;
