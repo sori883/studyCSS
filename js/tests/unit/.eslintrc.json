@@ -5,7 +5,7 @@
     "qunit": true
   },
   "globals": {
-    "bootstrap": false,
+    "simplicss": false,
     "sinon": false,
     "Util": false,
     "Alert": false,
