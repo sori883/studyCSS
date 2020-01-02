@@ -164,9 +164,40 @@ $headings-font-weight: 500 !default;
 $headings-line-height: 1.2 !default;
 $headings-color: null !default;
 
+// display
+$display1-size: 6rem !default;
+$display2-size: 5.5rem !default;
+$display3-size: 4.5rem !default;
+$display4-size: 3.5rem !default;
+$display1-weight: 300 !default;
+$display2-weight: 300 !default;
+$display3-weight: 300 !default;
+$display4-weight: 300 !default;
+$display-line-height: $headings-line-height !default;
+
 // lead
 $lead-font-size: $font-size-base * 1.25 !default;
 $lead-font-weight: 300 !default;
+
+// small
+$small-font-size: 80% !default;
+
+// mark
+$mark-padding: .2em !default;
+$mark-bg: #fcf8e3 !default;
+
+// hr
+$hr-border-color: rgba($black, .1) !default;
+$hr-border-width: $border-width !default;
+$hr-margin-y: $spacer !default;
+
+// list
+$list-inline-padding: .5rem !default;
+
+// blockquote
+$blockquote-small-color: $gray-600 !default;
+$blockquote-small-font-size: $small-font-size !default;
+$blockquote-font-size: $font-size-base * 1.25 !default;
 
 // transition
 $transition-base: all .2s ease-in-out !default;

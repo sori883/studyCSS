@@ -16,4 +16,85 @@ h6, .h6 { @include font-size($h6-font-size); }
 .lead {
   @include font-size($lead-font-size);
   font-weight: $lead-font-weight;
-}  
+}
+
+// display
+.display-1 {
+  @include font-size($display1-size);
+  font-weight: $display1-weight;
+  line-height: $display-line-height;
+}
+.display-2 {
+  @include font-size($display2-size);
+  font-weight: $display2-weight;
+  line-height: $display-line-height;
+}
+.display-3 {
+  @include font-size($display3-size);
+  font-weight: $display3-weight;
+  line-height: $display-line-height;
+}
+.display-4 {
+  @include font-size($display4-size);
+  font-weight: $display4-weight;
+  line-height: $display-line-height;
+}
+
+// Hr
+hr {
+  margin-top: $hr-margin-y;
+  margin-bottom: $hr-margin-y;
+  border: 0;
+  border-top: $hr-border-width solid $hr-border-color;
+}
+
+// strongs
+small,
+.small {
+  @include font-size($small-font-size);
+  font-weight: $font-weight-normal;
+}
+
+mark,
+.mark {
+  padding: $mark-padding;
+  background-color: $mark-bg;
+}
+
+.list-unstyled {
+  @include list-unstyled();
+}
+
+// リスト項目をinline-blockに変換します
+.list-inline {
+  @include list-unstyled();
+}
+.list-inline-item {
+  display: inline-block;
+
+  &:not(:last-child) {
+    margin-right: $list-inline-padding;
+  }
+}
+
+// 大文字
+.initialism {
+  @include font-size(90%);
+  text-transform: uppercase;
+}
+
+// Blockquotes
+.blockquote {
+  margin-bottom: $spacer;
+  @include font-size($blockquote-font-size);
+}
+
+.blockquote-footer {
+  display: block;
+  @include font-size($blockquote-small-font-size);
+  color: $blockquote-small-color;
+
+  &::before {
+    content: "\2014\00A0"; // emダッシュ
+  }
+}
