@@ -215,6 +215,21 @@ $close-font-weight: $font-weight-bold !default;
 $close-color: $black !default;
 $close-text-shadow: 0 1px 0 $white !default;
 
+// code
+$code-font-size: 87.5% !default;
+$code-color: $pink !default;
+$kbd-padding-y: .2rem !default;
+$kbd-padding-x: .4rem !default;
+$kbd-font-size: $code-font-size !default;
+$kbd-color: $white !default;
+$kbd-bg: $gray-900 !default;
+$kbd-box-shadow: inset 0 -.1rem 0 rgba($black, .25) !default;
+$nested-kbd-font-weight: $font-weight-bold !default;
+
+// pre
+$pre-color: $gray-900 !default;
+$pre-scrollable-max-height: 340px !default;
+
 // caret
 $caret-width: .3em !default;
 $caret-vertical-align: $caret-width * .85 !default;
