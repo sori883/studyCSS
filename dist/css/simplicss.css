@@ -4063,6 +4063,50 @@ a.badge-dark:focus, a.badge-dark.focus {
   box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
 
+/* line 1, scss/_breadcrumb.scss */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+}
+
+/* line 12, scss/_breadcrumb.scss */
+.breadcrumb-item {
+  display: flex;
+}
+
+/* line 16, scss/_breadcrumb.scss */
+.breadcrumb-item + .breadcrumb-item {
+  padding-left: 0.5rem;
+}
+
+/* line 19, scss/_breadcrumb.scss */
+.breadcrumb-item + .breadcrumb-item::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: #6c757d;
+  content: "/";
+}
+
+/* line 31, scss/_breadcrumb.scss */
+.breadcrumb-item + .breadcrumb-item:hover::before {
+  text-decoration: underline;
+}
+
+/* line 35, scss/_breadcrumb.scss */
+.breadcrumb-item + .breadcrumb-item:hover::before {
+  text-decoration: none;
+}
+
+/* line 39, scss/_breadcrumb.scss */
+.breadcrumb-item.active {
+  color: #6c757d;
+}
+
 /* line 6, scss/helpers/_position.scss */
 .fixed-top {
   position: fixed;
