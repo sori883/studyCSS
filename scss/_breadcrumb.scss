@@ -12,7 +12,8 @@
 .breadcrumb-item {
   display: flex;
 
-  // リンク間の区切り。デフォルトは/
+  // リンク間の区切り。デフォルトは("/")
+  // .breadcrumb-itemが複数あった場合は左にpaddingをつける
   + .breadcrumb-item {
     padding-left: $breadcrumb-item-padding;
 
