@@ -66,3 +66,23 @@
   // 2つの引数の中間地点
   @return mix($color-base, $color, $level * $theme-color-interval);
 }
+
+// Return valid calc
+@function add($value1, $value2, $return-calc: true) {
+  @if $value1 == null {
+    @return $value2; // value2を返す
+  }
+
+  @if $value2 == null {
+    @return $value1; // value1を返す
+  }
+
+  /// value1がnumberかつvalue2もnumberでかつvalue1とvalue2が加算、減算、比較できるか
+  @if type-of($value1) == number and type-of($value2) == number and comparable($value1, $value2) {
+    @return $value1 + $value2;
+  }
+
+  // return-calcがtrueなら、value1とvalue2を加算した値を返す
+  // return-calcがfalseなら、value1+value2を返す
+  @return if($return-calc == true, calc(#{$value1} + #{$value2}), $value1 + unquote(" + ") + $value2);
+}
