@@ -209,6 +209,7 @@ $transition-collapse: height .35s ease !default;
 $zindex-dropdown: 1000 !default;
 $zindex-sticky: 1020 !default;
 $zindex-fixed: 1030 !default;
+$zindex-popover: 1060 !default;
 
 // close
 $close-font-size: $font-size-base * 1.5 !default;
@@ -647,6 +648,31 @@ $form-feedback-tooltip-font-size: $tooltip-font-size !default;
 $form-feedback-tooltip-line-height: $line-height-base !default;
 $form-feedback-tooltip-opacity: $tooltip-opacity !default;
 $form-feedback-tooltip-border-radius: $tooltip-border-radius !default;
+
+// popovers
+$popover-font-size: $font-size-sm !default;
+$popover-bg: $white !default;
+$popover-max-width: 276px !default;
+$popover-border-width: $border-width !default;
+$popover-border-color: rgba($black, .2) !default;
+$popover-border-radius: $border-radius-lg !default;
+$popover-inner-border-radius: subtract($popover-border-radius, $popover-border-width) !default;
+$popover-box-shadow: 0 .25rem .5rem rgba($black, .2) !default;
+
+$popover-header-bg: darken($popover-bg, 3%) !default;
+$popover-header-color: $headings-color !default;
+$popover-header-padding-y: .5rem !default;
+$popover-header-padding-x: .75rem !default;
+
+$popover-body-color: $body-color !default;
+$popover-body-padding-y: $popover-header-padding-y !default;
+$popover-body-padding-x: $popover-header-padding-x !default;
+
+$popover-arrow-width: 1rem !default;
+$popover-arrow-height: .5rem !default;
+$popover-arrow-color: $popover-bg !default;
+
+$popover-arrow-outer-color:         fade-in($popover-border-color, .05) !default;
 
 // badges
 $badge-font-size: 75% !default;
