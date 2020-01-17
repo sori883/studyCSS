@@ -62,7 +62,7 @@
     left: subtract(-$popover-arrow-height, $popover-border-width);
     width: $popover-arrow-height;
     height: $popover-arrow-width;
-    margin: $popover-border-radius 0; // make sure the arrow does not touch the popover's rounded corners
+    margin: $popover-border-radius 0; // arrowがpopoverのborder-radiusに触れないようにする
 
     &::before {
       left: 0;
