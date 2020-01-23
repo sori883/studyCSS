@@ -306,8 +306,9 @@
   /*#__PURE__*/
   function () {
     function Tooltip(element, config) {
+      // popperがなかったら、throw
       if (typeof Popper === 'undefined') {
-        throw new TypeError('Bootstrap\'s tooltips require Popper.js (https://popper.js.org/)');
+        throw new TypeError('Simplicss\'s tooltips require Popper.js (https://popper.js.org/)');
       } // private
 
 
@@ -851,27 +852,44 @@
       this.show();
       this.config.animation = initConfigAnimation;
     } // Static
+    // 引数はtooltip({container: $('#customContainer')[0]})とかのオブジェクト
+    // あと、tooltip('show')のshowとか
     ;
 
     Tooltip._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        // $('#target').tooltipみたいな形な記述があればtooltipが入る
+        // その時、configに指定された値が入る。placement : 'top'とか
+        var data = $(this).data(DATA_KEY); // configがobjectならobjectを_configに入れる
+        // それ以外(undefinedとかshowとか)ならfalseを入れる
 
-        var _config = typeof config === 'object' && config;
+        var _config = typeof config === 'object' && config; // dataがundefinedで、configがdisposeまたは、hideにマッチする場合
+        // 処理を終了する
+
 
         if (!data && /dispose|hide/.test(config)) {
           return;
-        }
+        } // dataがundefinedの場合
+
 
         if (!data) {
-          data = new Tooltip(this, _config);
+          // dataにインスタンス化したTooltipを入れる
+          // thisはdata-toggle="tooltip"が指定されてるelements
+          // _configはfalseかobject
+          data = new Tooltip(this, _config); // elementsに対して、sc.tooltipって名前でdata(tooltipのインスタンス)
+          // を設定する
+
           $(this).data(DATA_KEY, data);
-        }
+        } // configがstringの場合(showとか)
+
 
         if (typeof config === 'string') {
+          // tooltipsにconfigと同じ名前のメソッドがあるか判定
+          // 存在しない場合は、ないよっていう
           if (typeof data[config] === 'undefined') {
             throw new TypeError("No method named \"" + config + "\"");
-          }
+          } // throwされなかった場合は、configと同じ名前のメソッドを実行する
+
 
           data[config]();
         }
