@@ -31,7 +31,8 @@ const scPlugins = {
   Alert: path.resolve(__dirname, '../js/src/alert.js'),
   Button: path.resolve(__dirname, '../js/src/button.js'),
   Dropdown: path.resolve(__dirname, '../js/src/dropdown.js'),
-  Popover: path.resolve(__dirname, '../js/src/popover.js'),
+  // Popover: path.resolve(__dirname, '../js/src/popover.js'),
+  Tooltip: path.resolve(__dirname, '../js/src/tooltip.js'),
   Util: path.resolve(__dirname, '../js/src/util.js')
 }
 const rootPath = TEST ? '../js/coverage/dist/' : '../js/dist/'

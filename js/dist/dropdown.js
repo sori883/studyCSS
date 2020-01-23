@@ -259,9 +259,10 @@
           $(parent).addClass(ClassName.POSITION_STATIC);
         } // popperをインスタンス化
         // referenceElementはdata-toggle、this._menuはメニュー、this._getPopperConfig()はpopperのコンフィグ
+        // ちなみにここでdropdownメニューを表示している
 
 
-        console.log(referenceElement);
+        this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig());
       } // タッチデバイスの場合、空のマウスオーバリスナーを追加
 
 

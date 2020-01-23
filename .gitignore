@@ -4,9 +4,12 @@
 # OS or Editor Files
 .DS_Store
 .vscode/
-shell.lnk
 simplicss.code-workspace
 .cache
+
+# Working Files
+shell.lnk
+memo.md
 
 # folders to ignore
 node_modules/
