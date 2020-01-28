@@ -73,12 +73,13 @@ function setTransitionEndSupport() {
 const Util = {
 
   TRANSITION_END: 'scTransitionEnd',
-
+  
+  //prefixはNAME(tooltipだとtooltipとか)
   getUID(prefix) {
     do {
       // eslint-disable-next-line no-bitwise
-      prefix += ~~(Math.random() * MAX_UID) // "~~" acts like a faster Math.floor() here
-    } while (document.getElementById(prefix))
+      prefix += ~~(Math.random() * MAX_UID) // ランダムな値を生成
+    } while (document.getElementById(prefix)) // 一致するIDの分だけ続行
     return prefix
   },
 
@@ -154,7 +155,7 @@ const Util = {
     return (obj[0] || obj).nodeType
   },
 
-  // Nameとconfigとdefauly typeでexpectedTypesとvalueTypeが一致しなかったら、エラーを投げる
+  // configの値がDefaultType
   typeCheckConfig(componentName, config, configTypes) {
     // default typeの分だけループ
     // dropdownだとoffset、flipなどなど
@@ -162,18 +163,18 @@ const Util = {
       // Object.prototype.hasOwnPropertyはオブジェクトにpropertyがあるか判定する
       // offsetプロパティが、configTypesにあるか
       if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
-        // configTypesからプロパティの値を取得
+        // configTypesからプロパティの値を取得(正規表現で使う文字列)
         const expectedTypes = configTypes[property]
         // configの中からpropertyの値を取得
         const value = config[property]
-        // valueが存在してdom要素だった場合はelementを格納
+        // valueが存在してdom要素だった場合は文字列(element)を格納
         // falseの場合は型を判定して格納
         const valueType = value && Util.isElement(value)
           ? 'element' : toType(value)
 
-        //  expectedTypesとvalueTypeが一致してない場合
+        //  expectedTypesの正規表現に、valueTypeが一致しているか確認
         if (!new RegExp(expectedTypes).test(valueType)) {
-          // エラーを投げる。エラーが投げられたら処理は終了
+          // 一致してなかったらthrowする
           throw new Error(
             `${componentName.toUpperCase()}: ` +
             `Option "${property}" provided type "${valueType}" ` +
@@ -184,25 +185,31 @@ const Util = {
   },
 
   findShadowRoot(element) {
+    // shadow domが関連付けされてないときはnullを返す
     if (!document.documentElement.attachShadow) {
       return null
     }
 
-    // Can find the shadow root otherwise it'll return the document
+    // elementのgetRootNodeがfunctionなら
     if (typeof element.getRootNode === 'function') {
+      // elementのroot要素を取得
       const root = element.getRootNode()
+      // rootがshadowrootのインスタンスならrootを返す。
+      // そうじゃない場合はnullを返す
       return root instanceof ShadowRoot ? root : null
     }
 
+    // elementがshadow domのインスタンス
+    // つまりshadow domの要素だったら、elementを返す
     if (element instanceof ShadowRoot) {
       return element
     }
 
-    // when we don't find a shadow root
+    // shadow domのルートが探せない場合はnullを返す
     if (!element.parentNode) {
       return null
     }
-
+    // elementのparentNodeに対して同じ操作を繰り返す
     return Util.findShadowRoot(element.parentNode)
   },
 

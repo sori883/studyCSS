@@ -113,6 +113,8 @@ const Trigger = {
 }
 
 class Tooltip {
+  // elementは data-toggle="tooltip"が付与されたelement
+  // configはobject(config)かfalse
   constructor(element, config) {
     // popperがなかったら、throw
     if (typeof Popper === 'undefined') {
@@ -239,30 +241,45 @@ class Tooltip {
   }
 
   show() {
+    // 対象のElementsがdisplay:noneだったらエラーにする
     if ($(this.element).css('display') === 'none') {
       throw new Error('Please use show on visible elements')
     }
 
+    // showEventにshow.sc.tooltipを入れる
     const showEvent = $.Event(this.constructor.Event.SHOW)
+
+    // titleが存在していて、isEnableがtrue
     if (this.isWithContent() && this._isEnabled) {
+      // element.trriger(show)。jQueryの普通のshow
       $(this.element).trigger(showEvent)
 
+      // this,.elementに関連するshadow dowのrootを取得する
       const shadowRoot = Util.findShadowRoot(this.element)
+      // jQuery.contains( 対象の要素 ,含まれているか調べたい要素 )
       const isInTheDom = $.contains(
+        // shadowRootがnullじゃなかったらshadowRootが対象の要素
+        // nullだった場合は、this.elementを内包するトップレベルのdocument(bodyとか)
         shadowRoot !== null ? shadowRoot : this.element.ownerDocument.documentElement,
-        this.element
+        this.element // this.elementを探す
       )
 
+      // showイベントがブラウザの希望を停止している
+      // もしくは、this.elementがdomにない場合は停止
       if (showEvent.isDefaultPrevented() || !isInTheDom) {
         return
       }
 
+      // tip elementの取得
       const tip   = this.getTipElement()
+      // 固有IDを取得
       const tipId = Util.getUID(this.constructor.NAME)
 
+      // tipに対して、固有のIDを設定
       tip.setAttribute('id', tipId)
+      // this.elementに対して、tipIDを設定
       this.element.setAttribute('aria-describedby', tipId)
-
+      // TODO3
       this.setContent()
 
       if (this.config.animation) {
@@ -383,6 +400,7 @@ class Tooltip {
   // Protected
 
   isWithContent() {
+    // titleが存在しているか判定
     return Boolean(this.getTitle())
   }
 
@@ -391,6 +409,8 @@ class Tooltip {
   }
 
   getTipElement() {
+    // this.tipはHTML elementのtooltip
+    // this.config.templateは、Defaultのtooltipテンプレート
     this.tip = this.tip || $(this.config.template)[0]
     return this.tip
   }
@@ -427,9 +447,13 @@ class Tooltip {
   }
 
   getTitle() {
+    // ekementのタイトルを取得
     let title = this.element.getAttribute('data-original-title')
 
+    // タイトルが存在しなかったら
     if (!title) {
+      // this.config,titleがfunctionなら実行してその結果を返す
+      // 単純にtitleがなかったらDefaultのtitleを使う
       title = typeof this.config.title === 'function'
         ? this.config.title.call(this.element)
         : this.config.title
@@ -505,28 +529,37 @@ class Tooltip {
   }
 
   _setListeners() {
+    // this.config.triggerを' '(半角スペース)で分割する
+    // Defaultならhoverとfocusになる
     const triggers = this.config.trigger.split(' ')
-
+    // triggerの分だけ繰り返す
     triggers.forEach((trigger) => {
+      // triggerがclickだったら
       if (trigger === 'click') {
         $(this.element).on(
+          // click.sc.tooltip
           this.constructor.Event.CLICK,
+          // Defaultはfalse
           this.config.selector,
           (event) => this.toggle(event)
         )
       } else if (trigger !== Trigger.MANUAL) {
+        // Triggerがmanualじゃなかったら。(hoverかfocus)
+        // triggerがhoverか判定
         const eventIn = trigger === Trigger.HOVER
-          ? this.constructor.Event.MOUSEENTER
-          : this.constructor.Event.FOCUSIN
+          ? this.constructor.Event.MOUSEENTER // trueはmouseenter.sc.tooltipを入れる
+          : this.constructor.Event.FOCUSIN // falseはfocusin.sc.tooltipを入れる
+        
+        // triggerがhoverか判定
         const eventOut = trigger === Trigger.HOVER
-          ? this.constructor.Event.MOUSELEAVE
-          : this.constructor.Event.FOCUSOUT
+          ? this.constructor.Event.MOUSELEAVE  // trueはmouseleave.sc.tooltipを入れる
+          : this.constructor.Event.FOCUSOUT // trueはfoucusout.sc.tooltipを入れる
 
         $(this.element)
           .on(
-            eventIn,
-            this.config.selector,
-            (event) => this._enter(event)
+            eventIn, // mouseenter.sc.tooltip
+            this.config.selector, // Defaultはfalse
+            (event) => this._enter(event) // TODO
           )
           .on(
             eventOut,
@@ -571,39 +604,60 @@ class Tooltip {
     }
   }
 
+  // eventはmouseoverとかのイベント
   _enter(event, context) {
+    // dataKeyにsc.tooltipを入れる
     const dataKey = this.constructor.DATA_KEY
+    // event.currentTargetはtooltipが付与されているelement
+    // 引数のcontextか、jQueryInterfaceでelementに入れたやつを入れる
     context = context || $(event.currentTarget).data(dataKey)
 
+    // contextが存在しているか確認
     if (!context) {
+      // contextがない場合は、tooltipのコンストラクタを読んどくみたい
       context = new this.constructor(
+        // tooltipが付与されたelement
         event.currentTarget,
+        // ユーザ側でconfigが設定されてたら上書きするてきな
         this._getDelegateConfig()
       )
+      // tooltipが付与された要素に対して、sc.tooltipのデータキーで
+      // context(tooltipのインスタンス)を入れる
       $(event.currentTarget).data(dataKey, context)
     }
 
+    // eventが存在してたら
     if (event) {
+      // event.typeがfocusinだったら、focusをtrueにする
+      // focusinじゃなかったらhoverをtrueにする
       context._activeTrigger[
         event.type === 'focusin' ? Trigger.FOCUS : Trigger.HOVER
       ] = true
     }
 
+    // div.tooltipがshowクラスを持っているもしくは、contextの_hoverStateがshowだった場合
     if ($(context.getTipElement()).hasClass(ClassName.SHOW) || context._hoverState === HoverState.SHOW) {
+      // context._hoverStateにshowを入れる
       context._hoverState = HoverState.SHOW
       return
     }
 
+    // setTimeout()を使用して設定された遅延処理を取り消す
     clearTimeout(context._timeout)
-
+    // context._hoverStateにshowを入れる
     context._hoverState = HoverState.SHOW
 
+    // context.config.delayが存在していなくて、delay.showが0の場合
     if (!context.config.delay || !context.config.delay.show) {
+      // showを発動
       context.show()
+      // 処理終了
       return
     }
 
+    // context._timeoutにdelay.showの分だけ遅らせたshowを発動する
     context._timeout = setTimeout(() => {
+      // hoverStateがshowの場合
       if (context._hoverState === HoverState.SHOW) {
         context.show()
       }
@@ -658,47 +712,70 @@ class Tooltip {
     return false
   }
 
+  // configはobject(config)かfalse
   _getConfig(config) {
     const dataAttributes = $(this.element).data()
 
+    // dataAttributesのキーを取得してその分ループしまくる
     Object.keys(dataAttributes)
       .forEach((dataAttr) => {
+        // 禁止されているdataAttrがないか存在しているか確認。
+        // ['sanitize', 'whiteList', 'sanitizeFn']=['sanitize', 'whiteList', 'sanitizeFn']
         if (DISALLOWED_ATTRIBUTES.indexOf(dataAttr) !== -1) {
+          // 存在している場合はそのdataAttrを削除する
           delete dataAttributes[dataAttr]
         }
       })
 
     config = {
+      // Defaultを展開して入れる
       ...this.constructor.Default,
+      // dataAttributesを展開して入れる
       ...dataAttributes,
+      // configがobjectでかつ存在していたらconfigを代入
+      // 上記じゃない場合は{}を代入
       ...typeof config === 'object' && config ? config : {}
     }
 
+    // config.delayがnumberだった場合
     if (typeof config.delay === 'number') {
       config.delay = {
+        // config.delayのshowとhideに
+        // config.delayの値を代入
         show: config.delay,
         hide: config.delay
       }
     }
 
+    // config.titleがnumberだった場合
+    // Stringに変換する
     if (typeof config.title === 'number') {
       config.title = config.title.toString()
     }
 
+    // config.cotentがnumberだった場合
+    // Stringに変換する
     if (typeof config.content === 'number') {
       config.content = config.content.toString()
     }
 
+    // configの各値のtypeがDefaultTypeの通りになっているか確認
+    // 例えば、configのanimationの型はbooleanかどうかとか
     Util.typeCheckConfig(
       NAME,
       config,
       this.constructor.DefaultType
     )
 
+    // config.sanitizeがtrueなら
+    // Defaultはtrue
     if (config.sanitize) {
+      // config.sanitizeFnはDefaultはfalse
+      // config.whiteListはsanitaizer.jsのwhitelist
       config.template = sanitizeHtml(config.template, config.whiteList, config.sanitizeFn)
     }
 
+    // configを返す
     return config
   }
 
@@ -706,8 +783,11 @@ class Tooltip {
     const config = {}
 
     if (this.config) {
+      //tooltipのconfigのkey分だけfor
       for (const key in this.config) {
+        // Defaultのkeyの値と、thiss.configのkeyの値が不一致だったら
         if (this.constructor.Default[key] !== this.config[key]) {
+          // configのkeyに、this.configのkeyの値を入れる
           config[key] = this.config[key]
         }
       }

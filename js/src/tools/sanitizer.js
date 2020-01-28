@@ -67,6 +67,7 @@ const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file):|[^&:/?#]*(?:[/?#]|
  */
 const DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[a-z0-9+/]+=*$/i
 
+// attrはhtmlの属性、allowedAttributeListは許可されている属性一覧
 function allowedAttribute(attr, allowedAttributeList) {
   // attrの属性とかを小文字で取得する
   const attrName = attr.nodeName.toLowerCase()
@@ -81,7 +82,7 @@ function allowedAttribute(attr, allowedAttributeList) {
       return Boolean(attr.nodeValue.match(SAFE_URL_PATTERN) || attr.nodeValue.match(DATA_URL_PATTERN))
     }
 
-    // 属性がなかったらtrueを返す
+    // 属性がなかったらtrueを返す。処理はここで終わり
     return true
   }
 
@@ -104,7 +105,7 @@ export function sanitizeHtml(unsafeHtml, whiteList, sanitizeFn) {
     return unsafeHtml
   }
 
-  // sanitizeFnが存在していて、functionならsanitizeFnを実行して返す
+  // sanitizeFnがtrueで、functionならsanitizeFnを実行して返す
   if (sanitizeFn && typeof sanitizeFn === 'function') {
     return sanitizeFn(unsafeHtml)
   }
@@ -114,7 +115,7 @@ export function sanitizeHtml(unsafeHtml, whiteList, sanitizeFn) {
   const createdDocument = domParser.parseFromString(unsafeHtml, 'text/html')
   // whitelistのキーをwhitelistKeysに入れる
   const whitelistKeys = Object.keys(whiteList)
-  // body配下の要素を1個ずつ取得する
+  //createdDocumentの要素を1個ずつ取得する
   const elements = [].slice.call(createdDocument.body.querySelectorAll('*'))
 
   // エレメントの数だけ回すよ
@@ -122,9 +123,11 @@ export function sanitizeHtml(unsafeHtml, whiteList, sanitizeFn) {
     // elにelementsのi番目を入れる
     const el = elements[i]
     // nodeNameを小文字で取得する
+    // 取得するnodeNameには、Classも含まれる
     const elName = el.nodeName.toLowerCase()
 
     // el.nodeNameがwhitelistKeysにあるか判定。
+    // '*'には一致しないんだね
     if (whitelistKeys.indexOf(el.nodeName.toLowerCase()) === -1) {
       // elを削除
       el.parentNode.removeChild(el)
@@ -134,17 +137,23 @@ export function sanitizeHtml(unsafeHtml, whiteList, sanitizeFn) {
     }
 
     // elの属性を取得
+    // roleとかclass
     const attributeList = [].slice.call(el.attributes)
-    // 配列を連結するんだろうけど、||が3つあるのがよくわからん
+    // whiteList[*]は全部に適用されるので、基本入れる
+    // whiteList[elName]は該当するelementがあれば入れる
+    // []は多分区切り
     const whitelistedAttributes = [].concat(whiteList['*'] || [], whiteList[elName] || [])
 
+    // attributeList(htmlについてたclassとかの属性)
     attributeList.forEach((attr) => {
+      // attrが許可された属性か判定
       if (!allowedAttribute(attr, whitelistedAttributes)) {
-        // Elementsから属性を削除
+        // 許可されてなかったらElementsから属性を削除
         el.removeAttribute(attr.nodeName)
       }
     })
   }
 
+   // サニタイズしたHTMLを返却
   return createdDocument.body.innerHTML
 }
