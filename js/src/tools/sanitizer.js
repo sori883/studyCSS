@@ -115,7 +115,7 @@ export function sanitizeHtml(unsafeHtml, whiteList, sanitizeFn) {
   const createdDocument = domParser.parseFromString(unsafeHtml, 'text/html')
   // whitelistのキーをwhitelistKeysに入れる
   const whitelistKeys = Object.keys(whiteList)
-  //createdDocumentの要素を1個ずつ取得する
+  // createdDocumentの要素を1個ずつ取得する
   const elements = [].slice.call(createdDocument.body.querySelectorAll('*'))
 
   // エレメントの数だけ回すよ

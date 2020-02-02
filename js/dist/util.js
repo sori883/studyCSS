@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
   typeof define === 'function' && define.amd ? define(['jquery'], factory) :
   (global = global || self, global.Util = factory(global.jQuery));
-}(this, function ($) { 'use strict';
+}(this, (function ($) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
@@ -47,7 +47,7 @@
   function transitionEndEmulator(duration) {
     var _this = this;
 
-    var called = false; // 呼び出しもとのエレメントでTRANSITION_ENDを実行
+    var called = false; // 呼び出しもとのエレメントでTRANSITION_ENDで一度だけ実行
 
     $(this).one(Util.TRANSITION_END, function () {
       // コールバックをtrueにする
@@ -78,7 +78,7 @@
 
   var Util = {
     TRANSITION_END: 'scTransitionEnd',
-    //prefixはNAME(tooltipだとtooltipとか)
+    // prefixはNAME(tooltipだとtooltipとか)
     getUID: function getUID(prefix) {
       do {
         // eslint-disable-next-line no-bitwise
@@ -224,5 +224,5 @@
 
   return Util;
 
-}));
+})));
 //# sourceMappingURL=util.js.map

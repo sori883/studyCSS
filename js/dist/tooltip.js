@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('popper.js'), require('./util.js')) :
   typeof define === 'function' && define.amd ? define(['jquery', 'popper.js', './util.js'], factory) :
   (global = global || self, global.Tooltip = factory(global.jQuery, global.Popper, global.Util));
-}(this, function ($, Popper, Util) { 'use strict';
+}(this, (function ($, Popper, Util) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
   Popper = Popper && Popper.hasOwnProperty('default') ? Popper['default'] : Popper;
@@ -58,13 +58,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -175,7 +175,7 @@
 
     var createdDocument = domParser.parseFromString(unsafeHtml, 'text/html'); // whitelistのキーをwhitelistKeysに入れる
 
-    var whitelistKeys = Object.keys(whiteList); //createdDocumentの要素を1個ずつ取得する
+    var whitelistKeys = Object.keys(whiteList); // createdDocumentの要素を1個ずつ取得する
 
     var elements = [].slice.call(createdDocument.body.querySelectorAll('*')); // エレメントの数だけ回すよ
 
@@ -352,46 +352,63 @@
     };
 
     _proto.toggle = function toggle(event) {
+      // this._isEnabledがfalseなら処理終了
       if (!this._isEnabled) {
         return;
-      }
+      } // イベントが存在した場合
+
 
       if (event) {
-        var dataKey = this.constructor.DATA_KEY;
-        var context = $(event.currentTarget).data(dataKey);
+        // dataKeyを格納
+        var dataKey = this.constructor.DATA_KEY; // event.currentTargetからdataKeyの値を取得（Tooltipのclass）
+
+        var context = $(event.currentTarget).data(dataKey); // contextがなかったら再設定する
 
         if (!context) {
           context = new this.constructor(event.currentTarget, this._getDelegateConfig());
           $(event.currentTarget).data(dataKey, context);
-        }
+        } // event.currentTargetの逆の値を格納
 
-        context._activeTrigger.click = !context._activeTrigger.click;
+
+        context._activeTrigger.click = !context._activeTrigger.click; // _activeTriggerがtrueだったら
 
         if (context._isWithActiveTrigger()) {
+          // showの処理
           context._enter(null, context);
         } else {
+          // falseならhideの処理
           context._leave(null, context);
         }
       } else {
+        // _activeTriggerがfalseの場合
+        // tipelementがshowクラスを持っていたら
         if ($(this.getTipElement()).hasClass(ClassName.SHOW)) {
-          this._leave(null, this);
+          // hide処理を実行
+          this._leave(null, this); // 処理終了
+
 
           return;
-        }
+        } // showを持っていなかったらshowをする
+
 
         this._enter(null, this);
       }
     };
 
     _proto.dispose = function dispose() {
-      clearTimeout(this._timeout);
-      $.removeData(this.element, this.constructor.DATA_KEY);
-      $(this.element).off(this.constructor.EVENT_KEY);
-      $(this.element).closest('.modal').off('hide.sc.modal', this._hideModalHandler);
+      // タイムアウトを削除
+      clearTimeout(this._timeout); // this.elementに紐付いているdataを削除（Tooltipクラス）
+
+      $.removeData(this.element, this.constructor.DATA_KEY); // this.elementに紐付いているイベントを削除
+
+      $(this.element).off(this.constructor.EVENT_KEY); // .modalに紐付いているイベントも削除
+
+      $(this.element).closest('.modal').off('hide.sc.modal', this._hideModalHandler); // this.tipがあったら削除
 
       if (this.tip) {
         $(this.tip).remove();
-      }
+      } // 各設定を削除
+
 
       this._isEnabled = null;
       this._timeout = null;
@@ -420,7 +437,7 @@
       var showEvent = $.Event(this.constructor.Event.SHOW); // titleが存在していて、isEnableがtrue
 
       if (this.isWithContent() && this._isEnabled) {
-        // element.trriger(show)。jQueryの普通のshow
+        // showイベントを発動する
         $(this.element).trigger(showEvent); // this,.elementに関連するshadow dowのrootを取得する
 
         var shadowRoot = Util.findShadowRoot(this.element); // jQuery.contains( 対象の要素 ,含まれているか調べたい要素 )
@@ -428,8 +445,8 @@
         var isInTheDom = $.contains( // shadowRootがnullじゃなかったらshadowRootが対象の要素
         // nullだった場合は、this.elementを内包するトップレベルのdocument(bodyとか)
         shadowRoot !== null ? shadowRoot : this.element.ownerDocument.documentElement, this.element // this.elementを探す
-        ); // showイベントがブラウザの希望を停止している
-        // もしくは、this.elementがdomにない場合は停止
+        ); // showイベントがブラウザの動作を停止している
+        // もしくは、this.elementがdomにない場合は処理終了
 
         if (showEvent.isDefaultPrevented() || !isInTheDom) {
           return;
@@ -442,33 +459,44 @@
 
         tip.setAttribute('id', tipId); // this.elementに対して、tipIDを設定
 
-        this.element.setAttribute('aria-describedby', tipId); // TODO3
+        this.element.setAttribute('aria-describedby', tipId); // tipにコンテンツの内容を設定する。あとshowとfadeクラスがあったら削除する
 
-        this.setContent();
+        this.setContent(); // animationがtrueの場合
 
         if (this.config.animation) {
+          // fadeクラスを付与する
           $(tip).addClass(ClassName.FADE);
-        }
+        } // placementがfunctionなら、実行する
+        // functionじゃない場合は、this.config.placementを入れる
 
-        var placement = typeof this.config.placement === 'function' ? this.config.placement.call(this, tip, this.element) : this.config.placement;
 
-        var attachment = this._getAttachment(placement);
+        var placement = typeof this.config.placement === 'function' ? this.config.placement.call(this, tip, this.element) : this.config.placement; // AttachmentMapから該当するplacementを取得する
 
-        this.addAttachmentClass(attachment);
+        var attachment = this._getAttachment(placement); // sc-tooltip-topなどのクラスを付与する
 
-        var container = this._getContainer();
 
-        $(tip).data(this.constructor.DATA_KEY, this);
+        this.addAttachmentClass(attachment); // body要素を取得する
+
+        var container = this._getContainer(); // tipにthis(tooltip)データを設定する
+
+
+        $(tip).data(this.constructor.DATA_KEY, this); // this.element.ownerDocument.documentElementはhtml要素
+        // this.tipはtooltip
+        // htmlにtolltipの要素があるか確認する
 
         if (!$.contains(this.element.ownerDocument.documentElement, this.tip)) {
+          // htmlにthis.tipが含まれていなかったらtipをcontainer(body要素)に追加する
+          // ここでhtmlに要素を追加して、tooltipを表示してる
           $(tip).appendTo(container);
-        }
+        } // inserted.sc.tooltipはツールチップテンプレートがDOMに追加されたときに show.sc.tooltip イベントの後に発動。
 
-        $(this.element).trigger(this.constructor.Event.INSERTED);
-        this._popper = new Popper(this.element, tip, this._getPopperConfig(attachment));
-        $(tip).addClass(ClassName.SHOW); // If this is a touch-enabled device we add extra
-        // empty mouseover listeners to the body's immediate children;
-        // only needed because of broken event delegation on iOS
+
+        $(this.element).trigger(this.constructor.Event.INSERTED); // this.popperをインスタンス化
+        // popperは位置調整
+
+        this._popper = new Popper(this.element, tip, this._getPopperConfig(attachment)); // tipにshowクラスを設定する
+
+        $(tip).addClass(ClassName.SHOW); // iOSのために、空のマウスオーバリスナーを追加
         // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
         if ('ontouchstart' in document.documentElement) {
@@ -476,23 +504,33 @@
         }
 
         var complete = function complete() {
+          // animationがtrueの場合
           if (_this.config.animation) {
+            // popperで定義した表示位置を調整してる
             _this._fixTransition();
-          }
+          } // hoverStateを代入
 
-          var prevHoverState = _this._hoverState;
-          _this._hoverState = null;
-          $(_this.element).trigger(_this.constructor.Event.SHOWN);
+
+          var prevHoverState = _this._hoverState; // hoverStateをnullにする
+
+          _this._hoverState = null; // shownイベントを実行する
+
+          $(_this.element).trigger(_this.constructor.Event.SHOWN); // prevHoverStateがoutなら
 
           if (prevHoverState === HoverState.OUT) {
+            // hoveroutしたときにhideする関数
             _this._leave(null, _this);
           }
-        };
+        }; // tipがfadeクラスをもってたら
+
 
         if ($(this.tip).hasClass(ClassName.FADE)) {
-          var transitionDuration = Util.getTransitionDurationFromElement(this.tip);
+          // tip要素から遷移時間を取得
+          var transitionDuration = Util.getTransitionDurationFromElement(this.tip); // tipに一度だけ(one)実行されるcompleteをバインド
+
           $(this.tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
         } else {
+          // そのままcompleteを実行
           complete();
         }
       }
@@ -501,57 +539,76 @@
     _proto.hide = function hide(callback) {
       var _this2 = this;
 
-      var tip = this.getTipElement();
+      // tipのelementを取得
+      var tip = this.getTipElement(); // hideイベントを定義
+
       var hideEvent = $.Event(this.constructor.Event.HIDE);
 
       var complete = function complete() {
+        // tipのHoverStateがshowじゃなく、tipにparentNodeが存在する場合
         if (_this2._hoverState !== HoverState.SHOW && tip.parentNode) {
+          // parentNodeからtipを削除する
           tip.parentNode.removeChild(tip);
-        }
+        } // tipからsc-tooltipと名のつくクラスを削除する
 
-        _this2._cleanTipClass();
 
-        _this2.element.removeAttribute('aria-describedby');
+        _this2._cleanTipClass(); // this.elementはdata-toggle="tooltip"がついている要素
 
-        $(_this2.element).trigger(_this2.constructor.Event.HIDDEN);
+
+        _this2.element.removeAttribute('aria-describedby'); // hiddenイベントを発動
+
+
+        $(_this2.element).trigger(_this2.constructor.Event.HIDDEN); // popperが存在していたら
 
         if (_this2._popper !== null) {
+          // popperを破棄する
           _this2._popper.destroy();
-        }
+        } // 引数のcallbackがあったら
+
 
         if (callback) {
+          // callbackを実行する
           callback();
         }
-      };
+      }; // hideイベントを実行する
 
-      $(this.element).trigger(hideEvent);
+
+      $(this.element).trigger(hideEvent); // hideイベントがブラウザの機能を停止していたら
+      // 処理終了
 
       if (hideEvent.isDefaultPrevented()) {
         return;
-      }
+      } // tipからshowクラスを削除する
 
-      $(tip).removeClass(ClassName.SHOW); // If this is a touch-enabled device we remove the extra
-      // empty mouseover listeners we added for iOS support
+
+      $(tip).removeClass(ClassName.SHOW); // iOSのために、空のマウスオーバリスナーを追加
+      // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
       if ('ontouchstart' in document.documentElement) {
         $(document.body).children().off('mouseover', null, $.noop);
-      }
+      } // activeTriggerのclick、focus、hoverをfalseにする
+
 
       this._activeTrigger[Trigger.CLICK] = false;
       this._activeTrigger[Trigger.FOCUS] = false;
-      this._activeTrigger[Trigger.HOVER] = false;
+      this._activeTrigger[Trigger.HOVER] = false; // tipがfadeクラスを持ってたら
 
       if ($(this.tip).hasClass(ClassName.FADE)) {
-        var transitionDuration = Util.getTransitionDurationFromElement(tip);
+        // tip要素から遷移時間を取得
+        var transitionDuration = Util.getTransitionDurationFromElement(tip); // tipに一度だけ(one)実行されるcompleteをバインド
+
         $(tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       } else {
+        // fadeを持ってなかったらそのまま実行
         complete();
-      }
+      } // hoverStateに空文字を入れる
+
 
       this._hoverState = '';
     };
 
     _proto.update = function update() {
+      // popperのスケジュールをアップデートする
       if (this._popper !== null) {
         this._popper.scheduleUpdate();
       }
@@ -561,9 +618,11 @@
     _proto.isWithContent = function isWithContent() {
       // titleが存在しているか判定
       return Boolean(this.getTitle());
-    };
+    } // AttachmentMapから取得したtooltipが出る場所
+    ;
 
     _proto.addAttachmentClass = function addAttachmentClass(attachment) {
+      // tipのelementにsc-tooltip-topなどのクラスを付与する
       $(this.getTipElement()).addClass(CLASS_PREFIX + "-" + attachment);
     };
 
@@ -575,32 +634,46 @@
     };
 
     _proto.setContent = function setContent() {
-      var tip = this.getTipElement();
-      this.setElementContent($(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle());
+      // tipのelementを取得する
+      var tip = this.getTipElement(); // tipにテキストを設定する
+
+      this.setElementContent($(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle()); // tipからfadeとshowクラスを削除する
+
       $(tip).removeClass(ClassName.FADE + " " + ClassName.SHOW);
-    };
+    } // elementは.tooltip-inner
+    // contentはtitle
+    ;
 
     _proto.setElementContent = function setElementContent($element, content) {
+      // コンテンツがオブジェクトで、content.nodeTypeまたはcontent.jqueryが存在するか
       if (typeof content === 'object' && (content.nodeType || content.jquery)) {
-        // Content is a DOM node or a jQuery
+        // contentがDOMノードまたはjQuery
+        // config.htmlがfalse以外の場合
         if (this.config.html) {
+          // contentの親要素が.tooltip-innerの場合
           if (!$(content).parent().is($element)) {
+            // .tooltip-innerの子要素を全て削除してcontentを追加する
             $element.empty().append(content);
           }
         } else {
+          // elementのテキストをcontentのテキストにする
           $element.text($(content).text());
         }
 
         return;
-      }
+      } // config.htmlが存在する場合
+
 
       if (this.config.html) {
+        // contentをサニタイズ
         if (this.config.sanitize) {
           content = sanitizeHtml(content, this.config.whiteList, this.config.sanitizeFn);
-        }
+        } // elementのhtmlをcontentに変更
+
 
         $element.html(content);
       } else {
+        // elementのtextをcontentにする
         $element.text(content);
       }
     };
@@ -617,11 +690,13 @@
 
       return title;
     } // Private
+    // 引数は表示位置(topとか)
     ;
 
     _proto._getPopperConfig = function _getPopperConfig(attachment) {
       var _this3 = this;
 
+      // defaultのconfig
       var defaultScConfig = {
         placement: attachment,
         modifiers: {
@@ -638,6 +713,7 @@
         },
         onCreate: function onCreate(data) {
           if (data.originalPlacement !== data.placement) {
+            // popperの表示位置を設定する
             _this3._handlePopperPlacementChange(data);
           }
         },
@@ -651,14 +727,17 @@
     _proto._getOffset = function _getOffset() {
       var _this4 = this;
 
-      var offset = {};
+      var offset = {}; // offsetがfunctionなら
 
       if (typeof this.config.offset === 'function') {
+        // dataはpopperみたい
         offset.fn = function (data) {
+          // popperのoffsetに、展開して入れる
           data.offsets = _objectSpread2({}, data.offsets, {}, _this4.config.offset(data.offsets, _this4.element) || {});
           return data;
         };
       } else {
+        // configのoffsetを代入
         offset.offset = this.config.offset;
       }
 
@@ -667,6 +746,7 @@
 
     _proto._getContainer = function _getContainer() {
       if (this.config.container === false) {
+        // body要素を返す
         return document.body;
       }
 
@@ -678,6 +758,7 @@
     };
 
     _proto._getAttachment = function _getAttachment(placement) {
+      // AttachmentMapから該当するplacementを取得する
       return AttachmentMap[placement.toUpperCase()];
     };
 
@@ -710,36 +791,49 @@
           _this5.config.selector, // Defaultはfalse
           function (event) {
             return _this5._enter(event);
-          } // TODO
-          ).on(eventOut, _this5.config.selector, function (event) {
+          } // showさせる
+          ).on(eventOut, // mouseleave.sc.tooltip
+          _this5.config.selector, // Defaultはfalse
+          function (event) {
             return _this5._leave(event);
-          });
+          } // hideさせる
+          );
         }
-      });
+      }); // _hideModalHandlerを適宜
 
       this._hideModalHandler = function () {
+        // this.elementがあったら
         if (_this5.element) {
+          // elementをhideする
           _this5.hide();
         }
-      };
+      }; // tooltip付近のmodalに対して、hide.sc.modalを設定
 
-      $(this.element).closest('.modal').on('hide.sc.modal', this._hideModalHandler);
+
+      $(this.element).closest('.modal').on('hide.sc.modal', this._hideModalHandler); // this.config.selectorがtrueだったら
 
       if (this.config.selector) {
         this.config = _objectSpread2({}, this.config, {
+          // this.configを展開して格納
           trigger: 'manual',
-          selector: ''
+          // triggerをmanualに設定
+          selector: '' // selectorは空文字にする
+
         });
       } else {
+        // falseならfixTitleを実行
         this._fixTitle();
       }
     };
 
     _proto._fixTitle = function _fixTitle() {
-      var titleType = typeof this.element.getAttribute('data-original-title');
+      // data-original-titleを取得して、そのTypeを判定
+      var titleType = typeof this.element.getAttribute('data-original-title'); // this.elementにtitleが存在していて、titleTypeがstringじゃない場合
 
       if (this.element.getAttribute('title') || titleType !== 'string') {
-        this.element.setAttribute('data-original-title', this.element.getAttribute('title') || '');
+        this.element.setAttribute('data-original-title', this.element.getAttribute('title') || '' // title属性があるならtitle属性の値で、無いなら空文字
+        ); // this.elementのtitle属性を空文字にする
+
         this.element.setAttribute('title', '');
       }
     } // eventはmouseoverとかのイベント
@@ -798,29 +892,42 @@
     };
 
     _proto._leave = function _leave(event, context) {
-      var dataKey = this.constructor.DATA_KEY;
-      context = context || $(event.currentTarget).data(dataKey);
+      // datakeyを取得
+      var dataKey = this.constructor.DATA_KEY; // 引数にもよるけど、contextはtootip。それかイベントのcurrentTarget(datakey)の値
+
+      context = context || $(event.currentTarget).data(dataKey); // contextが存在してなかったら
 
       if (!context) {
-        context = new this.constructor(event.currentTarget, this._getDelegateConfig());
+        context = new this.constructor( // tooltipが付与されたelement
+        event.currentTarget, // ユーザ側でconfigが設定されてたら上書きする
+        this._getDelegateConfig()); // eventのcurrentTargetにcontextを設定する
+
         $(event.currentTarget).data(dataKey, context);
-      }
+      } // eventが存在していたら
+
 
       if (event) {
+        // event.typeがfocusoutだったらfucusに対してfalseを設定
+        // 違っかたらhoverに対してfalseを設定
         context._activeTrigger[event.type === 'focusout' ? Trigger.FOCUS : Trigger.HOVER] = false;
-      }
+      } // _activeTriggerがtrueなら処理終了
+
 
       if (context._isWithActiveTrigger()) {
         return;
-      }
+      } // タイムアウトを削除
 
-      clearTimeout(context._timeout);
-      context._hoverState = HoverState.OUT;
+
+      clearTimeout(context._timeout); // hoverStateにoutを設定
+
+      context._hoverState = HoverState.OUT; // delayが0か、delay.hideが存在してなかったら
 
       if (!context.config.delay || !context.config.delay.hide) {
+        // tolltipのhideを実行して処理終了
         context.hide();
         return;
-      }
+      } // delay.hideの分だけhideを遅らせて発動
+
 
       context._timeout = setTimeout(function () {
         if (context._hoverState === HoverState.OUT) {
@@ -830,11 +937,16 @@
     };
 
     _proto._isWithActiveTrigger = function _isWithActiveTrigger() {
+      // this._activeTrigger分回す
       for (var trigger in this._activeTrigger) {
+        // trueだったら
         if (this._activeTrigger[trigger]) {
+          // trueを返す
           return true;
         }
-      }
+      } // .activeTriggerがfalseしかなかったり、forで回すための
+      // 値がなかったらfalseを返す
+
 
       return false;
     } // configはobject(config)かfalse
@@ -893,7 +1005,7 @@
       var config = {};
 
       if (this.config) {
-        //tooltipのconfigのkey分だけfor
+        // tooltipのconfigのkey分だけfor
         for (var key in this.config) {
           // Defaultのkeyの値と、thiss.configのkeyの値が不一致だったら
           if (this.constructor.Default[key] !== this.config[key]) {
@@ -907,35 +1019,48 @@
     };
 
     _proto._cleanTipClass = function _cleanTipClass() {
-      var $tip = $(this.getTipElement());
-      var tabClass = $tip.attr('class').match(SCCLS_PREFIX_REGEX);
+      // tipの要素を取得
+      var $tip = $(this.getTipElement()); // tipののclassにマッチしているものがあるか確認
+
+      var tabClass = $tip.attr('class').match(SCCLS_PREFIX_REGEX); // tabClassに値があったら
 
       if (tabClass !== null && tabClass.length) {
+        // tipからクラスを削除する
         $tip.removeClass(tabClass.join(''));
       }
-    };
+    } // popperの表示位置を変更するとかの処理だと思う
+    ;
 
     _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(popperData) {
+      // popperのインスタンスを格納
       var popperInstance = popperData.instance;
-      this.tip = popperInstance.popper;
+      this.tip = popperInstance.popper; // tipからクラスを削除する
 
-      this._cleanTipClass();
+      this._cleanTipClass(); // popperData.placementから取得した表示位置クラスを設定する
+
 
       this.addAttachmentClass(this._getAttachment(popperData.placement));
     };
 
     _proto._fixTransition = function _fixTransition() {
-      var tip = this.getTipElement();
-      var initConfigAnimation = this.config.animation;
+      // tipのelementを取得
+      var tip = this.getTipElement(); // configのanimetionを取得
+
+      var initConfigAnimation = this.config.animation; // tipにx-placementがなかったら処理終了
 
       if (tip.getAttribute('x-placement') !== null) {
         return;
-      }
+      } // tipのfadeクラスを削除する
 
-      $(tip).removeClass(ClassName.FADE);
-      this.config.animation = false;
-      this.hide();
-      this.show();
+
+      $(tip).removeClass(ClassName.FADE); // configのanimetionをfalseにする
+
+      this.config.animation = false; // tolltipのhideを実行
+
+      this.hide(); // tolltipのshowを実行
+
+      this.show(); // config.animationにanimationを再設定
+
       this.config.animation = initConfigAnimation;
     } // Static
     // 引数はtooltip({container: $('#customContainer')[0]})とかのオブジェクト
@@ -1038,5 +1163,5 @@
 
   return Tooltip;
 
-}));
+})));
 //# sourceMappingURL=tooltip.js.map

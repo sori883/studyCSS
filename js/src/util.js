@@ -42,7 +42,7 @@ function getSpecialTransitionEndEvent() {
 function transitionEndEmulator(duration) {
   let called = false
 
-  // 呼び出しもとのエレメントでTRANSITION_ENDを実行
+  // 呼び出しもとのエレメントでTRANSITION_ENDで一度だけ実行
   $(this).one(Util.TRANSITION_END, () => {
     // コールバックをtrueにする
     called = true
@@ -73,8 +73,8 @@ function setTransitionEndSupport() {
 const Util = {
 
   TRANSITION_END: 'scTransitionEnd',
-  
-  //prefixはNAME(tooltipだとtooltipとか)
+
+  // prefixはNAME(tooltipだとtooltipとか)
   getUID(prefix) {
     do {
       // eslint-disable-next-line no-bitwise
