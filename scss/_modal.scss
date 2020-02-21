@@ -1,0 +1,237 @@
+// .modal-open - body classのスクロールを削除する
+// .modal - スクロールコンテナ
+// .modal-dialog - モーダルの位置を決める
+// .modal-content - 実際のmodal
+
+
+.modal-open {
+  // スクロールを削除する
+  overflow: hidden;
+
+  .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+// モーダル内部のスクロールするコンテナ
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $zindex-modal;
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  // windowsのchromeがフォーカスアウトラインを追加しない用にする
+  // see https://github.com/twbs/bootstrap/pull/10951.
+  outline: 0;
+  // バグがあるから-webkit-overflow-scrolling: touch;を使用しない
+  // See https://github.com/twbs/bootstrap/issues/17695
+}
+
+// bottom paddingでモーダルを配置する
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: $modal-dialog-margin;
+  // モーダルを閉じるカスタムクリック処理のため、noneを設定
+  pointer-events: none;
+
+  // モーダルをフェードインするときはアニメーション化して下にスライドさせる
+  .modal.fade & {
+    @include transition($modal-transition);
+    transform: $modal-fade-transform;
+  }
+  .modal.show & {
+    transform: $modal-show-transform;
+  }
+
+  // 閉じるときのフォーカスをアニメーションにする
+  .modal.modal-static & {
+    transform: $modal-scale-transform;
+  }
+}
+
+.modal-dialog-scrollable {
+  display: flex; // IE10/11
+  max-height: subtract(100%, $modal-dialog-margin * 2);
+
+  .modal-content {
+    max-height: subtract(100vh, $modal-dialog-margin * 2); // IE10/11
+    overflow: hidden;
+  }
+
+  .modal-header,
+  .modal-footer {
+    flex-shrink: 0;
+  }
+
+  .modal-body {
+    overflow-y: auto;
+  }
+}
+
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: subtract(100%, $modal-dialog-margin * 2);
+
+  // .modal-dialog-centeredがビューの高さを拡張するようにする
+  &::before {
+    display: block; // IE10
+    height: subtract(100vh, $modal-dialog-margin * 2);
+    content: "";
+  }
+
+  // .modal-bodyがスクロールバーを表示するようにする(IE10/11)
+  &.modal-dialog-scrollable {
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+
+    .modal-content {
+      max-height: none;
+    }
+
+    &::before {
+      content: none;
+    }
+  }
+}
+
+// 実際のモーダル
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%; // .modal-content.がmodal-dialogまで拡張するようにする
+  // .modal-dialogのpointer-events: none;を中和する
+  color: $modal-content-color;
+  pointer-events: auto;
+  background-color: $modal-content-bg;
+  background-clip: padding-box;
+  border: $modal-content-border-width solid $modal-content-border-color;
+  @include border-radius($modal-content-border-radius);
+  @include box-shadow($modal-content-box-shadow-xs);
+  // 開いたmodalのoutlineを削除する
+  outline: 0;
+}
+
+// Modalのbackground
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $zindex-modal-backdrop;
+  width: 100vw;
+  height: 100vh;
+  background-color: $modal-backdrop-bg;
+
+  // 背景のフェード
+  &.fade { opacity: 0; }
+  &.show { opacity: $modal-backdrop-opacity; }
+}
+
+// Modalのheader
+// タイトル付きモーダルのTOPセクションとdismiss
+.modal-header {
+  display: flex;
+  align-items: flex-start; // .btnは常に右上になるようにする
+  justify-content: space-between; // 両端にヘッダー要素を配置する
+  padding: $modal-header-padding;
+  border-bottom: $modal-header-border-width solid $modal-header-border-color;
+  @include border-top-radius($modal-content-inner-border-radius);
+
+  .close {
+    padding: $modal-header-padding;
+    // .modal-titleがない場合でもアイコンが右に配置されるようにする
+    margin: (-$modal-header-padding-y) (-$modal-header-padding-x) (-$modal-header-padding-y) auto;
+  }
+}
+
+// ヘッダー内のタイトル
+.modal-title {
+  margin-bottom: 0;
+  line-height: $modal-title-line-height;
+}
+
+// Modal body
+// モーダルコンテンツを格納するクラス(.modal-headerと.modal-footerの兄弟要素)
+.modal-body {
+  position: relative;
+  // .modal-dialogの高さを固定する必要があるときに
+  // flex-grow: 1を有効にして、.modal-bodyがスペース全体に広がるようにする
+  flex: 1 1 auto;
+  padding: $modal-inner-padding;
+}
+
+// Footer
+.modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center; // 縦中央にする
+  justify-content: flex-end; // flexアイテムだとtext-alignが機能しないため、flexプロパティでボタンを右揃えする
+  padding: $modal-inner-padding - $modal-footer-margin-between / 2;
+  border-top: $modal-footer-border-width solid $modal-footer-border-color;
+  @include border-bottom-radius($modal-content-inner-border-radius);
+
+  // 以下を修正するためにmarginを配置する
+  // https://github.com/twbs/bootstrap/issues/24800
+  // stylelint-disable-next-line selector-max-universal
+  > * {
+    margin: $modal-footer-margin-between / 2;
+  }
+}
+
+// モーダル表示/非表示時に、スクロール幅を測定する
+.modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+
+// モーダルを拡大する
+@include media-breakpoint-up(sm) {
+  // 大きいビューポート時のモーダル幅を自動的に設定する
+  .modal-dialog {
+    max-width: $modal-md;
+    margin: $modal-dialog-margin-y-sm-up auto;
+  }
+
+  .modal-dialog-scrollable {
+    max-height: subtract(100%, $modal-dialog-margin-y-sm-up * 2);
+
+    .modal-content {
+      max-height: subtract(100vh, $modal-dialog-margin-y-sm-up * 2);
+    }
+  }
+
+  .modal-dialog-centered {
+    min-height: subtract(100%, $modal-dialog-margin-y-sm-up * 2);
+
+    &::before {
+      height: subtract(100vh, $modal-dialog-margin-y-sm-up * 2);
+    }
+  }
+
+  .modal-content {
+    @include box-shadow($modal-content-box-shadow-sm-up);
+  }
+
+  .modal-sm { max-width: $modal-sm; }
+}
+
+@include media-breakpoint-up(lg) {
+  .modal-lg,
+  .modal-xl {
+    max-width: $modal-lg;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .modal-xl { max-width: $modal-xl; }
+}

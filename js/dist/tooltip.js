@@ -776,7 +776,8 @@
           _this5.constructor.Event.CLICK, // Defaultはfalse
           _this5.config.selector, function (event) {
             return _this5.toggle(event);
-          });
+          } // toggleさせる
+          );
         } else if (trigger !== Trigger.MANUAL) {
           // Triggerがmanualじゃなかったら。(hoverかfocus)
           // triggerがhoverか判定
@@ -799,7 +800,7 @@
           } // hideさせる
           );
         }
-      }); // _hideModalHandlerを適宜
+      }); // _hideModalHandlerを定義
 
       this._hideModalHandler = function () {
         // this.elementがあったら
@@ -849,7 +850,7 @@
       if (!context) {
         // contextがない場合は、tooltipのコンストラクタを読んどくみたい
         context = new this.constructor( // tooltipが付与されたelement
-        event.currentTarget, // ユーザ側でconfigが設定されてたら上書きするてきな
+        event.currentTarget, // defaultにないtooltip.configを追加する
         this._getDelegateConfig()); // tooltipが付与された要素に対して、sc.tooltipのデータキーで
         // context(tooltipのインスタンス)を入れる
 
@@ -953,11 +954,13 @@
     ;
 
     _proto._getConfig = function _getConfig(config) {
+      // sc.tooltipとか
+      // placementとかtoggleの指定があればそれも
       var dataAttributes = $(this.element).data(); // dataAttributesのキーを取得してその分ループしまくる
 
       Object.keys(dataAttributes).forEach(function (dataAttr) {
         // 禁止されているdataAttrがないか存在しているか確認。
-        // ['sanitize', 'whiteList', 'sanitizeFn']=['sanitize', 'whiteList', 'sanitizeFn']
+        // ['sanitize', 'whiteList', 'sanitizeFn']
         if (DISALLOWED_ATTRIBUTES.indexOf(dataAttr) !== -1) {
           // 存在している場合はそのdataAttrを削除する
           delete dataAttributes[dataAttr];
@@ -1007,7 +1010,7 @@
       if (this.config) {
         // tooltipのconfigのkey分だけfor
         for (var key in this.config) {
-          // Defaultのkeyの値と、thiss.configのkeyの値が不一致だったら
+          // Defaultのkeyの値と、this.configのkeyの値が不一致だったら
           if (this.constructor.Default[key] !== this.config[key]) {
             // configのkeyに、this.configのkeyの値を入れる
             config[key] = this.config[key];

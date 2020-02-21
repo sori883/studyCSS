@@ -65,7 +65,7 @@
   }
 
   function setTransitionEndSupport() {
-    // Jqueryのカスタムプラグインを作成
+    // jQueryのカスタムプラグインを作成
     $.fn.emulateTransitionEnd = transitionEndEmulator;
     $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
   }
@@ -93,16 +93,16 @@
       var selector = element.getAttribute('data-target'); // data-targetが存在しないか#の場合
 
       if (!selector || selector === '#') {
-        // 引数elementのhref属性の値を取得
-        var hrefAttr = element.getAttribute('href'); // hrefAttrがあったら#かどうかを判定して、trueならhrefAttrをtrimして返す。falseなら、空文字を入れる
+        // elementのhref属性の値を取得
+        var hrefAttr = element.getAttribute('href'); // hrefAttrが存在していてかつ、#かどうかを判定して、trueならhrefAttrをtrimして返す。falseなら、空文字を入れる
         // trim: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/String/trim
 
         selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : '';
       }
 
       try {
-        // html内のdata-targetもしくはhregで指定されているselectorを返す
-        // data-targetの対象を返す
+        // html要素内にselectorで指定されている要素が存在するか判定
+        // 存在していた場合、selectorを返す
         // なかったらnullを返す
         return document.querySelector(selector) ? selector : null;
       } catch (err) {

@@ -632,7 +632,7 @@ class Tooltip {
           this.constructor.Event.CLICK,
           // Defaultはfalse
           this.config.selector,
-          (event) => this.toggle(event)
+          (event) => this.toggle(event) // toggleさせる
         )
       } else if (trigger !== Trigger.MANUAL) {
         // Triggerがmanualじゃなかったら。(hoverかfocus)
@@ -660,7 +660,7 @@ class Tooltip {
       }
     })
 
-    // _hideModalHandlerを適宜
+    // _hideModalHandlerを定義
     this._hideModalHandler = () => {
       // this.elementがあったら
       if (this.element) {
@@ -718,7 +718,7 @@ class Tooltip {
       context = new this.constructor(
         // tooltipが付与されたelement
         event.currentTarget,
-        // ユーザ側でconfigが設定されてたら上書きするてきな
+        // defaultにないtooltip.configを追加する
         this._getDelegateConfig()
       )
       // tooltipが付与された要素に対して、sc.tooltipのデータキーで
@@ -833,13 +833,15 @@ class Tooltip {
 
   // configはobject(config)かfalse
   _getConfig(config) {
+    // sc.tooltipとか
+    // placementとかtoggleの指定があればそれも
     const dataAttributes = $(this.element).data()
 
     // dataAttributesのキーを取得してその分ループしまくる
     Object.keys(dataAttributes)
       .forEach((dataAttr) => {
         // 禁止されているdataAttrがないか存在しているか確認。
-        // ['sanitize', 'whiteList', 'sanitizeFn']=['sanitize', 'whiteList', 'sanitizeFn']
+        // ['sanitize', 'whiteList', 'sanitizeFn']
         if (DISALLOWED_ATTRIBUTES.indexOf(dataAttr) !== -1) {
           // 存在している場合はそのdataAttrを削除する
           delete dataAttributes[dataAttr]
@@ -852,7 +854,6 @@ class Tooltip {
       // dataAttributesを展開して入れる
       ...dataAttributes,
       // configがobjectでかつ存在していたらconfigを代入
-      // 上記じゃない場合は{}を代入
       ...typeof config === 'object' && config ? config : {}
     }
 
@@ -904,7 +905,7 @@ class Tooltip {
     if (this.config) {
       // tooltipのconfigのkey分だけfor
       for (const key in this.config) {
-        // Defaultのkeyの値と、thiss.configのkeyの値が不一致だったら
+        // Defaultのkeyの値と、this.configのkeyの値が不一致だったら
         if (this.constructor.Default[key] !== this.config[key]) {
           // configのkeyに、this.configのkeyの値を入れる
           config[key] = this.config[key]
