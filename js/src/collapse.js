@@ -282,35 +282,53 @@ class Collapse {
     // もっていなかったらheightを取得
     const dimension = this._getDimension()
 
-    // 
+    // getBoundingClientRectは要素の位置を取得する
+    // つまり、開閉要素の位置(dimensionでheightかwidthを指定)を取得して
+    // 開閉要素のスタイルに指定する
     this._element.style[dimension] = `${this._element.getBoundingClientRect()[dimension]}px`
 
+    // 開閉要素の高さを取得する
+    // heightとpaddingとborderの合計値
     Util.reflow(this._element)
 
+    // 開閉要素に.collapsingを追加する
+    // .collapseと.showは削除する
     $(this._element)
       .addClass(ClassName.COLLAPSING)
       .removeClass(ClassName.COLLAPSE)
       .removeClass(ClassName.SHOW)
 
+    // trigger要素の長さを取得
     const triggerArrayLength = this._triggerArray.length
+    // triggerArrayLengthが1以上だったら
     if (triggerArrayLength > 0) {
+      // triggerArrayLengthの長さの分だけループする
       for (let i = 0; i < triggerArrayLength; i++) {
+        // triggerArrayのひとつを取得
         const trigger = this._triggerArray[i]
+        // triggerに指定されている開閉要素を取得する
         const selector = Util.getSelectorFromElement(trigger)
 
+        // selectorが存在していたら
         if (selector !== null) {
+          // 開閉要素を全て取得して、配列で入れる
           const $elem = $([].slice.call(document.querySelectorAll(selector)))
+          // 開閉要素がshowを持っていない場合
           if (!$elem.hasClass(ClassName.SHOW)) {
+            // trrigerに.collapsedを追加する
             $(trigger).addClass(ClassName.COLLAPSED)
+              // aria-expanded属性をfalseにする
               .attr('aria-expanded', false)
           }
         }
       }
     }
 
+    // this._isTransitioningをtrueにする
     this.setTransitioning(true)
 
     const complete = () => {
+      // this._isTransitioningをfalseにする
       this.setTransitioning(false)
       $(this._element)
         .removeClass(ClassName.COLLAPSING)

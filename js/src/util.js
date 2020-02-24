@@ -136,6 +136,8 @@ const Util = {
   },
 
   reflow(element) {
+    // 要素の高さを取得する
+    // heightとpaddingとborderの合計値
     return element.offsetHeight
   },
 

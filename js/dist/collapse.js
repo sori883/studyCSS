@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('./util.js')) :
   typeof define === 'function' && define.amd ? define(['jquery', './util.js'], factory) :
   (global = global || self, global.Collapse = factory(global.jQuery, global.Util));
-}(this, (function ($, Util) { 'use strict';
+}(this, function ($, Util) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
   Util = Util && Util.hasOwnProperty('default') ? Util['default'] : Util;
@@ -57,13 +57,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
+        ownKeys(source, true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(Object(source)).forEach(function (key) {
+        ownKeys(source).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -314,32 +314,47 @@
       // もっていなかったらheightを取得
 
 
-      var dimension = this._getDimension(); // 
+      var dimension = this._getDimension(); // getBoundingClientRectは要素の位置を取得する
+      // つまり、開閉要素の位置(dimensionでheightかwidthを指定)を取得して
+      // 開閉要素のスタイルに指定する
 
 
-      this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
-      Util.reflow(this._element);
-      $(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
-      var triggerArrayLength = this._triggerArray.length;
+      this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px"; // 開閉要素の高さを取得する
+      // heightとpaddingとborderの合計値
+
+      Util.reflow(this._element); // 開閉要素に.collapsingを追加する
+      // .collapseと.showは削除する
+
+      $(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW); // trigger要素の長さを取得
+
+      var triggerArrayLength = this._triggerArray.length; // triggerArrayLengthが1以上だったら
 
       if (triggerArrayLength > 0) {
+        // triggerArrayLengthの長さの分だけループする
         for (var i = 0; i < triggerArrayLength; i++) {
-          var trigger = this._triggerArray[i];
-          var selector = Util.getSelectorFromElement(trigger);
+          // triggerArrayのひとつを取得
+          var trigger = this._triggerArray[i]; // triggerに指定されている開閉要素を取得する
+
+          var selector = Util.getSelectorFromElement(trigger); // selectorが存在していたら
 
           if (selector !== null) {
-            var $elem = $([].slice.call(document.querySelectorAll(selector)));
+            // 開閉要素を全て取得して、配列で入れる
+            var $elem = $([].slice.call(document.querySelectorAll(selector))); // 開閉要素がshowを持っていない場合
 
             if (!$elem.hasClass(ClassName.SHOW)) {
-              $(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
+              // trrigerに.collapsedを追加する
+              $(trigger).addClass(ClassName.COLLAPSED) // aria-expanded属性をfalseにする
+              .attr('aria-expanded', false);
             }
           }
         }
-      }
+      } // this._isTransitioningをtrueにする
+
 
       this.setTransitioning(true);
 
       var complete = function complete() {
+        // this._isTransitioningをfalseにする
         _this2.setTransitioning(false);
 
         $(_this2._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).trigger(Event.HIDDEN);
@@ -550,5 +565,5 @@
 
   return Collapse;
 
-})));
+}));
 //# sourceMappingURL=collapse.js.map

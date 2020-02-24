@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
   typeof define === 'function' && define.amd ? define(['jquery'], factory) :
   (global = global || self, global.Util = factory(global.jQuery));
-}(this, (function ($) { 'use strict';
+}(this, function ($) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
@@ -135,6 +135,8 @@
       return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER; // ×1000する
     },
     reflow: function reflow(element) {
+      // 要素の高さを取得する
+      // heightとpaddingとborderの合計値
       return element.offsetHeight;
     },
     // 引数エレメントでtrainsition_endイベントを実行する
@@ -224,5 +226,5 @@
 
   return Util;
 
-})));
+}));
 //# sourceMappingURL=util.js.map
