@@ -211,7 +211,7 @@ class Collapse {
     $(this._element)
       .removeClass(ClassName.COLLAPSE)
       .addClass(ClassName.COLLAPSING)
-    
+
     // 開閉対象の高さを0pxにする
     this._element.style[dimension] = 0
 
@@ -238,7 +238,7 @@ class Collapse {
 
       // 0に設定したstyleを空にする
       this._element.style[dimension] = ''
-      
+
       // this._isTransitioningにfalseを設定
       this.setTransitioning(false)
 
@@ -330,15 +330,22 @@ class Collapse {
     const complete = () => {
       // this._isTransitioningをfalseにする
       this.setTransitioning(false)
+      // 開閉要素に対して.collapsingを削除
+      // .collapseを追加
+      // Hiddenイベントを実行
       $(this._element)
         .removeClass(ClassName.COLLAPSING)
         .addClass(ClassName.COLLAPSE)
         .trigger(Event.HIDDEN)
     }
 
+    // 開閉要素に設定したスタイルを空にする
     this._element.style[dimension] = ''
+    // this._elementから遷移時間を取得
     const transitionDuration = Util.getTransitionDurationFromElement(this._element)
 
+    // .collapsingの遷移が終わったタイミングでcompleteを実行
+    // emulateTransitionEndでTRANSITION_ENDを実行
     $(this._element)
       .one(Util.TRANSITION_END, complete)
       .emulateTransitionEnd(transitionDuration)
@@ -350,13 +357,16 @@ class Collapse {
     this._isTransitioning = isTransitioning
   }
 
+  // 全てを破壊する
   dispose() {
+    // DATA_KEYを削除
     $.removeData(this._element, DATA_KEY)
 
-    this._config          = null
-    this._parent          = null
-    this._element         = null
-    this._triggerArray    = null
+    // 各要素にnullを代入して削除
+    this._config = null
+    this._parent = null
+    this._element = null
+    this._triggerArray = null
     this._isTransitioning = null
   }
 
@@ -412,7 +422,7 @@ class Collapse {
     // parent要素の中からselectorとマッチする要素を取得する
     // data-toggleとdata-parent両方持っている要素のみ
     const children = [].slice.call(parent.querySelectorAll(selector))
-  
+
     // elementはselectorと一致した要素
     $(children).each((i, element) => {
       // 開閉する要素が.showを持っているかによって
@@ -528,7 +538,7 @@ $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
     // それ以外の場合はtoggleを入れる
     // $trigger.data()は<a>のdata-toggleの値を取得する
     const config  = data ? 'toggle' : $trigger.data()
-    
+
     // jqueryInterfaceを呼ぶ
     Collapse._jQueryInterface.call($target, config)
   })

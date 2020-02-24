@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('./util.js')) :
   typeof define === 'function' && define.amd ? define(['jquery', './util.js'], factory) :
   (global = global || self, global.Collapse = factory(global.jQuery, global.Util));
-}(this, function ($, Util) { 'use strict';
+}(this, (function ($, Util) { 'use strict';
 
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
   Util = Util && Util.hasOwnProperty('default') ? Util['default'] : Util;
@@ -57,13 +57,13 @@
       var source = arguments[i] != null ? arguments[i] : {};
 
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           _defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
       }
@@ -355,13 +355,20 @@
 
       var complete = function complete() {
         // this._isTransitioningをfalseにする
-        _this2.setTransitioning(false);
+        _this2.setTransitioning(false); // 開閉要素に対して.collapsingを削除
+        // .collapseを追加
+        // Hiddenイベントを実行
+
 
         $(_this2._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).trigger(Event.HIDDEN);
-      };
+      }; // 開閉要素に設定したスタイルを空にする
 
-      this._element.style[dimension] = '';
-      var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+
+      this._element.style[dimension] = ''; // this._elementから遷移時間を取得
+
+      var transitionDuration = Util.getTransitionDurationFromElement(this._element); // .collapsingの遷移が終わったタイミングでcompleteを実行
+      // emulateTransitionEndでTRANSITION_ENDを実行
+
       $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
     };
 
@@ -369,10 +376,13 @@
       // this._isTransitioningに引数を設定
       // trueかfalse
       this._isTransitioning = isTransitioning;
-    };
+    } // 全てを破壊する
+    ;
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
+      // DATA_KEYを削除
+      $.removeData(this._element, DATA_KEY); // 各要素にnullを代入して削除
+
       this._config = null;
       this._parent = null;
       this._element = null;
@@ -565,5 +575,5 @@
 
   return Collapse;
 
-}));
+})));
 //# sourceMappingURL=collapse.js.map
