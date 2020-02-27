@@ -83,7 +83,7 @@ if (bundle) {
   files = files.concat([
     jqueryFile,
     'js/coverage/dist/util.js',
-    'js/coverage/dist/!(util|index).js'
+    'js/coverage/dist/!(util|index|tooltip).js' // util.js, index.js, tooltip.jsは除く。除かないとConflictエラー出る
   ])
   reporters.push('coverage-istanbul')
   conf.customLaunchers = customLaunchers
