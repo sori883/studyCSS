@@ -11,11 +11,11 @@ $(function () {
   QUnit.module('collapse', {
     beforeEach: function () {
       // Run all tests in noConflict mode -- it's the only way to ensure that the plugin works in noConflict mode
-      $.fn.bootstrapCollapse = $.fn.collapse.noConflict()
+      $.fn.simplicssCollapse = $.fn.collapse.noConflict()
     },
     afterEach: function () {
-      $.fn.collapse = $.fn.bootstrapCollapse
-      delete $.fn.bootstrapCollapse
+      $.fn.collapse = $.fn.simplicssCollapse
+      delete $.fn.simplicssCollapse
       $('#qunit-fixture').html('')
     }
   })
@@ -28,9 +28,9 @@ $(function () {
   QUnit.test('should throw explicit error on undefined method', function (assert) {
     assert.expect(1)
     var $el = $('<div/>')
-    $el.bootstrapCollapse()
+    $el.simplicssCollapse()
     try {
-      $el.bootstrapCollapse('noMethod')
+      $el.simplicssCollapse('noMethod')
     } catch (err) {
       assert.strictEqual(err.message, 'No method named "noMethod"')
     }
@@ -39,7 +39,7 @@ $(function () {
   QUnit.test('should return jquery collection containing the element', function (assert) {
     assert.expect(2)
     var $el = $('<div/>')
-    var $collapse = $el.bootstrapCollapse()
+    var $collapse = $el.simplicssCollapse()
     assert.ok($collapse instanceof $, 'returns jquery collection')
     assert.strictEqual($collapse[0], $el[0], 'collection contains element')
   })
@@ -53,7 +53,7 @@ $(function () {
       assert.ok($el.hasClass('show'), 'has class "show"')
       assert.ok(!/height/i.test($el.attr('style')), 'has height reset')
       done()
-    }).bootstrapCollapse('show')
+    }).simplicssCollapse('show')
   })
 
   QUnit.test('should show multiple collapsed elements', function (assert) {
@@ -96,12 +96,12 @@ $(function () {
       assert.ok($el1.hasClass('show'))
       assert.ok($el2.hasClass('show'))
       done()
-    }).bootstrapCollapse('show')
+    }).simplicssCollapse('show')
   })
 
   QUnit.test('should hide a collapsed element', function (assert) {
     assert.expect(1)
-    var $el = $('<div class="collapse"/>').bootstrapCollapse('hide')
+    var $el = $('<div class="collapse"/>').simplicssCollapse('hide')
 
     assert.ok(!$el.hasClass('show'), 'does not have class "show"')
   })
@@ -119,7 +119,7 @@ $(function () {
       .on('shown.sc.collapse', function () {
         assert.ok(false, 'shown event fired')
       })
-      .bootstrapCollapse('show')
+      .simplicssCollapse('show')
   })
 
   QUnit.test('should reset style to auto after finishing opening collapse', function (assert) {
@@ -134,7 +134,7 @@ $(function () {
         assert.strictEqual(this.style.height, '', 'height is auto')
         done()
       })
-      .bootstrapCollapse('show')
+      .simplicssCollapse('show')
   })
 
   QUnit.test('should reset style to auto after finishing closing collapse', function (assert) {
@@ -143,13 +143,13 @@ $(function () {
 
     $('<div class="collapse"/>')
       .on('shown.sc.collapse', function () {
-        $(this).bootstrapCollapse('hide')
+        $(this).simplicssCollapse('hide')
       })
       .on('hidden.sc.collapse', function () {
         assert.strictEqual(this.style.height, '', 'height is auto')
         done()
       })
-      .bootstrapCollapse('show')
+      .simplicssCollapse('show')
   })
 
   QUnit.test('should remove "collapsed" class from target when collapse is shown', function (assert) {
@@ -230,7 +230,7 @@ $(function () {
         assert.ok(false)
       })
 
-    $test.bootstrapCollapse('show')
+    $test.simplicssCollapse('show')
 
     setTimeout(done, 0)
   })
@@ -245,7 +245,7 @@ $(function () {
         assert.ok(true)
       })
 
-    $test.bootstrapCollapse('show')
+    $test.simplicssCollapse('show')
 
     setTimeout(done, 0)
   })
@@ -259,7 +259,7 @@ $(function () {
       .on('show.sc.collapse', function () {
         assert.ok(false, 'showing a previously-uninitialized hidden collapse when the "hide" method is called')
       })
-      .bootstrapCollapse('hide')
+      .simplicssCollapse('hide')
 
     setTimeout(done, 0)
   })
@@ -273,7 +273,7 @@ $(function () {
       .on('hide.sc.collapse', function () {
         assert.ok(true, 'hiding a previously-uninitialized shown collapse when the "hide" method is called')
       })
-      .bootstrapCollapse('hide')
+      .simplicssCollapse('hide')
 
     setTimeout(done, 0)
   })
@@ -496,7 +496,7 @@ $(function () {
         assert.ok($target.hasClass('collapsed'))
         done()
       })
-      .bootstrapCollapse('hide')
+      .simplicssCollapse('hide')
   })
 
   QUnit.test('should remove "collapsed" class from target when collapse is shown via manual invocation', function (assert) {
@@ -511,7 +511,7 @@ $(function () {
         assert.ok(!$target.hasClass('collapsed'))
         done()
       })
-      .bootstrapCollapse('show')
+      .simplicssCollapse('show')
   })
 
   QUnit.test('should allow accordion to use children other than card', function (assert) {
@@ -826,7 +826,7 @@ $(function () {
 
     $(html).appendTo('#qunit-fixture')
     try {
-      $('[data-toggle="collapse"]').bootstrapCollapse({
+      $('[data-toggle="collapse"]').simplicssCollapse({
         parent: $('.my-collapse')
       })
       assert.ok(true, 'collapse correctly created')
@@ -847,7 +847,7 @@ $(function () {
 
     $(html).appendTo('#qunit-fixture')
     try {
-      $('[data-toggle="collapse"]').bootstrapCollapse({
+      $('[data-toggle="collapse"]').simplicssCollapse({
         parent: $('.my-collapse')[0]
       })
       assert.ok(true, 'collapse correctly created')
@@ -876,7 +876,7 @@ $(function () {
 
     var $parent = $('.my-collapse')
     var $collapse2 = $('#collapse2')
-    $parent.find('.collapse').bootstrapCollapse({
+    $parent.find('.collapse').simplicssCollapse({
       parent: $parent,
       toggle: false
     })
@@ -887,6 +887,6 @@ $(function () {
       done()
     })
 
-    $collapse2.bootstrapCollapse('toggle')
+    $collapse2.simplicssCollapse('toggle')
   })
 })

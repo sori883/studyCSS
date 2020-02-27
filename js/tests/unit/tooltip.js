@@ -11,11 +11,11 @@ $(function () {
   QUnit.module('tooltip', {
     beforeEach: function () {
       // Run all tests in noConflict mode -- it's the only way to ensure that the plugin works in noConflict mode
-      $.fn.bootstrapTooltip = $.fn.tooltip.noConflict()
+      $.fn.simplicssTooltip = $.fn.tooltip.noConflict()
     },
     afterEach: function () {
-      $.fn.tooltip = $.fn.bootstrapTooltip
-      delete $.fn.bootstrapTooltip
+      $.fn.tooltip = $.fn.simplicssTooltip
+      delete $.fn.simplicssTooltip
       $('.tooltip').remove()
       $('#qunit-fixture').html('')
     }
@@ -29,9 +29,9 @@ $(function () {
   QUnit.test('should throw explicit error on undefined method', function (assert) {
     assert.expect(1)
     var $el = $('<div/>')
-    $el.bootstrapTooltip()
+    $el.simplicssTooltip()
     try {
-      $el.bootstrapTooltip('noMethod')
+      $el.simplicssTooltip('noMethod')
     } catch (err) {
       assert.strictEqual(err.message, 'No method named "noMethod"')
     }
@@ -40,34 +40,34 @@ $(function () {
   QUnit.test('should return jquery collection containing the element', function (assert) {
     assert.expect(2)
     var $el = $('<div/>')
-    var $tooltip = $el.bootstrapTooltip()
+    var $tooltip = $el.simplicssTooltip()
     assert.ok($tooltip instanceof $, 'returns jquery collection')
     assert.strictEqual($tooltip[0], $el[0], 'collection contains element')
   })
 
   QUnit.test('should expose default settings', function (assert) {
     assert.expect(1)
-    assert.ok($.fn.bootstrapTooltip.Constructor.Default, 'defaults is defined')
+    assert.ok($.fn.simplicssTooltip.Constructor.Default, 'defaults is defined')
   })
 
   QUnit.test('should empty title attribute', function (assert) {
     assert.expect(1)
-    var $trigger = $('<a href="#" rel="tooltip" title="Another tooltip"/>').bootstrapTooltip()
+    var $trigger = $('<a href="#" rel="tooltip" title="Another tooltip"/>').simplicssTooltip()
     assert.strictEqual($trigger.attr('title'), '', 'title attribute was emptied')
   })
 
   QUnit.test('should add data attribute for referencing original title', function (assert) {
     assert.expect(1)
-    var $trigger = $('<a href="#" rel="tooltip" title="Another tooltip"/>').bootstrapTooltip()
+    var $trigger = $('<a href="#" rel="tooltip" title="Another tooltip"/>').simplicssTooltip()
     assert.strictEqual($trigger.attr('data-original-title'), 'Another tooltip', 'original title preserved in data attribute')
   })
 
   QUnit.test('should add aria-describedby to the trigger on show', function (assert) {
     assert.expect(3)
     var $trigger = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
-      .bootstrapTooltip()
+      .simplicssTooltip()
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
 
     var id = $('.tooltip').attr('id')
 
@@ -80,26 +80,26 @@ $(function () {
     assert.expect(2)
     var done = assert.async()
     var $trigger = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
-      .bootstrapTooltip()
+      .simplicssTooltip()
       .appendTo('#qunit-fixture')
 
     $trigger
       .one('shown.sc.tooltip', function () {
         assert.ok($trigger[0].hasAttribute('aria-describedby'), 'trigger has aria-describedby')
-        $trigger.bootstrapTooltip('hide')
+        $trigger.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.ok(!$trigger[0].hasAttribute('aria-describedby'), 'trigger does not have aria-describedby')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should assign a unique id tooltip element', function (assert) {
     assert.expect(2)
     $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
 
     var id = $('.tooltip').attr('id')
 
@@ -112,7 +112,7 @@ $(function () {
     var done = assert.async()
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         placement: 'bottom'
       })
 
@@ -121,13 +121,13 @@ $(function () {
         assert.ok($('.tooltip')
           .is('.fade.sc-tooltip-bottom.show'), 'has correct classes applied')
 
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($tooltip.data('sc.tooltip').tip.parentNode, null, 'tooltip removed')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should allow html entities', function (assert) {
@@ -135,20 +135,20 @@ $(function () {
     var done = assert.async()
     var $tooltip = $('<a href="#" rel="tooltip" title="&lt;b&gt;@fat&lt;/b&gt;"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         html: true
       })
 
     $tooltip
       .one('shown.sc.tooltip', function () {
         assert.notEqual($('.tooltip b').length, 0, 'b tag was inserted')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($tooltip.data('sc.tooltip').tip.parentNode, null, 'tooltip removed')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should allow DOMElement title (html: false)', function (assert) {
@@ -157,7 +157,7 @@ $(function () {
     var title = document.createTextNode('<3 writing tests')
     var $tooltip = $('<a href="#" rel="tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         title: title
       })
 
@@ -168,7 +168,7 @@ $(function () {
         assert.ok(!$.contains($('.tooltip').get(0), title), 'title node copied, not moved')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should allow DOMElement title (html: true)', function (assert) {
@@ -177,7 +177,7 @@ $(function () {
     var title = document.createTextNode('<3 writing tests')
     var $tooltip = $('<a href="#" rel="tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         html: true,
         title: title
       })
@@ -189,7 +189,7 @@ $(function () {
         assert.ok($.contains($('.tooltip').get(0), title), 'title node moved, not copied')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should respect custom classes', function (assert) {
@@ -197,20 +197,20 @@ $(function () {
     var done = assert.async()
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: '<div class="tooltip some-class"><div class="tooltip-arrow"/><div class="tooltip-inner"/></div>'
       })
 
     $tooltip
       .one('shown.sc.tooltip', function () {
         assert.ok($('.tooltip').hasClass('some-class'), 'custom class is present')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($tooltip.data('sc.tooltip').tip.parentNode, null, 'tooltip removed')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should fire show event', function (assert) {
@@ -222,7 +222,7 @@ $(function () {
         assert.ok(true, 'show event fired')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should throw an error when show is called on hidden elements', function (assert) {
@@ -230,7 +230,7 @@ $(function () {
     var done = assert.async()
 
     try {
-      $('<div title="tooltip title" style="display: none"/>').bootstrapTooltip('show')
+      $('<div title="tooltip title" style="display: none"/>').simplicssTooltip('show')
     } catch (err) {
       assert.strictEqual(err.message, 'Please use show on visible elements')
       done()
@@ -248,7 +248,7 @@ $(function () {
         assert.ok(true, 'inserted event fired')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should fire shown event', function (assert) {
@@ -261,7 +261,7 @@ $(function () {
         assert.ok(true, 'shown was called')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should not fire shown event when show was prevented', function (assert) {
@@ -277,7 +277,7 @@ $(function () {
       .on('shown.sc.tooltip', function () {
         assert.ok(false, 'shown event fired')
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should fire hide event', function (assert) {
@@ -287,13 +287,13 @@ $(function () {
     $('<div title="tooltip title"/>')
       .appendTo('#qunit-fixture')
       .on('shown.sc.tooltip', function () {
-        $(this).bootstrapTooltip('hide')
+        $(this).simplicssTooltip('hide')
       })
       .on('hide.sc.tooltip', function () {
         assert.ok(true, 'hide event fired')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should fire hidden event', function (assert) {
@@ -303,13 +303,13 @@ $(function () {
     $('<div title="tooltip title"/>')
       .appendTo('#qunit-fixture')
       .on('shown.sc.tooltip', function () {
-        $(this).bootstrapTooltip('hide')
+        $(this).simplicssTooltip('hide')
       })
       .on('hidden.sc.tooltip', function () {
         assert.ok(true, 'hidden event fired')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should not fire hidden event when hide was prevented', function (assert) {
@@ -319,7 +319,7 @@ $(function () {
     $('<div title="tooltip title"/>')
       .appendTo('#qunit-fixture')
       .on('shown.sc.tooltip', function () {
-        $(this).bootstrapTooltip('hide')
+        $(this).simplicssTooltip('hide')
       })
       .on('hide.sc.tooltip', function (e) {
         e.preventDefault()
@@ -329,21 +329,21 @@ $(function () {
       .on('hidden.sc.tooltip', function () {
         assert.ok(false, 'hidden event fired')
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should destroy tooltip', function (assert) {
     assert.expect(7)
     var $tooltip = $('<div/>')
-      .bootstrapTooltip()
+      .simplicssTooltip()
       .on('click.foo', function () {})  // eslint-disable-line no-empty-function
 
     assert.ok($tooltip.data('sc.tooltip'), 'tooltip has data')
     assert.ok($._data($tooltip[0], 'events').mouseover && $._data($tooltip[0], 'events').mouseout, 'tooltip has hover events')
     assert.strictEqual($._data($tooltip[0], 'events').click[0].namespace, 'foo', 'tooltip has extra click.foo event')
 
-    $tooltip.bootstrapTooltip('show')
-    $tooltip.bootstrapTooltip('dispose')
+    $tooltip.simplicssTooltip('show')
+    $tooltip.simplicssTooltip('dispose')
 
     assert.ok(!$tooltip.hasClass('show'), 'tooltip is hidden')
     assert.ok(!$._data($tooltip[0], 'sc.tooltip'), 'tooltip does not have data')
@@ -355,7 +355,7 @@ $(function () {
   //   assert.expect(2)
   //   var $div = $('<div><a href="#" rel="tooltip" title="Another tooltip"/></div>')
   //     .appendTo('#qunit-fixture')
-  //     .bootstrapTooltip({
+  //     .simplicssTooltip({
   //       selector: 'a[rel="tooltip"]',
   //       trigger: 'click'
   //     })
@@ -371,10 +371,10 @@ $(function () {
     assert.expect(1)
     $('<a href="#" rel="tooltip" title="tooltip on toggle"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         trigger: 'manual'
       })
-      .bootstrapTooltip('toggle')
+      .simplicssTooltip('toggle')
 
     assert.ok($('.tooltip').is('.fade.show'), 'tooltip is faded active')
   })
@@ -383,12 +383,12 @@ $(function () {
     assert.expect(1)
     $('<a href="#" rel="tooltip" title="tooltip on toggle">@ResentedHook</a>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         trigger: 'manual'
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
 
-    $('.tooltip').bootstrapTooltip('toggle')
+    $('.tooltip').simplicssTooltip('toggle')
     assert.ok($('.tooltip').not('.fade.show'), 'tooltip was faded out')
   })
 
@@ -397,7 +397,7 @@ $(function () {
     var done = assert.async()
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         container: 'body'
       })
 
@@ -405,13 +405,13 @@ $(function () {
       .one('shown.sc.tooltip', function () {
         assert.notEqual($('body > .tooltip').length, 0, 'tooltip is direct descendant of body')
         assert.strictEqual($('#qunit-fixture > .tooltip').length, 0, 'tooltip is not in parent')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($('body > .tooltip').length, 0, 'tooltip was removed from dom')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should place tooltips inside a specific container when container is an element', function (assert) {
@@ -420,7 +420,7 @@ $(function () {
     var $container = $('<div></div>').appendTo('#qunit-fixture')
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         container: $container[0]
       })
 
@@ -428,13 +428,13 @@ $(function () {
       .one('shown.sc.tooltip', function () {
         assert.strictEqual($container.find('.tooltip').length, 1)
         assert.strictEqual($('#qunit-fixture > .tooltip').length, 0, 'tooltip is not in parent')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($container.find('.tooltip').length, 0, 'tooltip was removed from dom')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should place tooltips inside a specific container when container is a selector', function (assert) {
@@ -443,7 +443,7 @@ $(function () {
     var $container = $('<div id="container"></div>').appendTo('#qunit-fixture')
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         container: '#container'
       })
 
@@ -451,13 +451,13 @@ $(function () {
       .one('shown.sc.tooltip', function () {
         assert.strictEqual($container.find('.tooltip').length, 1)
         assert.strictEqual($('#qunit-fixture > .tooltip').length, 0, 'tooltip is not in parent')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($container.find('.tooltip').length, 0, 'tooltip was removed from dom')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should add position class before positioning so that position-specific styles are taken into account', function (assert) {
@@ -472,7 +472,7 @@ $(function () {
     var $container = $('<div/>').appendTo('#qunit-fixture')
     $('<a href="#" rel="tooltip" title="very very very very very very very very long tooltip in one line"/>')
       .appendTo($container)
-      .bootstrapTooltip({
+      .simplicssTooltip({
         placement: 'right',
         trigger: 'manual'
       })
@@ -483,7 +483,7 @@ $(function () {
         $styles.remove()
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should use title attribute for tooltip text', function (assert) {
@@ -491,18 +491,18 @@ $(function () {
     var done = assert.async()
     var $tooltip = $('<a href="#" rel="tooltip" title="Simple tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip()
+      .simplicssTooltip()
 
     $tooltip
       .one('shown.sc.tooltip', function () {
         assert.strictEqual($('.tooltip').children('.tooltip-inner').text(), 'Simple tooltip', 'title from title attribute is set')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($('.tooltip').length, 0, 'tooltip removed from dom')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should prefer title attribute over title option', function (assert) {
@@ -510,20 +510,20 @@ $(function () {
     var done = assert.async()
     var $tooltip = $('<a href="#" rel="tooltip" title="Simple tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         title: 'This is a tooltip with some content'
       })
 
     $tooltip
       .one('shown.sc.tooltip', function () {
         assert.strictEqual($('.tooltip').children('.tooltip-inner').text(), 'Simple tooltip', 'title is set from title attribute while preferred over title option')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($('.tooltip').length, 0, 'tooltip removed from dom')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should use title option', function (assert) {
@@ -531,20 +531,20 @@ $(function () {
     var done = assert.async()
     var $tooltip = $('<a href="#" rel="tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         title: 'This is a tooltip with some content'
       })
 
     $tooltip
       .one('shown.sc.tooltip', function () {
         assert.strictEqual($('.tooltip').children('.tooltip-inner').text(), 'This is a tooltip with some content', 'title from title option is set')
-        $tooltip.bootstrapTooltip('hide')
+        $tooltip.simplicssTooltip('hide')
       })
       .one('hidden.sc.tooltip', function () {
         assert.strictEqual($('.tooltip').length, 0, 'tooltip removed from dom')
         done()
       })
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
   })
 
   QUnit.test('should not error when trying to show an top-placed tooltip that has been removed from the dom', function (assert) {
@@ -555,12 +555,12 @@ $(function () {
       .one('show.sc.tooltip', function () {
         $(this).remove()
       })
-      .bootstrapTooltip({
+      .simplicssTooltip({
         placement: 'top'
       })
 
     try {
-      $tooltip.bootstrapTooltip('show')
+      $tooltip.simplicssTooltip('show')
     } catch (err) {
       passed = false
     }
@@ -574,7 +574,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         delay: 150
       })
 
@@ -596,7 +596,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         delay: 150
       })
 
@@ -619,7 +619,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         delay: {
           show: 0,
           hide: 150
@@ -650,7 +650,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         delay: 150
       })
 
@@ -673,7 +673,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         delay: {
           show: 150,
           hide: 0
@@ -699,7 +699,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         delay: {
           show: 0,
           hide: 150
@@ -724,7 +724,7 @@ $(function () {
     $tooltip.trigger('mouseenter')
   })
 
-  QUnit.test('should not reload the tooltip on suscequent mouseenter events', function (assert) {
+  QUnit.test('should not reload the tooltip on subsequent mouseenter events', function (assert) {
     assert.expect(1)
     var titleHtml = function () {
       var uid = Util.getUID('tooltip')
@@ -734,7 +734,7 @@ $(function () {
     var $tooltip = $('<span id="tt-outer" rel="tooltip" data-trigger="hover" data-placement="top">some text</span>')
       .appendTo('#qunit-fixture')
 
-    $tooltip.bootstrapTooltip({
+    $tooltip.simplicssTooltip({
       html: true,
       animation: false,
       trigger: 'hover',
@@ -765,7 +765,7 @@ $(function () {
     var $tooltip = $('<span id="tt-outer" rel="tooltip" data-trigger="hover" data-placement="top">some text</span>')
       .appendTo('#qunit-fixture')
 
-    $tooltip.bootstrapTooltip({
+    $tooltip.simplicssTooltip({
       html: true,
       animation: false,
       trigger: 'hover',
@@ -801,7 +801,7 @@ $(function () {
       .on('hidden.sc.tooltip shown.sc.tooltip', function () {
         assert.ok(false, 'should not fire any tooltip events')
       })
-      .bootstrapTooltip('hide')
+      .simplicssTooltip('hide')
     assert.strictEqual(typeof $tooltip.data('sc.tooltip'), 'undefined', 'should not initialize the tooltip')
   })
 
@@ -809,7 +809,7 @@ $(function () {
     assert.expect(41)
     var $el = $('<button>Trigger</button>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         trigger: 'click hover focus',
         animation: false
       })
@@ -852,7 +852,7 @@ $(function () {
     assert.expect(3)
     var $el = $('<a href="#" rel="tooltip" title="Test tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         trigger: 'click hover focus',
         animation: false
       })
@@ -867,7 +867,7 @@ $(function () {
     $el.trigger('click')
     assert.ok(showingTooltip(), 'tooltip is faded in')
 
-    $el.bootstrapTooltip('hide')
+    $el.simplicssTooltip('hide')
     assert.ok(!showingTooltip(), 'tooltip was faded out')
 
     $el.trigger('click')
@@ -889,7 +889,7 @@ $(function () {
 
     $(templateHTML).appendTo('#qunit-fixture')
     $('#tooltipTest')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         trigger: 'manuel'
       })
       .on('shown.sc.tooltip', function () {
@@ -902,7 +902,7 @@ $(function () {
 
     $('#modal-test')
       .on('shown.sc.modal', function () {
-        $('#tooltipTest').bootstrapTooltip('show')
+        $('#tooltipTest').simplicssTooltip('show')
       })
       .modal('show')
   })
@@ -928,15 +928,15 @@ $(function () {
 
     $tooltip.on('shown.sc.tooltip', function () {
       $tooltip.detach()
-      $tooltip.bootstrapTooltip('dispose')
+      $tooltip.simplicssTooltip('dispose')
       $modal.modal('hide')
     })
 
     $modal.on('shown.sc.modal', function () {
-      $tooltip.bootstrapTooltip({
+      $tooltip.simplicssTooltip({
         trigger: 'manuel'
       })
-        .bootstrapTooltip('show')
+        .simplicssTooltip('show')
     })
       .on('hidden.sc.modal', function () {
         assert.ok(true, 'modal hidden')
@@ -950,7 +950,7 @@ $(function () {
     var done = assert.async()
     var $el = $('<a href="#" rel="tooltip" title="Test tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip('show')
+      .simplicssTooltip('show')
       .on('hidden.sc.tooltip', function () {
         var tooltip = $el.data('sc.tooltip')
         var $tooltip = $(tooltip.getTipElement())
@@ -959,7 +959,7 @@ $(function () {
         done()
       })
 
-    $el.bootstrapTooltip('hide')
+    $el.simplicssTooltip('hide')
   })
 
   QUnit.test('should convert number in title to string', function (assert) {
@@ -974,7 +974,7 @@ $(function () {
         done()
       })
 
-    $el.bootstrapTooltip('show')
+    $el.simplicssTooltip('show')
   })
 
   QUnit.test('tooltip should be shown right away after the call of disable/enable', function (assert) {
@@ -983,17 +983,17 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip()
+      .simplicssTooltip()
       .on('shown.sc.tooltip', function () {
         assert.strictEqual($('.tooltip').hasClass('show'), true)
         done()
       })
 
-    $trigger.bootstrapTooltip('disable')
+    $trigger.simplicssTooltip('disable')
     $trigger.trigger($.Event('click'))
     setTimeout(function () {
       assert.strictEqual($('.tooltip').length === 0, true)
-      $trigger.bootstrapTooltip('enable')
+      $trigger.simplicssTooltip('enable')
       $trigger.trigger($.Event('click'))
     }, 200)
   })
@@ -1003,7 +1003,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip()
+      .simplicssTooltip()
 
     var tooltip = $tooltip.data('sc.tooltip')
     tooltip.show()
@@ -1019,7 +1019,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip()
+      .simplicssTooltip()
 
     var tooltip = $tooltip.data('sc.tooltip')
     tooltip.update()
@@ -1032,7 +1032,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip()
+      .simplicssTooltip()
 
     var $tipTest = $('<div class="sc-tooltip" />')
       .appendTo('#qunit-fixture')
@@ -1055,7 +1055,7 @@ $(function () {
 
     var $tooltip = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip()
+      .simplicssTooltip()
 
     var tooltip = $tooltip.data('sc.tooltip')
 
@@ -1079,7 +1079,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         offset: getOffset
       })
 
@@ -1096,7 +1096,7 @@ $(function () {
     var myOffset = 42
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         offset: myOffset
       })
 
@@ -1112,7 +1112,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         sanitize: false
       })
 
@@ -1125,7 +1125,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<div>',
           '  <script>console.log("oups script inserted")</script>',
@@ -1143,7 +1143,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<div>',
           '  <img src="x" onError="alert(\'test\')">Some content</img>',
@@ -1160,7 +1160,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<div>',
           '  <a href="javascript:alert(7)">Click me</a>',
@@ -1178,7 +1178,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<a href="javascript:alert(7)">Click me</a>',
           '<span>Some content</span>'
@@ -1199,7 +1199,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<span>Some content</span>'
         ].join(''),
@@ -1218,7 +1218,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<span aria-pressed="true">Some content</span>'
         ].join('')
@@ -1237,7 +1237,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<span aria-pressed="true">Some content</span>'
         ].join(''),
@@ -1256,7 +1256,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-sanitize="false" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         template: [
           '<span aria-pressed="true">Some content</span>'
         ].join('')
@@ -1272,7 +1272,7 @@ $(function () {
 
     var $trigger = $('<a href="#" rel="tooltip" data-trigger="click" title="Another tooltip"/>')
       .appendTo('#qunit-fixture')
-      .bootstrapTooltip({
+      .simplicssTooltip({
         popperConfig: {
           placement: 'left'
         }
