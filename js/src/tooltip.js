@@ -130,8 +130,8 @@ class Tooltip {
 
     // Protected
     this.element = element
-    this.config  = this._getConfig(config)
-    this.tip     = null
+    this.config = this._getConfig(config)
+    this.tip = null
 
     this._setListeners()
   }
@@ -255,8 +255,8 @@ class Tooltip {
 
     this._popper = null
     this.element = null
-    this.config  = null
-    this.tip     = null
+    this.config = null
+    this.tip = null
   }
 
   show() {
@@ -530,7 +530,7 @@ class Tooltip {
   }
 
   getTitle() {
-    // ekementのタイトルを取得
+    // elementのタイトルを取得
     let title = this.element.getAttribute('data-original-title')
 
     // タイトルが存在しなかったら
@@ -919,11 +919,11 @@ class Tooltip {
   _cleanTipClass() {
     // tipの要素を取得
     const $tip = $(this.getTipElement())
-    // tipののclassにマッチしているものがあるか確認
+    // tipのclassにマッチしているものがあるか確認
     const tabClass = $tip.attr('class').match(SCCLS_PREFIX_REGEX)
     // tabClassに値があったら
     if (tabClass !== null && tabClass.length) {
-      // tipからクラスを削除する
+      // TabClassに該当するクラスを全て削除する
       $tip.removeClass(tabClass.join(''))
     }
   }
