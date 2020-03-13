@@ -4530,6 +4530,612 @@
   };
 
   /**
+   * ------------------------------------------------------------------------
+   * Constants
+   * ------------------------------------------------------------------------
+   */
+
+  var NAME$4 = 'modal';
+  var VERSION$4 = '4.4.1';
+  var DATA_KEY$4 = 'bs.modal';
+  var EVENT_KEY$4 = "." + DATA_KEY$4;
+  var DATA_API_KEY$4 = '.data-api';
+  var JQUERY_NO_CONFLICT$4 = $.fn[NAME$4];
+  var ESCAPE_KEYCODE$1 = 27; // KeyboardEvent.which value for Escape (Esc) key
+
+  var Default$2 = {
+    backdrop: true,
+    keyboard: true,
+    focus: true,
+    show: true
+  };
+  var DefaultType$2 = {
+    backdrop: '(boolean|string)',
+    keyboard: 'boolean',
+    focus: 'boolean',
+    show: 'boolean'
+  };
+  var Event$4 = {
+    HIDE: "hide" + EVENT_KEY$4,
+    HIDE_PREVENTED: "hidePrevented" + EVENT_KEY$4,
+    HIDDEN: "hidden" + EVENT_KEY$4,
+    SHOW: "show" + EVENT_KEY$4,
+    SHOWN: "shown" + EVENT_KEY$4,
+    FOCUSIN: "focusin" + EVENT_KEY$4,
+    RESIZE: "resize" + EVENT_KEY$4,
+    CLICK_DISMISS: "click.dismiss" + EVENT_KEY$4,
+    KEYDOWN_DISMISS: "keydown.dismiss" + EVENT_KEY$4,
+    MOUSEUP_DISMISS: "mouseup.dismiss" + EVENT_KEY$4,
+    MOUSEDOWN_DISMISS: "mousedown.dismiss" + EVENT_KEY$4,
+    CLICK_DATA_API: "click" + EVENT_KEY$4 + DATA_API_KEY$4
+  };
+  var ClassName$4 = {
+    SCROLLABLE: 'modal-dialog-scrollable',
+    SCROLLBAR_MEASURER: 'modal-scrollbar-measure',
+    BACKDROP: 'modal-backdrop',
+    OPEN: 'modal-open',
+    FADE: 'fade',
+    SHOW: 'show',
+    STATIC: 'modal-static'
+  };
+  var Selector$4 = {
+    DIALOG: '.modal-dialog',
+    MODAL_BODY: '.modal-body',
+    DATA_TOGGLE: '[data-toggle="modal"]',
+    DATA_DISMISS: '[data-dismiss="modal"]',
+    FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
+    STICKY_CONTENT: '.sticky-top'
+  };
+  /**
+   * ------------------------------------------------------------------------
+   * Class Definition
+   * ------------------------------------------------------------------------
+   */
+
+  var Modal =
+  /*#__PURE__*/
+  function () {
+    function Modal(element, config) {
+      this._config = this._getConfig(config);
+      this._element = element;
+      this._dialog = element.querySelector(Selector$4.DIALOG);
+      this._backdrop = null;
+      this._isShown = false;
+      this._isBodyOverflowing = false;
+      this._ignoreBackdropClick = false;
+      this._isTransitioning = false;
+      this._scrollbarWidth = 0;
+    } // Getters
+
+
+    var _proto = Modal.prototype;
+
+    // Public
+    _proto.toggle = function toggle(relatedTarget) {
+      return this._isShown ? this.hide() : this.show(relatedTarget);
+    };
+
+    _proto.show = function show(relatedTarget) {
+      var _this = this;
+
+      if (this._isShown || this._isTransitioning) {
+        return;
+      }
+
+      if ($(this._element).hasClass(ClassName$4.FADE)) {
+        this._isTransitioning = true;
+      }
+
+      var showEvent = $.Event(Event$4.SHOW, {
+        relatedTarget: relatedTarget
+      });
+      $(this._element).trigger(showEvent);
+
+      if (this._isShown || showEvent.isDefaultPrevented()) {
+        return;
+      }
+
+      this._isShown = true;
+
+      this._checkScrollbar();
+
+      this._setScrollbar();
+
+      this._adjustDialog();
+
+      this._setEscapeEvent();
+
+      this._setResizeEvent();
+
+      $(this._element).on(Event$4.CLICK_DISMISS, Selector$4.DATA_DISMISS, function (event) {
+        return _this.hide(event);
+      });
+      $(this._dialog).on(Event$4.MOUSEDOWN_DISMISS, function () {
+        $(_this._element).one(Event$4.MOUSEUP_DISMISS, function (event) {
+          if ($(event.target).is(_this._element)) {
+            _this._ignoreBackdropClick = true;
+          }
+        });
+      });
+
+      this._showBackdrop(function () {
+        return _this._showElement(relatedTarget);
+      });
+    };
+
+    _proto.hide = function hide(event) {
+      var _this2 = this;
+
+      if (event) {
+        event.preventDefault();
+      }
+
+      if (!this._isShown || this._isTransitioning) {
+        return;
+      }
+
+      var hideEvent = $.Event(Event$4.HIDE);
+      $(this._element).trigger(hideEvent);
+
+      if (!this._isShown || hideEvent.isDefaultPrevented()) {
+        return;
+      }
+
+      this._isShown = false;
+      var transition = $(this._element).hasClass(ClassName$4.FADE);
+
+      if (transition) {
+        this._isTransitioning = true;
+      }
+
+      this._setEscapeEvent();
+
+      this._setResizeEvent();
+
+      $(document).off(Event$4.FOCUSIN);
+      $(this._element).removeClass(ClassName$4.SHOW);
+      $(this._element).off(Event$4.CLICK_DISMISS);
+      $(this._dialog).off(Event$4.MOUSEDOWN_DISMISS);
+
+      if (transition) {
+        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+        $(this._element).one(Util.TRANSITION_END, function (event) {
+          return _this2._hideModal(event);
+        }).emulateTransitionEnd(transitionDuration);
+      } else {
+        this._hideModal();
+      }
+    };
+
+    _proto.dispose = function dispose() {
+      [window, this._element, this._dialog].forEach(function (htmlElement) {
+        return $(htmlElement).off(EVENT_KEY$4);
+      });
+      /**
+       * `document` has 2 events `Event.FOCUSIN` and `Event.CLICK_DATA_API`
+       * Do not move `document` in `htmlElements` array
+       * It will remove `Event.CLICK_DATA_API` event that should remain
+       */
+
+      $(document).off(Event$4.FOCUSIN);
+      $.removeData(this._element, DATA_KEY$4);
+      this._config = null;
+      this._element = null;
+      this._dialog = null;
+      this._backdrop = null;
+      this._isShown = null;
+      this._isBodyOverflowing = null;
+      this._ignoreBackdropClick = null;
+      this._isTransitioning = null;
+      this._scrollbarWidth = null;
+    };
+
+    _proto.handleUpdate = function handleUpdate() {
+      this._adjustDialog();
+    } // Private
+    ;
+
+    _proto._getConfig = function _getConfig(config) {
+      config = _objectSpread2({}, Default$2, {}, config);
+      Util.typeCheckConfig(NAME$4, config, DefaultType$2);
+      return config;
+    };
+
+    _proto._triggerBackdropTransition = function _triggerBackdropTransition() {
+      var _this3 = this;
+
+      if (this._config.backdrop === 'static') {
+        var hideEventPrevented = $.Event(Event$4.HIDE_PREVENTED);
+        $(this._element).trigger(hideEventPrevented);
+
+        if (hideEventPrevented.defaultPrevented) {
+          return;
+        }
+
+        this._element.classList.add(ClassName$4.STATIC);
+
+        var modalTransitionDuration = Util.getTransitionDurationFromElement(this._element);
+        $(this._element).one(Util.TRANSITION_END, function () {
+          _this3._element.classList.remove(ClassName$4.STATIC);
+        }).emulateTransitionEnd(modalTransitionDuration);
+
+        this._element.focus();
+      } else {
+        this.hide();
+      }
+    };
+
+    _proto._showElement = function _showElement(relatedTarget) {
+      var _this4 = this;
+
+      var transition = $(this._element).hasClass(ClassName$4.FADE);
+      var modalBody = this._dialog ? this._dialog.querySelector(Selector$4.MODAL_BODY) : null;
+
+      if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
+        // Don't move modal's DOM position
+        document.body.appendChild(this._element);
+      }
+
+      this._element.style.display = 'block';
+
+      this._element.removeAttribute('aria-hidden');
+
+      this._element.setAttribute('aria-modal', true);
+
+      if ($(this._dialog).hasClass(ClassName$4.SCROLLABLE) && modalBody) {
+        modalBody.scrollTop = 0;
+      } else {
+        this._element.scrollTop = 0;
+      }
+
+      if (transition) {
+        Util.reflow(this._element);
+      }
+
+      $(this._element).addClass(ClassName$4.SHOW);
+
+      if (this._config.focus) {
+        this._enforceFocus();
+      }
+
+      var shownEvent = $.Event(Event$4.SHOWN, {
+        relatedTarget: relatedTarget
+      });
+
+      var transitionComplete = function transitionComplete() {
+        if (_this4._config.focus) {
+          _this4._element.focus();
+        }
+
+        _this4._isTransitioning = false;
+        $(_this4._element).trigger(shownEvent);
+      };
+
+      if (transition) {
+        var transitionDuration = Util.getTransitionDurationFromElement(this._dialog);
+        $(this._dialog).one(Util.TRANSITION_END, transitionComplete).emulateTransitionEnd(transitionDuration);
+      } else {
+        transitionComplete();
+      }
+    };
+
+    _proto._enforceFocus = function _enforceFocus() {
+      var _this5 = this;
+
+      $(document).off(Event$4.FOCUSIN) // Guard against infinite focus loop
+      .on(Event$4.FOCUSIN, function (event) {
+        if (document !== event.target && _this5._element !== event.target && $(_this5._element).has(event.target).length === 0) {
+          _this5._element.focus();
+        }
+      });
+    };
+
+    _proto._setEscapeEvent = function _setEscapeEvent() {
+      var _this6 = this;
+
+      if (this._isShown) {
+        $(this._element).on(Event$4.KEYDOWN_DISMISS, function (event) {
+          if (_this6._config.keyboard && event.which === ESCAPE_KEYCODE$1) {
+            event.preventDefault();
+
+            _this6.hide();
+          } else if (!_this6._config.keyboard && event.which === ESCAPE_KEYCODE$1) {
+            _this6._triggerBackdropTransition();
+          }
+        });
+      } else if (!this._isShown) {
+        $(this._element).off(Event$4.KEYDOWN_DISMISS);
+      }
+    };
+
+    _proto._setResizeEvent = function _setResizeEvent() {
+      var _this7 = this;
+
+      if (this._isShown) {
+        $(window).on(Event$4.RESIZE, function (event) {
+          return _this7.handleUpdate(event);
+        });
+      } else {
+        $(window).off(Event$4.RESIZE);
+      }
+    };
+
+    _proto._hideModal = function _hideModal() {
+      var _this8 = this;
+
+      this._element.style.display = 'none';
+
+      this._element.setAttribute('aria-hidden', true);
+
+      this._element.removeAttribute('aria-modal');
+
+      this._isTransitioning = false;
+
+      this._showBackdrop(function () {
+        $(document.body).removeClass(ClassName$4.OPEN);
+
+        _this8._resetAdjustments();
+
+        _this8._resetScrollbar();
+
+        $(_this8._element).trigger(Event$4.HIDDEN);
+      });
+    };
+
+    _proto._removeBackdrop = function _removeBackdrop() {
+      if (this._backdrop) {
+        $(this._backdrop).remove();
+        this._backdrop = null;
+      }
+    };
+
+    _proto._showBackdrop = function _showBackdrop(callback) {
+      var _this9 = this;
+
+      var animate = $(this._element).hasClass(ClassName$4.FADE) ? ClassName$4.FADE : '';
+
+      if (this._isShown && this._config.backdrop) {
+        this._backdrop = document.createElement('div');
+        this._backdrop.className = ClassName$4.BACKDROP;
+
+        if (animate) {
+          this._backdrop.classList.add(animate);
+        }
+
+        $(this._backdrop).appendTo(document.body);
+        $(this._element).on(Event$4.CLICK_DISMISS, function (event) {
+          if (_this9._ignoreBackdropClick) {
+            _this9._ignoreBackdropClick = false;
+            return;
+          }
+
+          if (event.target !== event.currentTarget) {
+            return;
+          }
+
+          _this9._triggerBackdropTransition();
+        });
+
+        if (animate) {
+          Util.reflow(this._backdrop);
+        }
+
+        $(this._backdrop).addClass(ClassName$4.SHOW);
+
+        if (!callback) {
+          return;
+        }
+
+        if (!animate) {
+          callback();
+          return;
+        }
+
+        var backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
+        $(this._backdrop).one(Util.TRANSITION_END, callback).emulateTransitionEnd(backdropTransitionDuration);
+      } else if (!this._isShown && this._backdrop) {
+        $(this._backdrop).removeClass(ClassName$4.SHOW);
+
+        var callbackRemove = function callbackRemove() {
+          _this9._removeBackdrop();
+
+          if (callback) {
+            callback();
+          }
+        };
+
+        if ($(this._element).hasClass(ClassName$4.FADE)) {
+          var _backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
+
+          $(this._backdrop).one(Util.TRANSITION_END, callbackRemove).emulateTransitionEnd(_backdropTransitionDuration);
+        } else {
+          callbackRemove();
+        }
+      } else if (callback) {
+        callback();
+      }
+    } // ----------------------------------------------------------------------
+    // the following methods are used to handle overflowing modals
+    // todo (fat): these should probably be refactored out of modal.js
+    // ----------------------------------------------------------------------
+    ;
+
+    _proto._adjustDialog = function _adjustDialog() {
+      var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
+
+      if (!this._isBodyOverflowing && isModalOverflowing) {
+        this._element.style.paddingLeft = this._scrollbarWidth + "px";
+      }
+
+      if (this._isBodyOverflowing && !isModalOverflowing) {
+        this._element.style.paddingRight = this._scrollbarWidth + "px";
+      }
+    };
+
+    _proto._resetAdjustments = function _resetAdjustments() {
+      this._element.style.paddingLeft = '';
+      this._element.style.paddingRight = '';
+    };
+
+    _proto._checkScrollbar = function _checkScrollbar() {
+      var rect = document.body.getBoundingClientRect();
+      this._isBodyOverflowing = rect.left + rect.right < window.innerWidth;
+      this._scrollbarWidth = this._getScrollbarWidth();
+    };
+
+    _proto._setScrollbar = function _setScrollbar() {
+      var _this10 = this;
+
+      if (this._isBodyOverflowing) {
+        // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
+        //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
+        var fixedContent = [].slice.call(document.querySelectorAll(Selector$4.FIXED_CONTENT));
+        var stickyContent = [].slice.call(document.querySelectorAll(Selector$4.STICKY_CONTENT)); // Adjust fixed content padding
+
+        $(fixedContent).each(function (index, element) {
+          var actualPadding = element.style.paddingRight;
+          var calculatedPadding = $(element).css('padding-right');
+          $(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this10._scrollbarWidth + "px");
+        }); // Adjust sticky content margin
+
+        $(stickyContent).each(function (index, element) {
+          var actualMargin = element.style.marginRight;
+          var calculatedMargin = $(element).css('margin-right');
+          $(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this10._scrollbarWidth + "px");
+        }); // Adjust body padding
+
+        var actualPadding = document.body.style.paddingRight;
+        var calculatedPadding = $(document.body).css('padding-right');
+        $(document.body).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + this._scrollbarWidth + "px");
+      }
+
+      $(document.body).addClass(ClassName$4.OPEN);
+    };
+
+    _proto._resetScrollbar = function _resetScrollbar() {
+      // Restore fixed content padding
+      var fixedContent = [].slice.call(document.querySelectorAll(Selector$4.FIXED_CONTENT));
+      $(fixedContent).each(function (index, element) {
+        var padding = $(element).data('padding-right');
+        $(element).removeData('padding-right');
+        element.style.paddingRight = padding ? padding : '';
+      }); // Restore sticky content
+
+      var elements = [].slice.call(document.querySelectorAll("" + Selector$4.STICKY_CONTENT));
+      $(elements).each(function (index, element) {
+        var margin = $(element).data('margin-right');
+
+        if (typeof margin !== 'undefined') {
+          $(element).css('margin-right', margin).removeData('margin-right');
+        }
+      }); // Restore body padding
+
+      var padding = $(document.body).data('padding-right');
+      $(document.body).removeData('padding-right');
+      document.body.style.paddingRight = padding ? padding : '';
+    };
+
+    _proto._getScrollbarWidth = function _getScrollbarWidth() {
+      // thx d.walsh
+      var scrollDiv = document.createElement('div');
+      scrollDiv.className = ClassName$4.SCROLLBAR_MEASURER;
+      document.body.appendChild(scrollDiv);
+      var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+      document.body.removeChild(scrollDiv);
+      return scrollbarWidth;
+    } // Static
+    ;
+
+    Modal._jQueryInterface = function _jQueryInterface(config, relatedTarget) {
+      return this.each(function () {
+        var data = $(this).data(DATA_KEY$4);
+
+        var _config = _objectSpread2({}, Default$2, {}, $(this).data(), {}, typeof config === 'object' && config ? config : {});
+
+        if (!data) {
+          data = new Modal(this, _config);
+          $(this).data(DATA_KEY$4, data);
+        }
+
+        if (typeof config === 'string') {
+          if (typeof data[config] === 'undefined') {
+            throw new TypeError("No method named \"" + config + "\"");
+          }
+
+          data[config](relatedTarget);
+        } else if (_config.show) {
+          data.show(relatedTarget);
+        }
+      });
+    };
+
+    _createClass(Modal, null, [{
+      key: "VERSION",
+      get: function get() {
+        return VERSION$4;
+      }
+    }, {
+      key: "Default",
+      get: function get() {
+        return Default$2;
+      }
+    }]);
+
+    return Modal;
+  }();
+  /**
+   * ------------------------------------------------------------------------
+   * Data Api implementation
+   * ------------------------------------------------------------------------
+   */
+
+
+  $(document).on(Event$4.CLICK_DATA_API, Selector$4.DATA_TOGGLE, function (event) {
+    var _this11 = this;
+
+    var target;
+    var selector = Util.getSelectorFromElement(this);
+
+    if (selector) {
+      target = document.querySelector(selector);
+    }
+
+    var config = $(target).data(DATA_KEY$4) ? 'toggle' : _objectSpread2({}, $(target).data(), {}, $(this).data());
+
+    if (this.tagName === 'A' || this.tagName === 'AREA') {
+      event.preventDefault();
+    }
+
+    var $target = $(target).one(Event$4.SHOW, function (showEvent) {
+      if (showEvent.isDefaultPrevented()) {
+        // Only register focus restorer if modal will actually get shown
+        return;
+      }
+
+      $target.one(Event$4.HIDDEN, function () {
+        if ($(_this11).is(':visible')) {
+          _this11.focus();
+        }
+      });
+    });
+
+    Modal._jQueryInterface.call($(target), config, this);
+  });
+  /**
+   * ------------------------------------------------------------------------
+   * jQuery
+   * ------------------------------------------------------------------------
+   */
+
+  $.fn[NAME$4] = Modal._jQueryInterface;
+  $.fn[NAME$4].Constructor = Modal;
+
+  $.fn[NAME$4].noConflict = function () {
+    $.fn[NAME$4] = JQUERY_NO_CONFLICT$4;
+    return Modal._jQueryInterface;
+  };
+
+  /**
    * --------------------------------------------------------------------------
    * Bootstrap (v4.4.1): tools/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -4683,15 +5289,15 @@
    * ------------------------------------------------------------------------
    */
 
-  var NAME$4 = 'tooltip';
-  var VERSION$4 = '4.4.1';
-  var DATA_KEY$4 = 'sc.tooltip';
-  var EVENT_KEY$4 = "." + DATA_KEY$4;
-  var JQUERY_NO_CONFLICT$4 = $.fn[NAME$4];
+  var NAME$5 = 'tooltip';
+  var VERSION$5 = '4.4.1';
+  var DATA_KEY$5 = 'sc.tooltip';
+  var EVENT_KEY$5 = "." + DATA_KEY$5;
+  var JQUERY_NO_CONFLICT$5 = $.fn[NAME$5];
   var CLASS_PREFIX = 'sc-tooltip';
   var SCCLS_PREFIX_REGEX = new RegExp("(^|\\s)" + CLASS_PREFIX + "\\S+", 'g');
   var DISALLOWED_ATTRIBUTES = ['sanitize', 'whiteList', 'sanitizeFn'];
-  var DefaultType$2 = {
+  var DefaultType$3 = {
     animation: 'boolean',
     template: 'string',
     title: '(string|element|function)',
@@ -4716,7 +5322,7 @@
     BOTTOM: 'bottom',
     LEFT: 'left'
   };
-  var Default$2 = {
+  var Default$3 = {
     animation: true,
     template: '<div class="tooltip" role="tooltip">' + '<div class="arrow"></div>' + '<div class="tooltip-inner"></div></div>',
     trigger: 'hover focus',
@@ -4738,23 +5344,23 @@
     SHOW: 'show',
     OUT: 'out'
   };
-  var Event$4 = {
-    HIDE: "hide" + EVENT_KEY$4,
-    HIDDEN: "hidden" + EVENT_KEY$4,
-    SHOW: "show" + EVENT_KEY$4,
-    SHOWN: "shown" + EVENT_KEY$4,
-    INSERTED: "inserted" + EVENT_KEY$4,
-    CLICK: "click" + EVENT_KEY$4,
-    FOCUSIN: "focusin" + EVENT_KEY$4,
-    FOCUSOUT: "focusout" + EVENT_KEY$4,
-    MOUSEENTER: "mouseenter" + EVENT_KEY$4,
-    MOUSELEAVE: "mouseleave" + EVENT_KEY$4
+  var Event$5 = {
+    HIDE: "hide" + EVENT_KEY$5,
+    HIDDEN: "hidden" + EVENT_KEY$5,
+    SHOW: "show" + EVENT_KEY$5,
+    SHOWN: "shown" + EVENT_KEY$5,
+    INSERTED: "inserted" + EVENT_KEY$5,
+    CLICK: "click" + EVENT_KEY$5,
+    FOCUSIN: "focusin" + EVENT_KEY$5,
+    FOCUSOUT: "focusout" + EVENT_KEY$5,
+    MOUSEENTER: "mouseenter" + EVENT_KEY$5,
+    MOUSELEAVE: "mouseleave" + EVENT_KEY$5
   };
-  var ClassName$4 = {
+  var ClassName$5 = {
     FADE: 'fade',
     SHOW: 'show'
   };
-  var Selector$4 = {
+  var Selector$5 = {
     TOOLTIP: '.tooltip',
     TOOLTIP_INNER: '.tooltip-inner',
     ARROW: '.arrow'
@@ -4838,7 +5444,7 @@
       } else {
         // _activeTriggerがfalseの場合
         // tipelementがshowクラスを持っていたら
-        if ($(this.getTipElement()).hasClass(ClassName$4.SHOW)) {
+        if ($(this.getTipElement()).hasClass(ClassName$5.SHOW)) {
           // hide処理を実行
           this._leave(null, this); // 処理終了
 
@@ -4921,7 +5527,7 @@
 
         if (this.config.animation) {
           // fadeクラスを付与する
-          $(tip).addClass(ClassName$4.FADE);
+          $(tip).addClass(ClassName$5.FADE);
         } // placementがfunctionなら、実行する
         // functionじゃない場合は、this.config.placementを入れる
 
@@ -4952,7 +5558,7 @@
 
         this._popper = new Popper(this.element, tip, this._getPopperConfig(attachment)); // tipにshowクラスを設定する
 
-        $(tip).addClass(ClassName$4.SHOW); // iOSのために、空のマウスオーバリスナーを追加
+        $(tip).addClass(ClassName$5.SHOW); // iOSのために、空のマウスオーバリスナーを追加
         // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
         if ('ontouchstart' in document.documentElement) {
@@ -4980,7 +5586,7 @@
         }; // tipがfadeクラスをもってたら
 
 
-        if ($(this.tip).hasClass(ClassName$4.FADE)) {
+        if ($(this.tip).hasClass(ClassName$5.FADE)) {
           // tip要素から遷移時間を取得
           var transitionDuration = Util.getTransitionDurationFromElement(this.tip); // tipに一度だけ(one)実行されるcompleteをバインド
 
@@ -5037,7 +5643,7 @@
       } // tipからshowクラスを削除する
 
 
-      $(tip).removeClass(ClassName$4.SHOW); // iOSのために、空のマウスオーバリスナーを追加
+      $(tip).removeClass(ClassName$5.SHOW); // iOSのために、空のマウスオーバリスナーを追加
       // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
       if ('ontouchstart' in document.documentElement) {
@@ -5049,7 +5655,7 @@
       this._activeTrigger[Trigger.FOCUS] = false;
       this._activeTrigger[Trigger.HOVER] = false; // tipがfadeクラスを持ってたら
 
-      if ($(this.tip).hasClass(ClassName$4.FADE)) {
+      if ($(this.tip).hasClass(ClassName$5.FADE)) {
         // tip要素から遷移時間を取得
         var transitionDuration = Util.getTransitionDurationFromElement(tip); // tipに一度だけ(one)実行されるcompleteをバインド
 
@@ -5093,9 +5699,9 @@
       // tipのelementを取得する
       var tip = this.getTipElement(); // tipにテキストを設定する
 
-      this.setElementContent($(tip.querySelectorAll(Selector$4.TOOLTIP_INNER)), this.getTitle()); // tipからfadeとshowクラスを削除する
+      this.setElementContent($(tip.querySelectorAll(Selector$5.TOOLTIP_INNER)), this.getTitle()); // tipからfadeとshowクラスを削除する
 
-      $(tip).removeClass(ClassName$4.FADE + " " + ClassName$4.SHOW);
+      $(tip).removeClass(ClassName$5.FADE + " " + ClassName$5.SHOW);
     } // elementは.tooltip-inner
     // contentはtitle
     ;
@@ -5161,7 +5767,7 @@
             behavior: this.config.fallbackPlacement
           },
           arrow: {
-            element: Selector$4.ARROW
+            element: Selector$5.ARROW
           },
           preventOverflow: {
             boundariesElement: this.config.boundary
@@ -5321,7 +5927,7 @@
       } // div.tooltipがshowクラスを持っているもしくは、contextの_hoverStateがshowだった場合
 
 
-      if ($(context.getTipElement()).hasClass(ClassName$4.SHOW) || context._hoverState === HoverState.SHOW) {
+      if ($(context.getTipElement()).hasClass(ClassName$5.SHOW) || context._hoverState === HoverState.SHOW) {
         // context._hoverStateにshowを入れる
         context._hoverState = HoverState.SHOW;
         return;
@@ -5447,7 +6053,7 @@
       // 例えば、configのanimationの型はbooleanかどうかとか
 
 
-      Util.typeCheckConfig(NAME$4, config, this.constructor.DefaultType); // config.sanitizeがtrueなら
+      Util.typeCheckConfig(NAME$5, config, this.constructor.DefaultType); // config.sanitizeがtrueなら
       // Defaultはtrue
 
       if (config.sanitize) {
@@ -5512,7 +6118,7 @@
       } // tipのfadeクラスを削除する
 
 
-      $(tip).removeClass(ClassName$4.FADE); // configのanimetionをfalseにする
+      $(tip).removeClass(ClassName$5.FADE); // configのanimetionをfalseにする
 
       this.config.animation = false; // tolltipのhideを実行
 
@@ -5530,7 +6136,7 @@
       return this.each(function () {
         // $('#target').tooltipみたいな形な記述があればtooltipが入る
         // その時、configに指定された値が入る。placement : 'top'とか
-        var data = $(this).data(DATA_KEY$4); // configがobjectならobjectを_configに入れる
+        var data = $(this).data(DATA_KEY$5); // configがobjectならobjectを_configに入れる
         // それ以外(undefinedとかshowとか)ならfalseを入れる
 
         var _config = typeof config === 'object' && config; // dataがundefinedで、configがdisposeまたは、hideにマッチする場合
@@ -5549,7 +6155,7 @@
           data = new Tooltip(this, _config); // elementsに対して、sc.tooltipって名前でdata(tooltipのインスタンス)
           // を設定する
 
-          $(this).data(DATA_KEY$4, data);
+          $(this).data(DATA_KEY$5, data);
         } // configがstringの場合(showとか)
 
 
@@ -5569,37 +6175,37 @@
     _createClass(Tooltip, null, [{
       key: "VERSION",
       get: function get() {
-        return VERSION$4;
+        return VERSION$5;
       }
     }, {
       key: "Default",
       get: function get() {
-        return Default$2;
+        return Default$3;
       }
     }, {
       key: "NAME",
       get: function get() {
-        return NAME$4;
+        return NAME$5;
       }
     }, {
       key: "DATA_KEY",
       get: function get() {
-        return DATA_KEY$4;
+        return DATA_KEY$5;
       }
     }, {
       key: "Event",
       get: function get() {
-        return Event$4;
+        return Event$5;
       }
     }, {
       key: "EVENT_KEY",
       get: function get() {
-        return EVENT_KEY$4;
+        return EVENT_KEY$5;
       }
     }, {
       key: "DefaultType",
       get: function get() {
-        return DefaultType$2;
+        return DefaultType$3;
       }
     }]);
 
@@ -5612,11 +6218,11 @@
    */
 
 
-  $.fn[NAME$4] = Tooltip._jQueryInterface;
-  $.fn[NAME$4].Constructor = Tooltip;
+  $.fn[NAME$5] = Tooltip._jQueryInterface;
+  $.fn[NAME$5].Constructor = Tooltip;
 
-  $.fn[NAME$4].noConflict = function () {
-    $.fn[NAME$4] = JQUERY_NO_CONFLICT$4;
+  $.fn[NAME$5].noConflict = function () {
+    $.fn[NAME$5] = JQUERY_NO_CONFLICT$5;
     return Tooltip._jQueryInterface;
   };
 
@@ -5626,44 +6232,44 @@
    * ------------------------------------------------------------------------
    */
 
-  var NAME$5 = 'popover';
-  var VERSION$5 = '4.4.1';
-  var DATA_KEY$5 = 'sc.popover';
-  var EVENT_KEY$5 = "." + DATA_KEY$5;
-  var JQUERY_NO_CONFLICT$5 = $.fn[NAME$5];
+  var NAME$6 = 'popover';
+  var VERSION$6 = '4.4.1';
+  var DATA_KEY$6 = 'sc.popover';
+  var EVENT_KEY$6 = "." + DATA_KEY$6;
+  var JQUERY_NO_CONFLICT$6 = $.fn[NAME$6];
   var CLASS_PREFIX$1 = 'sc-popover';
   var SCCLS_PREFIX_REGEX$1 = new RegExp("(^|\\s)" + CLASS_PREFIX$1 + "\\S+", 'g');
 
-  var Default$3 = _objectSpread2({}, Tooltip.Default, {
+  var Default$4 = _objectSpread2({}, Tooltip.Default, {
     placement: 'right',
     trigger: 'click',
     content: '',
     template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body"></div></div>'
   });
 
-  var DefaultType$3 = _objectSpread2({}, Tooltip.DefaultType, {
+  var DefaultType$4 = _objectSpread2({}, Tooltip.DefaultType, {
     content: '(string|element|function)'
   });
 
-  var ClassName$5 = {
+  var ClassName$6 = {
     FADE: 'fade',
     SHOW: 'show'
   };
-  var Selector$5 = {
+  var Selector$6 = {
     TITLE: '.popover-header',
     CONTENT: '.popover-body'
   };
-  var Event$5 = {
-    HIDE: "hide" + EVENT_KEY$5,
-    HIDDEN: "hidden" + EVENT_KEY$5,
-    SHOW: "show" + EVENT_KEY$5,
-    SHOWN: "shown" + EVENT_KEY$5,
-    INSERTED: "inserted" + EVENT_KEY$5,
-    CLICK: "click" + EVENT_KEY$5,
-    FOCUSIN: "focusin" + EVENT_KEY$5,
-    FOCUSOUT: "focusout" + EVENT_KEY$5,
-    MOUSEENTER: "mouseenter" + EVENT_KEY$5,
-    MOUSELEAVE: "mouseleave" + EVENT_KEY$5
+  var Event$6 = {
+    HIDE: "hide" + EVENT_KEY$6,
+    HIDDEN: "hidden" + EVENT_KEY$6,
+    SHOW: "show" + EVENT_KEY$6,
+    SHOWN: "shown" + EVENT_KEY$6,
+    INSERTED: "inserted" + EVENT_KEY$6,
+    CLICK: "click" + EVENT_KEY$6,
+    FOCUSIN: "focusin" + EVENT_KEY$6,
+    FOCUSOUT: "focusout" + EVENT_KEY$6,
+    MOUSEENTER: "mouseenter" + EVENT_KEY$6,
+    MOUSELEAVE: "mouseleave" + EVENT_KEY$6
   };
   /**
    * ------------------------------------------------------------------------
@@ -5708,7 +6314,7 @@
       // .popover-headerと['data-original-title']属性のタイトルが引数
       // .popover-headerにthis.getTitle()で取得したテキストを設定する
 
-      this.setElementContent($tip.find(Selector$5.TITLE), this.getTitle()); // ['data-content']属性の値を取得
+      this.setElementContent($tip.find(Selector$6.TITLE), this.getTitle()); // ['data-content']属性の値を取得
 
       var content = this._getContent(); // コンテンツがfunctionの場合
 
@@ -5719,9 +6325,9 @@
       } // .popover-bodyに対して、contentのテキストを設定する
 
 
-      this.setElementContent($tip.find(Selector$5.CONTENT), content); // tipのfadeクラスとshowクラスを削除する
+      this.setElementContent($tip.find(Selector$6.CONTENT), content); // tipのfadeクラスとshowクラスを削除する
 
-      $tip.removeClass(ClassName$5.FADE + " " + ClassName$5.SHOW);
+      $tip.removeClass(ClassName$6.FADE + " " + ClassName$6.SHOW);
     } // Private
     ;
 
@@ -5748,7 +6354,7 @@
       return this.each(function () {
         // thisはdata-toggle="popover"を持った要素
         // その要素から、DATA_KEYの値を取得する
-        var data = $(this).data(DATA_KEY$5); // configがibjectなら、_configに代入する
+        var data = $(this).data(DATA_KEY$6); // configがibjectなら、_configに代入する
         // オブジェクトじゃないならnullを代入する
 
         var _config = typeof config === 'object' ? config : null; // dataが存在していなくて、disposeとhideがconfigに含まれている場合
@@ -5765,7 +6371,7 @@
           // _configはobjectかnull
           data = new Popover(this, _config); // popover要素にDATA_KEY名でPopoverのインスタンスを設定する
 
-          $(this).data(DATA_KEY$5, data);
+          $(this).data(DATA_KEY$6, data);
         } // dataがあった場合
         // configがstringの場合
 
@@ -5787,37 +6393,37 @@
       key: "VERSION",
       // Getters
       get: function get() {
-        return VERSION$5;
+        return VERSION$6;
       }
     }, {
       key: "Default",
       get: function get() {
-        return Default$3;
+        return Default$4;
       }
     }, {
       key: "NAME",
       get: function get() {
-        return NAME$5;
+        return NAME$6;
       }
     }, {
       key: "DATA_KEY",
       get: function get() {
-        return DATA_KEY$5;
+        return DATA_KEY$6;
       }
     }, {
       key: "Event",
       get: function get() {
-        return Event$5;
+        return Event$6;
       }
     }, {
       key: "EVENT_KEY",
       get: function get() {
-        return EVENT_KEY$5;
+        return EVENT_KEY$6;
       }
     }, {
       key: "DefaultType",
       get: function get() {
-        return DefaultType$3;
+        return DefaultType$4;
       }
     }]);
 
@@ -5830,11 +6436,11 @@
    */
 
 
-  $.fn[NAME$5] = Popover._jQueryInterface;
-  $.fn[NAME$5].Constructor = Popover;
+  $.fn[NAME$6] = Popover._jQueryInterface;
+  $.fn[NAME$6].Constructor = Popover;
 
-  $.fn[NAME$5].noConflict = function () {
-    $.fn[NAME$5] = JQUERY_NO_CONFLICT$5;
+  $.fn[NAME$6].noConflict = function () {
+    $.fn[NAME$6] = JQUERY_NO_CONFLICT$6;
     return Popover._jQueryInterface;
   };
 
@@ -5842,6 +6448,7 @@
   exports.Button = Button;
   exports.Collapse = Collapse;
   exports.Dropdown = Dropdown;
+  exports.Modal = Modal;
   exports.Popover = Popover;
   exports.Tooltip = Tooltip;
   exports.Util = Util;
