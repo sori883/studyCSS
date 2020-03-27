@@ -15,6 +15,7 @@ const plugins = [
     externalHelpersWhitelist: [ // 必要なhelperのみを追加
       'defineProperties',
       'createClass',
+      'createSuper',
       'inheritsLoose',
       'defineProperty',
       'objectSpread2'
@@ -27,7 +28,6 @@ const globals = {
   'popper.js': 'Popper'
 }
 
-// popper用に残しておくけどjqueryだけだと意味ないよ
 if (BUNDLE) {
   fileDest = 'simplicss.bundle.js'
   external.pop()
