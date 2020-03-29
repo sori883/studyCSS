@@ -4,8 +4,8 @@
   (global = global || self, factory(global.simplicss = {}, global.jQuery, global.Popper));
 }(this, (function (exports, $, Popper) { 'use strict';
 
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
-  Popper = Popper && Popper.hasOwnProperty('default') ? Popper['default'] : Popper;
+  $ = $ && Object.prototype.hasOwnProperty.call($, 'default') ? $['default'] : $;
+  Popper = Popper && Object.prototype.hasOwnProperty.call(Popper, 'default') ? Popper['default'] : Popper;
 
   function _defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
@@ -325,9 +325,7 @@
     SHOW: 'show'
   };
 
-  var Alert =
-  /*#__PURE__*/
-  function () {
+  var Alert = /*#__PURE__*/function () {
     function Alert(element) {
       this._element = element;
     } // バージョンのゲッター
@@ -545,9 +543,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var Button =
-  /*#__PURE__*/
-  function () {
+  var Button = /*#__PURE__*/function () {
     function Button(element) {
       this._element = element;
     } // バージョンのゲッター
@@ -804,9 +800,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var Collapse =
-  /*#__PURE__*/
-  function () {
+  var Collapse = /*#__PURE__*/function () {
     function Collapse(element, config) {
       this._isTransitioning = false;
       this._element = element; // cofigを取得
@@ -1343,9 +1337,7 @@
    * ------------------------------------------------------------------------
    */
 
-  var Dropdown =
-  /*#__PURE__*/
-  function () {
+  var Dropdown = /*#__PURE__*/function () {
     // button.dropdown-toggleと、configがobjectならobject、違うならnull
     function Dropdown(element, config) {
       this._element = element;
@@ -1924,7 +1916,7 @@
 
   var NAME$4 = 'modal';
   var VERSION$4 = '4.4.1';
-  var DATA_KEY$4 = 'bs.modal';
+  var DATA_KEY$4 = 'sc.modal';
   var EVENT_KEY$4 = "." + DATA_KEY$4;
   var DATA_API_KEY$4 = '.data-api';
   var JQUERY_NO_CONFLICT$4 = $.fn[NAME$4];
@@ -1979,12 +1971,13 @@
    * ------------------------------------------------------------------------
    */
 
-  var Modal =
-  /*#__PURE__*/
-  function () {
+  var Modal = /*#__PURE__*/function () {
     function Modal(element, config) {
-      this._config = this._getConfig(config);
-      this._element = element;
+      // configを取得
+      this._config = this._getConfig(config); // modal要素
+
+      this._element = element; // .modal-dialog要素を取得する
+
       this._dialog = element.querySelector(Selector$4.DIALOG);
       this._backdrop = null;
       this._isShown = false;
@@ -1999,51 +1992,77 @@
 
     // Public
     _proto.toggle = function toggle(relatedTarget) {
+      // isShownがtrueだった場合は、hideを実行
+      // falseの場合は、クリックされるbtn要素を引数に、showを実行
       return this._isShown ? this.hide() : this.show(relatedTarget);
     };
 
     _proto.show = function show(relatedTarget) {
       var _this = this;
 
+      // isShownか_isTransitioningがtrueの場合は処理終了
       if (this._isShown || this._isTransitioning) {
         return;
-      }
+      } // modal要素が、fadeクラスを持っていたら
+
 
       if ($(this._element).hasClass(ClassName$4.FADE)) {
+        // _isTransitioningにtrueを代入
         this._isTransitioning = true;
-      }
+      } // showイベントをrelatedTargetに対して、定義する。
+
 
       var showEvent = $.Event(Event$4.SHOW, {
         relatedTarget: relatedTarget
-      });
-      $(this._element).trigger(showEvent);
+      }); // modalイベントに対してshowイベントを発動する
+
+      $(this._element).trigger(showEvent); // isShownがtrueもしくは、showEvenetがブラウザの動作を停止していた場合
+      // 処理終了
 
       if (this._isShown || showEvent.isDefaultPrevented()) {
         return;
-      }
+      } // isShownをtrueにする
 
-      this._isShown = true;
 
-      this._checkScrollbar();
+      this._isShown = true; // スクロールバーが存在するか確認し
+      // スクロールバーの横幅を取得
 
-      this._setScrollbar();
+      this._checkScrollbar(); // .modal-openでoverflow: hiddenにしたとき、
+      // 表示がくずれない用に、paddingかmarginを調整する
 
-      this._adjustDialog();
 
-      this._setEscapeEvent();
+      this._setScrollbar(); // modal要素の幅をスクロールバーに合わせて調整
 
-      this._setResizeEvent();
+
+      this._adjustDialog(); // ESCキー押下時のイベントをmodal要素に対して設定
+      // .modal-staticが付与されていたらアニメーションしながらフォーカスする。付与されていなかったらhide
+
+
+      this._setEscapeEvent(); // windowリサイズ時に、modal要素の横幅を調整する
+      // イベントを定義
+
+
+      this._setResizeEvent(); // modal要素に、click-dismissイベントを設定
+      // 対象セクレタのdata-dismiss='modal'クリック時に
+      // modalをhideする
+
 
       $(this._element).on(Event$4.CLICK_DISMISS, Selector$4.DATA_DISMISS, function (event) {
         return _this.hide(event);
-      });
+      }); // .modal-dialog要素に、マウスボタン押下時のイベントを定義する
+
       $(this._dialog).on(Event$4.MOUSEDOWN_DISMISS, function () {
+        // modal要素に対して、マウスボタンが離れた時のイベントをバインドする
         $(_this._element).one(Event$4.MOUSEUP_DISMISS, function (event) {
+          // event.target(マウスが離れた場所)とmodal要素が一致していた場合
           if ($(event.target).is(_this._element)) {
             _this._ignoreBackdropClick = true;
           }
         });
-      });
+      }); // _showBackdropはmodalが表示されていたらbackdropを表示して_showElementを実行
+      // modalが非表示ならbackdropを削除して_showElementを実行
+      // _config.backdropがfalseならcallbackを実行するだけ
+      // showElementはmodalを表示する
 
       this._showBackdrop(function () {
         return _this._showElement(relatedTarget);
@@ -2053,59 +2072,74 @@
     _proto.hide = function hide(event) {
       var _this2 = this;
 
+      // イベントがあったら停止
       if (event) {
         event.preventDefault();
-      }
+      } // modalが表示されているか、遷移中なら処理終了
+
 
       if (!this._isShown || this._isTransitioning) {
         return;
-      }
+      } // hideイベントを定義する
 
-      var hideEvent = $.Event(Event$4.HIDE);
-      $(this._element).trigger(hideEvent);
+
+      var hideEvent = $.Event(Event$4.HIDE); // modal要素に対して、hideイベントを実行する
+
+      $(this._element).trigger(hideEvent); // modalが表示いないまたは、hideEventがブラウザの動作を停止させている場合は処理終了
 
       if (!this._isShown || hideEvent.isDefaultPrevented()) {
         return;
-      }
+      } // isShownをfalseにする
 
-      this._isShown = false;
-      var transition = $(this._element).hasClass(ClassName$4.FADE);
+
+      this._isShown = false; // modal要素が.fadeを持っているか判定
+
+      var transition = $(this._element).hasClass(ClassName$4.FADE); // modal要素が.fadeを持っている場合
 
       if (transition) {
+        // _isTransitioningをtrueにする
         this._isTransitioning = true;
-      }
+      } // modal要素からエスケープキーでmodalをhideするイベントを削除する
 
-      this._setEscapeEvent();
 
-      this._setResizeEvent();
+      this._setEscapeEvent(); // modal要素からブラウザのリサイズイベントを削除する
 
-      $(document).off(Event$4.FOCUSIN);
-      $(this._element).removeClass(ClassName$4.SHOW);
-      $(this._element).off(Event$4.CLICK_DISMISS);
-      $(this._dialog).off(Event$4.MOUSEDOWN_DISMISS);
+
+      this._setResizeEvent(); // focusinイベントを削除
+
+
+      $(document).off(Event$4.FOCUSIN); // modal要素から.showを削除する
+
+      $(this._element).removeClass(ClassName$4.SHOW); // modal要素からクリックを離した時のイベントを削除する
+
+      $(this._element).off(Event$4.CLICK_DISMISS); // dialogからマウスダウンを離したときのイベントを削除する
+
+      $(this._dialog).off(Event$4.MOUSEDOWN_DISMISS); // modal要素が.fadeを持っていたら
 
       if (transition) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+        // modal要素の遷移時間を取得する
+        var transitionDuration = Util.getTransitionDurationFromElement(this._element); // 遷移終了時にmodalを非表示にする
+
         $(this._element).one(Util.TRANSITION_END, function (event) {
           return _this2._hideModal(event);
         }).emulateTransitionEnd(transitionDuration);
       } else {
+        // modalを非表示にする
         this._hideModal();
       }
     };
 
     _proto.dispose = function dispose() {
+      // window、this_element、this._dialogのイベントを削除する
       [window, this._element, this._dialog].forEach(function (htmlElement) {
         return $(htmlElement).off(EVENT_KEY$4);
-      });
-      /**
-       * `document` has 2 events `Event.FOCUSIN` and `Event.CLICK_DATA_API`
-       * Do not move `document` in `htmlElements` array
-       * It will remove `Event.CLICK_DATA_API` event that should remain
-       */
+      }); // documentには、Event.FOCUSIN`と `Event.CLICK_DATA_APIの2つのイベントがある
+      // documentのfocusinイベントを削除
 
-      $(document).off(Event$4.FOCUSIN);
-      $.removeData(this._element, DATA_KEY$4);
+      $(document).off(Event$4.FOCUSIN); // modal要素からdata_keyを削除する
+
+      $.removeData(this._element, DATA_KEY$4); // 各種設定初期化
+
       this._config = null;
       this._element = null;
       this._dialog = null;
@@ -2118,36 +2152,52 @@
     };
 
     _proto.handleUpdate = function handleUpdate() {
+      // modal要素の幅をスクロールバーに合わせて調整
       this._adjustDialog();
     } // Private
     ;
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2({}, Default$2, {}, config);
-      Util.typeCheckConfig(NAME$4, config, DefaultType$2);
+      // configにDefaultとconfigを格納する
+      config = _objectSpread2({}, Default$2, {}, config); // configの型がDefaultTypeと一致しているか確認
+      // 一致していなかった場合は、エラー
+
+      Util.typeCheckConfig(NAME$4, config, DefaultType$2); // configを返す
+
       return config;
     };
 
     _proto._triggerBackdropTransition = function _triggerBackdropTransition() {
       var _this3 = this;
 
+      // .modal-staticはアニメーションで要素をフォーカスする
+      // _config.backdropがstaticの場合（Defaultではstatic）
       if (this._config.backdrop === 'static') {
-        var hideEventPrevented = $.Event(Event$4.HIDE_PREVENTED);
-        $(this._element).trigger(hideEventPrevented);
+        // hidePreventedイベントを定義する
+        var hideEventPrevented = $.Event(Event$4.HIDE_PREVENTED); // modal要素に対してhideEventPreventedを実行する
+
+        $(this._element).trigger(hideEventPrevented); // イベントでブラウザのデフォルトの動作が停止されていた場合は処理終了
 
         if (hideEventPrevented.defaultPrevented) {
           return;
-        }
+        } // modal要素に.staticを追加
 
-        this._element.classList.add(ClassName$4.STATIC);
 
-        var modalTransitionDuration = Util.getTransitionDurationFromElement(this._element);
+        this._element.classList.add(ClassName$4.STATIC); // modal要素の遷移時間を取得
+
+
+        var modalTransitionDuration = Util.getTransitionDurationFromElement(this._element); // 遷移終了時のイベントをバインド
+
         $(this._element).one(Util.TRANSITION_END, function () {
+          // modal要素から.staticを削除
           _this3._element.classList.remove(ClassName$4.STATIC);
-        }).emulateTransitionEnd(modalTransitionDuration);
+        }).emulateTransitionEnd(modalTransitionDuration); // 遷移終了時のイベントを実行
 
-        this._element.focus();
+        this._element.focus(); // modal要素にフォーカスする
+
       } else {
+        // this._config.backdropがstaticじゃない場合は
+        // hideを実行
         this.hide();
       }
     };
@@ -2155,63 +2205,96 @@
     _proto._showElement = function _showElement(relatedTarget) {
       var _this4 = this;
 
-      var transition = $(this._element).hasClass(ClassName$4.FADE);
-      var modalBody = this._dialog ? this._dialog.querySelector(Selector$4.MODAL_BODY) : null;
+      // relatedTargetはbtnとかのトリガー要素
+      // this._elementはmodal要素
+      // modal要素が.fadeを持っているか判定
+      var transition = $(this._element).hasClass(ClassName$4.FADE); // this._dialogが存在する場合は、modal-body要素を取得する。
+      // 存在しない場合は、null
+
+      var modalBody = this._dialog ? this._dialog.querySelector(Selector$4.MODAL_BODY) : null; // modal要素の親要素が存在していないまたは、
+      // parentNodeのがエレメントじゃない場合
 
       if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
-        // Don't move modal's DOM position
+        // bodyにmodal要素を追加する
         document.body.appendChild(this._element);
-      }
+      } // modal要素にdisplay:block;を設定する
 
-      this._element.style.display = 'block';
 
-      this._element.removeAttribute('aria-hidden');
+      this._element.style.display = 'block'; // modal要素のaria-hidden属性を削除する
 
-      this._element.setAttribute('aria-modal', true);
+      this._element.removeAttribute('aria-hidden'); // modal要素に、aria-modal="true"を設定する
+
+
+      this._element.setAttribute('aria-modal', true); // .modal-dialogが.modal-dialog-scrollableを持っているかつ、
+      // .modal-body要素が存在する場合
+
 
       if ($(this._dialog).hasClass(ClassName$4.SCROLLABLE) && modalBody) {
+        // .modal-bodyのスクロール位置を0にする
         modalBody.scrollTop = 0;
       } else {
+        // modal要素のスクロール位置を0にする
         this._element.scrollTop = 0;
-      }
+      } // modal要素が.fadeを持っている場合
+
 
       if (transition) {
+        // modal要素のpaddingとborderを含む
+        // 高さを取得する
         Util.reflow(this._element);
-      }
+      } // modal要素に.showを追加する
 
-      $(this._element).addClass(ClassName$4.SHOW);
+
+      $(this._element).addClass(ClassName$4.SHOW); // _config.focusがtrueの場合
 
       if (this._config.focus) {
+        // modal要素をフォーカスする
         this._enforceFocus();
-      }
+      } // shownイベントを定義する
+
 
       var shownEvent = $.Event(Event$4.SHOWN, {
         relatedTarget: relatedTarget
-      });
+      }); // 遷移完了後のイベントを定義
 
       var transitionComplete = function transitionComplete() {
+        // _config.focusがtrueならフォーカスする
         if (_this4._config.focus) {
           _this4._element.focus();
-        }
+        } // _isTransitioningをfalseにする
 
-        _this4._isTransitioning = false;
+
+        _this4._isTransitioning = false; // modal要素に対して、shownEventを発動する
+
         $(_this4._element).trigger(shownEvent);
-      };
+      }; // modal要素が.fadeを持っている場合
+
 
       if (transition) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._dialog);
+        // .modal-dialog要素から遷移時間を取得
+        var transitionDuration = Util.getTransitionDurationFromElement(this._dialog); // modal-dialogにtransisionendイベントをバインドして
+        // 遷移時間分ずらして実行
+
         $(this._dialog).one(Util.TRANSITION_END, transitionComplete).emulateTransitionEnd(transitionDuration);
       } else {
+        // modal要素が.fadeをもっていない場合は、
+        // transitionCompleteを実行する
         transitionComplete();
       }
-    };
+    } // modal要素をフォーカスする
+    ;
 
     _proto._enforceFocus = function _enforceFocus() {
       var _this5 = this;
 
-      $(document).off(Event$4.FOCUSIN) // Guard against infinite focus loop
+      $(document).off(Event$4.FOCUSIN) // 無限フォーカスループにならないように、フォーカスイベントを削除する
       .on(Event$4.FOCUSIN, function (event) {
-        if (document !== event.target && _this5._element !== event.target && $(_this5._element).has(event.target).length === 0) {
+        // フォーカスイベントをバインドする
+        if (document !== event.target && // event.targetとdocumentが一致しない
+        _this5._element !== event.target && // event.targetとmodal要素が一致しない
+        $(_this5._element).has(event.target).length === 0) {
+          // modal要素にevent.targetが存在しない場合
+          // modal要素をフォーカスする
           _this5._element.focus();
         }
       });
@@ -2221,16 +2304,25 @@
       var _this6 = this;
 
       if (this._isShown) {
+        // isShownがtrueだった場合（show関数の冒頭でtrueにしてる）
+        // modal要素に、keydown.dismissイベントをバインドする
         $(this._element).on(Event$4.KEYDOWN_DISMISS, function (event) {
+          //  _config.keyboardがtrueで、エスケープキーを謳歌された場合
           if (_this6._config.keyboard && event.which === ESCAPE_KEYCODE$1) {
-            event.preventDefault();
+            // エスケープキーのデフォルト動作を停止する
+            event.preventDefault(); // hideを実行
 
             _this6.hide();
           } else if (!_this6._config.keyboard && event.which === ESCAPE_KEYCODE$1) {
+            // _config.keyboardがfalseで、エスケープキーが押下されたとき
+            // backdropが'static'の場合は、要素をアニメーションしながらフォーカスする
+            // staticじゃない場合はhideする
             _this6._triggerBackdropTransition();
           }
         });
       } else if (!this._isShown) {
+        // modalが表示されていないとき
+        // modalから、キーイベントを削除する
         $(this._element).off(Event$4.KEYDOWN_DISMISS);
       }
     };
@@ -2238,11 +2330,15 @@
     _proto._setResizeEvent = function _setResizeEvent() {
       var _this7 = this;
 
+      // modalが表示されていたら
       if (this._isShown) {
+        // windowのリサイズ時イベントを設定する
+        // modal要素の幅をスクロールバーに合わせて調整
         $(window).on(Event$4.RESIZE, function (event) {
           return _this7.handleUpdate(event);
         });
       } else {
+        // modalが表示されていない場合は、リサイズイベント削除
         $(window).off(Event$4.RESIZE);
       }
     };
@@ -2250,20 +2346,26 @@
     _proto._hideModal = function _hideModal() {
       var _this8 = this;
 
-      this._element.style.display = 'none';
+      // modal要素にdisplay:none;を設定する
+      this._element.style.display = 'none'; // modal要素にaria-hidden='true'を付与する
 
-      this._element.setAttribute('aria-hidden', true);
+      this._element.setAttribute('aria-hidden', true); // modal要素からaria-modal属性を削除する
 
-      this._element.removeAttribute('aria-modal');
 
-      this._isTransitioning = false;
+      this._element.removeAttribute('aria-modal'); // _isTransitioningをfasleにする
+
+
+      this._isTransitioning = false; // backdropを削除する
 
       this._showBackdrop(function () {
-        $(document.body).removeClass(ClassName$4.OPEN);
+        $(document.body).removeClass(ClassName$4.OPEN); // modyの.modal-openを削除する
 
-        _this8._resetAdjustments();
+        _this8._resetAdjustments(); // modal要素から左右のpaddingを削除する
 
-        _this8._resetScrollbar();
+
+        _this8._resetScrollbar(); // setScrollbarで設定したpaddingとかを削除する
+        // hiddenイベントを発動する
+
 
         $(_this8._element).trigger(Event$4.HIDDEN);
       });
@@ -2271,74 +2373,111 @@
 
     _proto._removeBackdrop = function _removeBackdrop() {
       if (this._backdrop) {
-        $(this._backdrop).remove();
-        this._backdrop = null;
+        // backdrop要素が存在していた場合
+        $(this._backdrop).remove(); // backdrop要素を削除
+
+        this._backdrop = null; // backdrop要素をnullにする
       }
-    };
+    } // callbackは関数
+    ;
 
     _proto._showBackdrop = function _showBackdrop(callback) {
       var _this9 = this;
 
-      var animate = $(this._element).hasClass(ClassName$4.FADE) ? ClassName$4.FADE : '';
+      // backdropはmodal表示時の背景
+      // http://bootstrap3.cyberlab.info/javascript/modals-options-backdrop.html#usage2
+      // modal要素が.fadeを持っている場合はfadeを格納
+      // 持っていない場合は空文字
+      var animate = $(this._element).hasClass(ClassName$4.FADE) ? ClassName$4.FADE : ''; // _isShownと_config.backdropがtrueの場合
+      // modalをshowするとき
 
       if (this._isShown && this._config.backdrop) {
-        this._backdrop = document.createElement('div');
-        this._backdrop.className = ClassName$4.BACKDROP;
+        // _backdropに<div>を作成する
+        this._backdrop = document.createElement('div'); // divに.modal-backdropを付与する
+
+        this._backdrop.className = ClassName$4.BACKDROP; // modal要素が.fadeを持っていた場合
 
         if (animate) {
+          // backdropに.fadeを追加
           this._backdrop.classList.add(animate);
-        }
+        } // body要素にdiv.modal-backdrop要素を追加
 
-        $(this._backdrop).appendTo(document.body);
+
+        $(this._backdrop).appendTo(document.body); // クリックを離したときにのイベントを定義
+
         $(this._element).on(Event$4.CLICK_DISMISS, function (event) {
+          // this._ignoreBackdropClickがtrueの場合
           if (_this9._ignoreBackdropClick) {
+            // falseにして、処理を終了する
             _this9._ignoreBackdropClick = false;
             return;
-          }
+          } // クリックを離したところと、イベントハンドラがアタッチされた要素が一致しない場合
+
 
           if (event.target !== event.currentTarget) {
+            // 処理を終了する
             return;
-          }
+          } // backdropが'static'の場合は、要素をアニメーションしながらフォーカスする
+          // staticじゃない場合はhideする
+
 
           _this9._triggerBackdropTransition();
-        });
+        }); // modal要素が.fadeを持っていた場合
 
         if (animate) {
+          // backdropの高さを取得する
           Util.reflow(this._backdrop);
-        }
+        } // backdropに.showを追加する
 
-        $(this._backdrop).addClass(ClassName$4.SHOW);
+
+        $(this._backdrop).addClass(ClassName$4.SHOW); // callbackが存在しない場合は処理終了
 
         if (!callback) {
           return;
-        }
+        } // .fadeが付与されていなかったらcallbackを実行して処理終了
+
 
         if (!animate) {
           callback();
           return;
-        }
+        } // 以下は、.fadeがmodal要素に付与されていて、callabckが存在する場合
+        // backdropの遷移時間を取得する
 
-        var backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
+
+        var backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop); // backdropの遷移終了時のイベントを定義し、
+        // 遷移時間の分だけ送らせて実行
+
         $(this._backdrop).one(Util.TRANSITION_END, callback).emulateTransitionEnd(backdropTransitionDuration);
       } else if (!this._isShown && this._backdrop) {
-        $(this._backdrop).removeClass(ClassName$4.SHOW);
+        // isShownがfalseで、backdropがtrueの場合
+        // modalをhideするとき
+        // backdrop要素から.showを削除
+        $(this._backdrop).removeClass(ClassName$4.SHOW); // backdropを削除する関数を定義
 
         var callbackRemove = function callbackRemove() {
-          _this9._removeBackdrop();
+          _this9._removeBackdrop(); // backdropを削除
+
 
           if (callback) {
+            // callback関数が存在していたら実行
             callback();
           }
-        };
+        }; // modal要素が.fadeを持っていたら
+
 
         if ($(this._element).hasClass(ClassName$4.FADE)) {
-          var _backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
+          // backdropの遷移時間を取得する
+          var _backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop); // backdropの遷移終了時にcallbackRemoveを実行
+
 
           $(this._backdrop).one(Util.TRANSITION_END, callbackRemove).emulateTransitionEnd(_backdropTransitionDuration);
         } else {
+          // .fadeがなかったらそのままbackdropを削除
           callbackRemove();
         }
       } else if (callback) {
+        // _config.backdropがfalseの場合は、
+        // callbackを実行
         callback();
       }
     } // ----------------------------------------------------------------------
@@ -2348,109 +2487,162 @@
     ;
 
     _proto._adjustDialog = function _adjustDialog() {
-      var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
+      // this._elementはmodal要素
+      // modal要素の高さが、ブラウザの表示高さを超えていた場合は、true
+      // this.elementは表示されてないから、基本は0
+      var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight; // _isBodyOverflowingがfalseで、isModalOverflowingがtrueの場合
 
       if (!this._isBodyOverflowing && isModalOverflowing) {
+        // modal要素の実際のpadding-leftをスクロールバーの幅にする
         this._element.style.paddingLeft = this._scrollbarWidth + "px";
-      }
+      } // _isBodyOverflowingがtrueで、isModalOverflowingがfalseの場合
+
 
       if (this._isBodyOverflowing && !isModalOverflowing) {
+        // modal要素の実際のpadding-rightをスクロールバーの幅にする
         this._element.style.paddingRight = this._scrollbarWidth + "px";
       }
     };
 
     _proto._resetAdjustments = function _resetAdjustments() {
+      // modal要素から左右のpaddingを削除する
       this._element.style.paddingLeft = '';
       this._element.style.paddingRight = '';
     };
 
     _proto._checkScrollbar = function _checkScrollbar() {
-      var rect = document.body.getBoundingClientRect();
-      this._isBodyOverflowing = rect.left + rect.right < window.innerWidth;
+      // body要素の幅を取得
+      var rect = document.body.getBoundingClientRect(); // body要素の幅(right+left)がwindowのコンテンツ幅より小さいか判定
+      // つまりX方向にスクロールバーがあるか確認
+
+      this._isBodyOverflowing = rect.left + rect.right < window.innerWidth; // スクロールバーの横幅を取得
+
       this._scrollbarWidth = this._getScrollbarWidth();
     };
 
     _proto._setScrollbar = function _setScrollbar() {
       var _this10 = this;
 
+      // body要素がはみ出ていた場合
       if (this._isBodyOverflowing) {
-        // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
-        //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-        var fixedContent = [].slice.call(document.querySelectorAll(Selector$4.FIXED_CONTENT));
-        var stickyContent = [].slice.call(document.querySelectorAll(Selector$4.STICKY_CONTENT)); // Adjust fixed content padding
+        // DOMNode.style.paddingRightは実際の値を返す。設定されていない場合は''を返す
+        // $(DOMNode).css('padding-right')はcssの値を返す。設定されていない場合は''を返す
+        // .fixed-top、.fixed-bottom、.is-fixed、.sticky-topを持つ要素を取得する
+        var fixedContent = [].slice.call(document.querySelectorAll(Selector$4.FIXED_CONTENT)); // .sticky-topを持つ要素を取得する
+
+        var stickyContent = [].slice.call(document.querySelectorAll(Selector$4.STICKY_CONTENT)); // 固定コンテンツのpaddingを調整する
 
         $(fixedContent).each(function (index, element) {
-          var actualPadding = element.style.paddingRight;
+          // fixedContentの実際のpadding-rightを取得する
+          var actualPadding = element.style.paddingRight; // fixedContentにcssで設定されているpadding-rightを取得
+
           var calculatedPadding = $(element).css('padding-right');
-          $(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this10._scrollbarWidth + "px");
-        }); // Adjust sticky content margin
+          $(element).data('padding-right', actualPadding) // elementに実際のpadding-rightを設定する
+          .css('padding-right', parseFloat(calculatedPadding) + _this10._scrollbarWidth + "px"); // elementのpadding-rightにスクロールバーの横幅を足した値を設定する
+        }); // stickyコンテンツのmarginを調整する
 
         $(stickyContent).each(function (index, element) {
-          var actualMargin = element.style.marginRight;
-          var calculatedMargin = $(element).css('margin-right');
-          $(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this10._scrollbarWidth + "px");
-        }); // Adjust body padding
+          // stickyコンテンツの実際のmargin-rightを取得する
+          var actualMargin = element.style.marginRight; // stickyコンテンツにcssで指定されているmargin-rightを取得する
 
-        var actualPadding = document.body.style.paddingRight;
+          var calculatedMargin = $(element).css('margin-right');
+          $(element).data('margin-right', actualMargin) // elementに実際のmargin-rightを設定する
+          .css('margin-right', parseFloat(calculatedMargin) - _this10._scrollbarWidth + "px"); // elementのmargin-rightにスクロールバーの横幅を足した値を設定する
+        }); // body要素のpaddingを調整する
+        // body要素の実際のpadding-rightを取得する
+
+        var actualPadding = document.body.style.paddingRight; // body要素にcssで指定されているpadding-rightを取得する
+
         var calculatedPadding = $(document.body).css('padding-right');
-        $(document.body).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + this._scrollbarWidth + "px");
-      }
+        $(document.body).data('padding-right', actualPadding) // body要素に実際のpadding-rightを設定する
+        .css('padding-right', parseFloat(calculatedPadding) + this._scrollbarWidth + "px"); // body要素のpadding-rightにスクロールバーの横幅を足した値を設定する
+      } // body要素に.modal-openを追加する
+      // overflow: hidden;でスクロールバーがなくなった時に、表示がずれないようにするため
+
 
       $(document.body).addClass(ClassName$4.OPEN);
     };
 
     _proto._resetScrollbar = function _resetScrollbar() {
-      // Restore fixed content padding
+      // fixedコンテンツのpaddindを戻す
+      // fixedクラスを持つ要素を取得
       var fixedContent = [].slice.call(document.querySelectorAll(Selector$4.FIXED_CONTENT));
       $(fixedContent).each(function (index, element) {
-        var padding = $(element).data('padding-right');
-        $(element).removeData('padding-right');
+        // _setScrollbarで設定したpadding-rightを取得する
+        var padding = $(element).data('padding-right'); // padding-right属性を削除
+
+        $(element).removeData('padding-right'); // paddingが存在したらそれを代入。なかったら空文字
+
         element.style.paddingRight = padding ? padding : '';
-      }); // Restore sticky content
+      }); // stickyコンテンツのpaddingを戻す
+      // .sticky-topが付与された要素を収録
 
       var elements = [].slice.call(document.querySelectorAll("" + Selector$4.STICKY_CONTENT));
       $(elements).each(function (index, element) {
-        var margin = $(element).data('margin-right');
+        // 要素からmargin-rightを取得
+        var margin = $(element).data('margin-right'); // marginがundefinedじゃなかったら
 
         if (typeof margin !== 'undefined') {
+          // .sticky-topのmargin-rightを削除する
           $(element).css('margin-right', margin).removeData('margin-right');
         }
-      }); // Restore body padding
+      }); // bodyのpadding-rightを戻す
 
-      var padding = $(document.body).data('padding-right');
-      $(document.body).removeData('padding-right');
+      var padding = $(document.body).data('padding-right'); // modyのpadding-rightを咲くjおする
+
+      $(document.body).removeData('padding-right'); // paddingが存在したらその値、なかったら空文字
+
       document.body.style.paddingRight = padding ? padding : '';
     };
 
     _proto._getScrollbarWidth = function _getScrollbarWidth() {
       // thx d.walsh
-      var scrollDiv = document.createElement('div');
-      scrollDiv.className = ClassName$4.SCROLLBAR_MEASURER;
-      document.body.appendChild(scrollDiv);
-      var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
-      document.body.removeChild(scrollDiv);
+      // div要素を作成
+      var scrollDiv = document.createElement('div'); // divに.modal-scrollbar-measurerを付与
+
+      scrollDiv.className = ClassName$4.SCROLLBAR_MEASURER; // scrolldivをbody要素に追加
+
+      document.body.appendChild(scrollDiv); // scrollDiv.getBoundingClientRectはscssで指定したwidthを取得(50px)
+      // clientWidthはスクロールバーの横幅を含まないscrollDivの横幅を取得
+      // これを引くと、スクロールバーの横幅になる
+
+      var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth; // scrollDivを削除
+
+      document.body.removeChild(scrollDiv); // スクロールバーの横幅を返す
+
       return scrollbarWidth;
     } // Static
+    // relatedTargetはクリックされるbtn要素
     ;
 
     Modal._jQueryInterface = function _jQueryInterface(config, relatedTarget) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY$4);
+        // thisはmodal要素
+        // thisのDATA_KEYを取得
+        var data = $(this).data(DATA_KEY$4); // _configに値を格納する
 
-        var _config = _objectSpread2({}, Default$2, {}, $(this).data(), {}, typeof config === 'object' && config ? config : {});
+        var _config = _objectSpread2({}, Default$2, {}, $(this).data(), {}, typeof config === 'object' && config ? config : {}); // dataが存在していなかったら
+
 
         if (!data) {
-          data = new Modal(this, _config);
+          // modalをインスタンス化してdataに格納する
+          data = new Modal(this, _config); // dataをmodal要素に入れる
+
           $(this).data(DATA_KEY$4, data);
-        }
+        } // configがStringの場合
+
 
         if (typeof config === 'string') {
+          // modalクラスにメソッドが存在するか確認
           if (typeof data[config] === 'undefined') {
             throw new TypeError("No method named \"" + config + "\"");
-          }
+          } // メソッドが存在した場合は、relatedTargetを引数に実行する
+
 
           data[config](relatedTarget);
         } else if (_config.show) {
+          // _config.showがtrueの場合
+          // relatedTargetを引数にshowを実行する
           data.show(relatedTarget);
         }
       });
@@ -2475,36 +2667,51 @@
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
+  // sc.modal.data-apiのイベントを定義する
+  // 対象は、 [data-toggle="modal"]
 
 
   $(document).on(Event$4.CLICK_DATA_API, Selector$4.DATA_TOGGLE, function (event) {
     var _this11 = this;
 
-    var target;
-    var selector = Util.getSelectorFromElement(this);
+    var target; // thisは[data-toggle="modal"]が付与されているelement
+    // [data-toggle="modal"]要素で指定されている['data-target"]かhrefを取得する
+    // つまり、modal要素
+
+    var selector = Util.getSelectorFromElement(this); // selectorが存在したら
 
     if (selector) {
+      // targetにselectorを元に取得した要素を格納する
       target = document.querySelector(selector);
-    }
+    } // $(target).data(DATA_KEY)が存在したら'toggle'を格納する
+    // 存在していない場合は、
 
-    var config = $(target).data(DATA_KEY$4) ? 'toggle' : _objectSpread2({}, $(target).data(), {}, $(this).data());
+
+    var config = $(target).data(DATA_KEY$4) ? 'toggle' : _objectSpread2({}, $(target).data(), {}, $(this).data()); // thisのhtmlが<a>か<area>だったらブラウザのデフォルト動作を禁止する
+    // <a>クリックでページが変わるとか
 
     if (this.tagName === 'A' || this.tagName === 'AREA') {
       event.preventDefault();
-    }
+    } // modalのshowイベントをバインドしてshow時に無名関数を実行する
+
 
     var $target = $(target).one(Event$4.SHOW, function (showEvent) {
+      // showEventがブラウザの動作を停止していたら
       if (showEvent.isDefaultPrevented()) {
-        // Only register focus restorer if modal will actually get shown
+        // modalが実際に表示される場合のみforcusする
         return;
-      }
+      } // modalのhiddenイベントをバインドして、hidden時に無名関数を実行する
+
 
       $target.one(Event$4.HIDDEN, function () {
+        // thisは[data-toggle="modal"]が付与された要素
+        // それが表示状態なら
         if ($(_this11).is(':visible')) {
+          // focusする
           _this11.focus();
         }
       });
-    });
+    }); // configとthisはjQueryInterfaceに渡す引数
 
     Modal._jQueryInterface.call($(target), config, this);
   });
@@ -2759,9 +2966,7 @@
     MANUAL: 'manual'
   };
 
-  var Tooltip =
-  /*#__PURE__*/
-  function () {
+  var Tooltip = /*#__PURE__*/function () {
     // elementは data-toggle="tooltip"が付与されたelement
     // configはobject(config)かfalse
     function Tooltip(element, config) {
@@ -3665,9 +3870,7 @@
    */
   // Tooltipを継承するみたい
 
-  var Popover =
-  /*#__PURE__*/
-  function (_Tooltip) {
+  var Popover = /*#__PURE__*/function (_Tooltip) {
     _inheritsLoose(Popover, _Tooltip);
 
     function Popover() {

@@ -34,7 +34,7 @@
     <div class="container mt-3">
       <h1>Modal <small>Bootstrap Visual Test</small></h1>
 
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-padding-right='15' aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -235,28 +235,19 @@
         })
 
         $('#btnPreventModal').on('click', function () {
-          $('#firefoxModal').one('shown.bs.modal', function () {
-            $(this).modal('hide')
+          $('#firefoxModal').one('shown.sc.modal', function () {
+            $(this).modal('dispose')
           })
-          .one('hide.bs.modal', function (event) {
-            event.preventDefault()
-            if ($(this).data('bs.modal')._isTransitioning) {
-              console.error('Modal plugin should not set _isTransitioning when hide event is prevented')
-            } else {
-              console.log('Test passed')
-              $(this).modal('hide') // work as expected
-            }
-          })
-          .modal('show')
         })
+
 
         // Test transition duration
         var t0, t1;
 
-        $('#slowModal').on('shown.bs.modal', function(){
+        $('#slowModal').on('shown.sc.modal', function(){
           t1 = performance.now()
           console.log('transition-duration took ' + (t1 - t0) + 'ms.')
-        }).on('show.bs.modal', function(){
+        }).on('show.sc.modal', function(){
           t0 = performance.now()
         })
 
