@@ -1920,7 +1920,7 @@
   var EVENT_KEY$4 = "." + DATA_KEY$4;
   var DATA_API_KEY$4 = '.data-api';
   var JQUERY_NO_CONFLICT$4 = $.fn[NAME$4];
-  var ESCAPE_KEYCODE$1 = 27; // KeyboardEvent.which value for Escape (Esc) key
+  var ESCAPE_KEYCODE$1 = 27; // エスケープキー
 
   var Default$2 = {
     backdrop: true,
@@ -4078,10 +4078,12 @@
    */
 
   var Toast = /*#__PURE__*/function () {
+    // elementはtoast要素
+    // configはそれがobjectかのtrueかfalse
     function Toast(element, config) {
       this._element = element;
       this._config = this._getConfig(config);
-      this._timeout = null;
+      this._timeout = null; // toast要素クリック時にdata-dismiss='toast'を持つ要素をhideするイベントを定義
 
       this._setListeners();
     } // Getters
@@ -4093,69 +4095,91 @@
     _proto.show = function show() {
       var _this = this;
 
-      var showEvent = $.Event(Event$7.SHOW);
-      $(this._element).trigger(showEvent);
+      // showイベントを定義
+      var showEvent = $.Event(Event$7.SHOW); // showイベントを発動
+
+      $(this._element).trigger(showEvent); // showイベントがブラウザのデフォルト動作を禁止していたら処理終了
 
       if (showEvent.isDefaultPrevented()) {
         return;
-      }
+      } // animationがtrueの場合(Defaulrはtrue)
+
 
       if (this._config.animation) {
+        // toast要素に.fadeを追加
         this._element.classList.add(ClassName$7.FADE);
-      }
+      } // 処理完了時の関数を定義
+
 
       var complete = function complete() {
-        _this._element.classList.remove(ClassName$7.SHOWING);
+        // toast要素から.showingを削除
+        _this._element.classList.remove(ClassName$7.SHOWING); // .showを付与
 
-        _this._element.classList.add(ClassName$7.SHOW);
 
-        $(_this._element).trigger(Event$7.SHOWN);
+        _this._element.classList.add(ClassName$7.SHOW); // shownイベントを実行
+
+
+        $(_this._element).trigger(Event$7.SHOWN); // autohideがtrueの場合(Defaultはtrue)
 
         if (_this._config.autohide) {
+          // delayだけ送らせてhideを実行(Defaultは500)
           _this._timeout = setTimeout(function () {
             _this.hide();
           }, _this._config.delay);
         }
-      };
+      }; // .hideを削除
 
-      this._element.classList.remove(ClassName$7.HIDE);
 
-      Util.reflow(this._element);
+      this._element.classList.remove(ClassName$7.HIDE); // taost要素の高さを取得
 
-      this._element.classList.add(ClassName$7.SHOWING);
+
+      Util.reflow(this._element); // .showingを付与
+
+      this._element.classList.add(ClassName$7.SHOWING); // animetionがtrueの場合
+
 
       if (this._config.animation) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+        // toast要素の遷移時間を取得
+        var transitionDuration = Util.getTransitionDurationFromElement(this._element); // 遷移時間だけ送らせてcomplete関数を実行
+
         $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       } else {
+        // animetionがfalseの場合は即実行
         complete();
       }
     };
 
     _proto.hide = function hide() {
+      // toast要素が.showを持っていた場合は処理終了
       if (!this._element.classList.contains(ClassName$7.SHOW)) {
         return;
-      }
+      } // hideイベントを定義
 
-      var hideEvent = $.Event(Event$7.HIDE);
-      $(this._element).trigger(hideEvent);
+
+      var hideEvent = $.Event(Event$7.HIDE); // hideイベントを実行
+
+      $(this._element).trigger(hideEvent); // hideイベントがブラウザの処理を停止していたら処理終了
 
       if (hideEvent.isDefaultPrevented()) {
         return;
-      }
+      } // closeを実行
+
 
       this._close();
     };
 
     _proto.dispose = function dispose() {
+      // timeoutを削除
       clearTimeout(this._timeout);
-      this._timeout = null;
+      this._timeout = null; // toast要素が.showを持っていたら削除する
 
       if (this._element.classList.contains(ClassName$7.SHOW)) {
         this._element.classList.remove(ClassName$7.SHOW);
-      }
+      } // クリック時に非表示にするイベントを削除
 
-      $(this._element).off(Event$7.CLICK_DISMISS);
+
+      $(this._element).off(Event$7.CLICK_DISMISS); // toast要素を削除する
+
       $.removeData(this._element, DATA_KEY$7);
       this._element = null;
       this._config = null;
@@ -4163,55 +4187,82 @@
     ;
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2({}, Default$5, {}, $(this._element).data(), {}, typeof config === 'object' && config ? config : {});
-      Util.typeCheckConfig(NAME$7, config, this.constructor.DefaultType);
+      config = _objectSpread2({}, Default$5, {}, $(this._element).data(), {}, typeof config === 'object' && config ? config : {}); // configの値が、DefaultTypeの型と一致しているか確認
+
+      Util.typeCheckConfig(NAME$7, config, this.constructor.DefaultType); // configを返す
+
       return config;
     };
 
     _proto._setListeners = function _setListeners() {
       var _this2 = this;
 
-      $(this._element).on(Event$7.CLICK_DISMISS, Selector$7.DATA_DISMISS, function () {
+      // toast要素クリック時にdata-dismiss='toast'を持つ要素をhideする
+      $(this._element).on(Event$7.CLICK_DISMISS, // click.dismiss
+      Selector$7.DATA_DISMISS, // data-dismiss='toast'
+      function () {
         return _this2.hide();
-      });
+      } // hideする
+      );
     };
 
     _proto._close = function _close() {
       var _this3 = this;
 
+      // 関数定義
       var complete = function complete() {
-        _this3._element.classList.add(ClassName$7.HIDE);
+        _this3._element.classList.add(ClassName$7.HIDE); // toast要素に.hideを追加
 
-        $(_this3._element).trigger(Event$7.HIDDEN);
-      };
 
-      this._element.classList.remove(ClassName$7.SHOW);
+        $(_this3._element).trigger(Event$7.HIDDEN); // hiddenイベントを実行
+      }; // toast要素から.showを削除
+
+
+      this._element.classList.remove(ClassName$7.SHOW); // animetionがtrueの場合(Defaultはtrue)
+
 
       if (this._config.animation) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+        // toast要素の遷移時間を取得
+        var transitionDuration = Util.getTransitionDurationFromElement(this._element); // toast要素の遷移時間後に、complete関数を実行
+
         $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       } else {
+        // animationがfalseならすぐに実行
         complete();
       }
     } // Static
     ;
 
     Toast._jQueryInterface = function _jQueryInterface(config) {
+      // thisはtoast要素
+      // configは$('.toast').toast('show')のshow部分
+      // toast要素の数だけ処理を行う
       return this.each(function () {
-        var $element = $(this);
-        var data = $element.data(DATA_KEY$7);
+        // toast要素を格納
+        var $element = $(this); // toast要素にDATAが設定されているか確認
 
-        var _config = typeof config === 'object' && config;
+        var data = $element.data(DATA_KEY$7); // configがobjectか判定してする
+        // objectの場合は、objectをそのまま入れる
+        // objectじゃない場合は、false
+
+        var _config = typeof config === 'object' && config; // dataが存在していない場合
+
 
         if (!data) {
-          data = new Toast(this, _config);
+          // toast要素と_configを引数にtoastをインスタンス化する
+          // thisはtoast要素
+          data = new Toast(this, _config); // toast要素にToastインスタンスを紐付け
+
           $element.data(DATA_KEY$7, data);
-        }
+        } // configがstringの場合
+
 
         if (typeof config === 'string') {
+          // Toastにconfigと同じ名前の引数が存在しない場合はエラー
           if (typeof data[config] === 'undefined') {
             throw new TypeError("No method named \"" + config + "\"");
-          }
+          } // Toastのメソッドを実行
+
 
           data[config](this);
         }

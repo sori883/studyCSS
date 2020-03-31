@@ -884,3 +884,6 @@ $grid-breakpoints: (
 
 $grid-columns: 12 !default;
 $grid-gutter-width: 30px !default;
+
+// utilities
+$positions: static, relative, absolute, fixed, sticky !default;

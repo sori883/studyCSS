@@ -801,6 +801,60 @@ button.bg-dark:focus {
   background-color: transparent !important;
 }
 
+/* line 5, scss/utilities/_position.scss */
+.position-static {
+  position: static !important;
+}
+
+/* line 5, scss/utilities/_position.scss */
+.position-relative {
+  position: relative !important;
+}
+
+/* line 5, scss/utilities/_position.scss */
+.position-absolute {
+  position: absolute !important;
+}
+
+/* line 5, scss/utilities/_position.scss */
+.position-fixed {
+  position: fixed !important;
+}
+
+/* line 5, scss/utilities/_position.scss */
+.position-sticky {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+}
+
+/* line 10, scss/utilities/_position.scss */
+.fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+/* line 18, scss/utilities/_position.scss */
+.fixed-bottom {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  /* line 26, scss/utilities/_position.scss */
+  .sticky-top {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+  }
+}
+
 /* line 11, scss/utilities/_spacing.scss */
 .m-0 {
   margin: 0 !important;
