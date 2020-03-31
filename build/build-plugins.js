@@ -34,6 +34,7 @@ const scPlugins = {
   Dropdown: path.resolve(__dirname, '../js/src/dropdown.js'),
   Modal: path.resolve(__dirname, '../js/src/modal.js'),
   Popover: path.resolve(__dirname, '../js/src/popover.js'),
+  Toast: path.resolve(__dirname, '../js/src/toast.js'),
   Tooltip: path.resolve(__dirname, '../js/src/tooltip.js'),
   Util: path.resolve(__dirname, '../js/src/util.js')
 }

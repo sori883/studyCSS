@@ -4,6 +4,7 @@ import Collapse from './collapse'
 import Dropdown from './dropdown'
 import Modal from './modal'
 import Popover from './popover'
+import Toast from './toast'
 import Tooltip from './tooltip'
 import Util from './util'
 
@@ -14,6 +15,7 @@ export {
   Dropdown,
   Modal,
   Popover,
+  Toast,
   Tooltip,
   Util
 }

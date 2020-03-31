@@ -1,0 +1,45 @@
+.toast {
+  max-width: $toast-max-width;
+  overflow: hidden; // ネストされたアイテムの角丸を削除
+  @include font-size($toast-font-size);
+  color: $toast-color;
+  background-color: $toast-background-color;
+  background-clip: padding-box;
+  border: $toast-border-width solid $toast-border-color;
+  box-shadow: $toast-box-shadow;
+  backdrop-filter: blur(10px); // 背景にぼかしを入れる
+  opacity: 0; // 非表示(多分transitionが聞かないから？)
+  @include border-radius($toast-border-radius);
+
+  &:not(:last-child) {
+    margin-bottom: $toast-padding-x; // 最後のtoast以外は、下にmarginを入れる
+  }
+
+  &.showing {
+    opacity: 1; // 表示中
+  }
+
+  &.show { // 完全体
+    display: block;
+    opacity: 1;
+  }
+
+  &.hide {
+    // hideはdisplay:none(transition効かない)
+    display: none;
+  }
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  padding: $toast-padding-y $toast-padding-x;
+  color: $toast-header-color;
+  background-color: $toast-header-background-color;
+  background-clip: padding-box;
+  border-bottom: $toast-border-width solid $toast-header-border-color;
+}
+
+.toast-body {
+  padding: $toast-padding-x;
+}
