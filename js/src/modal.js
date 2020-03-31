@@ -20,7 +20,7 @@ const DATA_KEY = 'sc.modal'
 const EVENT_KEY = `.${DATA_KEY}`
 const DATA_API_KEY = '.data-api'
 const JQUERY_NO_CONFLICT = $.fn[NAME]
-const ESCAPE_KEYCODE = 27 // KeyboardEvent.which value for Escape (Esc) key
+const ESCAPE_KEYCODE = 27 // エスケープキー
 
 const Default = {
   backdrop : true,
