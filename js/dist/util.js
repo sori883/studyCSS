@@ -82,7 +82,7 @@
     getUID: function getUID(prefix) {
       do {
         // eslint-disable-next-line no-bitwise
-        prefix += ~~(Math.random() * MAX_UID); // ランダムな値を生成
+        prefix += ~~(Math.random() * MAX_UID); // ランダムな値を生成してprefixに追加
       } while (document.getElementById(prefix)); // 一致するIDの分だけ続行
 
 
